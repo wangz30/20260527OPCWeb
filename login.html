@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录/注册 - 云上OPC社区</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#7c3aed',
+                        'primary-dark': '#6d28d9',
+                        'primary-light': '#a78bfa',
+                        secondary: '#1e1b4b',
+                        accent: '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Noto Sans SC', sans-serif; }
+        .gradient-bg { background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), url('登录页背景.jpeg') center center / cover no-repeat; }
+        .tab-active { border-bottom: 2px solid #7c3aed; color: #7c3aed; }
+        .tab-inactive { border-bottom: 2px solid transparent; color: #6b7280; }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex items-center justify-center py-12 px-4">
+    <div class="max-w-md w-full">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <a href="index.html" class="inline-flex items-center space-x-2">
+                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center overflow-hidden">
+                    <img src="logo.png" alt="云上OPC" class="w-full h-full object-cover">
+                </div>
+                <span class="text-2xl font-bold text-white">云上OPC社区</span>
+            </a>
+        </div>
+
+        <!-- 登录/注册卡片 -->
+        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <!-- 标签页 -->
+            <div class="flex border-b border-gray-200">
+                <button id="loginTab" class="flex-1 py-4 text-center font-medium tab-active" onclick="switchTab('login')">登录</button>
+                <button id="registerTab" class="flex-1 py-4 text-center font-medium tab-inactive" onclick="switchTab('register')">注册</button>
+            </div>
+
+            <div class="p-8">
+                <!-- 登录表单 -->
+                <div id="loginForm">
+                    <!-- 登录方式切换 -->
+                    <div class="flex space-x-4 mb-6">
+                        <button id="passwordLoginBtn" class="flex-1 py-2 px-4 rounded-lg bg-primary text-white text-sm font-medium" onclick="switchLoginMethod('password')">密码登录</button>
+                        <button id="codeLoginBtn" class="flex-1 py-2 px-4 rounded-lg bg-gray-100 text-gray-600 text-sm font-medium" onclick="switchLoginMethod('code')">验证码登录</button>
+                    </div>
+
+                    <!-- 密码登录 -->
+                    <div id="passwordLogin">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">用户名/手机号</label>
+                                <input type="text" id="loginUsername" placeholder="请输入用户名或手机号" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">密码</label>
+                                <input type="password" id="loginPassword" placeholder="请输入密码" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <a href="#" class="text-sm text-primary hover:text-primary-dark">忘记密码？</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 验证码登录 -->
+                    <div id="codeLogin" class="hidden">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">手机号</label>
+                                <input type="tel" id="loginPhone" placeholder="请输入手机号" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">验证码</label>
+                                <div class="flex space-x-3">
+                                    <input type="text" id="loginCode" placeholder="请输入验证码" 
+                                        class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    <button id="sendCodeBtn" onclick="sendCode('login')" class="px-4 py-3 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition whitespace-nowrap">
+                                        获取验证码
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="handleLogin()" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition mt-6">
+                        登录
+                    </button>
+                </div>
+
+                <!-- 注册表单 -->
+                <div id="registerForm" class="hidden">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+                            <input type="text" id="registerName" placeholder="请输入真实姓名" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">单位（可选）</label>
+                            <input type="text" id="registerCompany" placeholder="请输入单位名称" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">用户名</label>
+                            <input type="text" id="registerUsername" placeholder="设置用户名" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">密码</label>
+                            <input type="password" id="registerPassword" placeholder="设置密码（至少8位，含字母、数字、特殊字符）" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <p class="text-xs text-gray-500 mt-1">密码需至少8位，包含字母、数字、特殊字符</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">确认密码</label>
+                            <input type="password" id="registerConfirmPassword" placeholder="再次输入密码" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">手机号</label>
+                            <input type="tel" id="registerPhone" placeholder="请输入手机号" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">短信验证码</label>
+                            <div class="flex space-x-3">
+                                <input type="text" id="registerPhoneCode" placeholder="请输入验证码" 
+                                    class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <button id="sendRegisterCodeBtn" onclick="sendCode('register')" class="px-4 py-3 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition whitespace-nowrap">
+                                    获取验证码
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 用户协议 -->
+                    <div class="mt-4">
+                        <label class="flex items-start">
+                            <input type="checkbox" id="agreeTerms" class="rounded border-gray-300 text-primary focus:ring-primary mt-1">
+                            <span class="ml-2 text-sm text-gray-600">
+                                我已阅读并同意<a href="#" class="text-primary hover:text-primary-dark">《用户协议》</a>和<a href="#" class="text-primary hover:text-primary-dark">《隐私政策》</a>
+                            </span>
+                        </label>
+                    </div>
+
+                    <button onclick="handleRegister()" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition mt-6">
+                        注册
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 返回首页 -->
+        <div class="text-center mt-6">
+            <a href="index.html" class="text-white hover:text-gray-200 transition">
+                <i class="fas fa-arrow-left mr-2"></i>返回首页
+            </a>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        let currentTab = 'login';
+        let loginMethod = 'password';
+        let countdown = 0;
+
+        // 切换标签页
+        function switchTab(tab) {
+            currentTab = tab;
+            if (tab === 'login') {
+                document.getElementById('loginTab').classList.add('tab-active');
+                document.getElementById('loginTab').classList.remove('tab-inactive');
+                document.getElementById('registerTab').classList.add('tab-inactive');
+                document.getElementById('registerTab').classList.remove('tab-active');
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('registerForm').classList.add('hidden');
+            } else {
+                document.getElementById('registerTab').classList.add('tab-active');
+                document.getElementById('registerTab').classList.remove('tab-inactive');
+                document.getElementById('loginTab').classList.add('tab-inactive');
+                document.getElementById('loginTab').classList.remove('tab-active');
+                document.getElementById('registerForm').classList.remove('hidden');
+                document.getElementById('loginForm').classList.add('hidden');
+            }
+        }
+
+        // 切换登录方式
+        function switchLoginMethod(method) {
+            loginMethod = method;
+            if (method === 'password') {
+                document.getElementById('passwordLoginBtn').classList.add('bg-primary', 'text-white');
+                document.getElementById('passwordLoginBtn').classList.remove('bg-gray-100', 'text-gray-600');
+                document.getElementById('codeLoginBtn').classList.add('bg-gray-100', 'text-gray-600');
+                document.getElementById('codeLoginBtn').classList.remove('bg-primary', 'text-white');
+                document.getElementById('passwordLogin').classList.remove('hidden');
+                document.getElementById('codeLogin').classList.add('hidden');
+            } else {
+                document.getElementById('codeLoginBtn').classList.add('bg-primary', 'text-white');
+                document.getElementById('codeLoginBtn').classList.remove('bg-gray-100', 'text-gray-600');
+                document.getElementById('passwordLoginBtn').classList.add('bg-gray-100', 'text-gray-600');
+                document.getElementById('passwordLoginBtn').classList.remove('bg-primary', 'text-white');
+                document.getElementById('codeLogin').classList.remove('hidden');
+                document.getElementById('passwordLogin').classList.add('hidden');
+            }
+        }
+
+
+
+        // 发送验证码
+        function sendCode(type) {
+            if (countdown > 0) return;
+
+            const phone = type === 'login' ? document.getElementById('loginPhone').value : document.getElementById('registerPhone').value;
+            if (!phone) {
+                showToast('请输入手机号', 'error');
+                return;
+            }
+
+            // 模拟发送验证码
+            showToast('验证码已发送');
+            countdown = 60;
+            updateCountdown(type);
+        }
+
+        // 更新倒计时
+        function updateCountdown(type) {
+            const btnId = type === 'login' ? 'sendCodeBtn' : 'sendRegisterCodeBtn';
+            const btn = document.getElementById(btnId);
+            
+            if (countdown > 0) {
+                btn.textContent = `${countdown}秒后重发`;
+                btn.disabled = true;
+                countdown--;
+                setTimeout(() => updateCountdown(type), 1000);
+            } else {
+                btn.textContent = '获取验证码';
+                btn.disabled = false;
+            }
+        }
+
+        // 处理登录
+        function handleLogin() {
+            const username = document.getElementById('loginUsername')?.value;
+            const phone = document.getElementById('loginPhone')?.value;
+            
+            if (loginMethod === 'password' && !username) {
+                showToast('请输入用户名或手机号', 'error');
+                return;
+            }
+            if (loginMethod === 'code' && !phone) {
+                showToast('请输入手机号', 'error');
+                return;
+            }
+
+            // 登录成功，设置token
+            localStorage.setItem('opc_token', 'mock_token_' + Date.now());
+            
+            showToast('登录成功');
+            
+            setTimeout(() => {
+                // 检查是否有待办动作（如认证后跳转或充值后继续）
+                try {
+                    const raw = localStorage.getItem('opc_app_state');
+                    if (raw) {
+                        const state = JSON.parse(raw);
+                        if (state.pendingAction && state.pendingAction.action) {
+                            const pendingAction = state.pendingAction;
+                            // 清除待办动作
+                            localStorage.setItem('opc_app_state', JSON.stringify({
+                                ...state,
+                                pendingAction: null
+                            }));
+                            
+                            // 如果有回调名称，尝试执行
+                            if (pendingAction.callbackName && typeof window[pendingAction.callbackName] === 'function') {
+                                window[pendingAction.callbackName](...pendingAction.args);
+                                return;
+                            }
+                            
+                            // 如果有 targetUrl 则跳转
+                            if (pendingAction.targetUrl) {
+                                window.location.href = pendingAction.targetUrl;
+                                return;
+                            }
+                            
+                            // 默认：显示成功提示并跳转到服务页
+                            showToast(`正在进入${pendingAction.action}`);
+                            setTimeout(() => {
+                                window.location.href = 'services.html';
+                            }, 800);
+                            return;
+                        }
+                    }
+                } catch (e) {}
+                
+                // 无待办动作，返回来源页或首页
+                const referrer = document.referrer;
+                if (referrer && !referrer.includes('login.html')) {
+                    window.location.href = referrer;
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }, 1200);
+        }
+
+        // 处理注册
+        function handleRegister() {
+            // 检查用户协议
+            if (!document.getElementById('agreeTerms').checked) {
+                showToast('请阅读并同意用户协议和隐私政策', 'error');
+                return;
+            }
+
+            // 密码强度校验
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            if (password.length < 8) {
+                showToast('密码至少8位', 'error');
+                return;
+            }
+            
+            if (!/(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])/.test(password)) {
+                showToast('密码需包含字母、数字、特殊字符', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showToast('两次输入的密码不一致', 'error');
+                return;
+            }
+
+            showToast('注册成功');
+            setTimeout(() => {
+                switchTab('login');
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

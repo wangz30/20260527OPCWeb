@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创客空间入驻 - 云上OPC社区</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#7c3aed',
+                        'primary-dark': '#6d28d9',
+                        'primary-light': '#a78bfa',
+                        secondary: '#1e1b4b',
+                        accent: '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Noto Sans SC', sans-serif; }
+        .nav-dropdown-menu { display: none; }
+        .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+        .maker-card { transition: all 0.3s ease; }
+        .maker-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <img src="logo.png" alt="云上OPC" class="w-8 h-8">
+                        <span class="text-xl font-bold text-secondary">云上OPC社区</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-primary font-medium transition">首页</a>
+                    <div class="nav-dropdown relative group">
+                        <a href="services.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>能力中心</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="services.html#ai-models" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition" onclick="switchTab('ai-models'); return true;">
+                                <i class="fas fa-brain w-5 text-primary"></i>
+                                <span>AI模型服务</span>
+                            </a>
+                            <a href="services.html#data-api" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition" onclick="switchTab('data-api'); return true;">
+                                <i class="fas fa-database w-5 text-primary"></i>
+                                <span>数据API服务</span>
+                            </a>
+                            <a href="services.html#cloud" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition" onclick="switchTab('cloud'); return true;">
+                                <i class="fas fa-cloud w-5 text-primary"></i>
+                                <span>云资源服务</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown relative group">
+                        <a href="news.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>前沿资讯</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="news.html?category=policy" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-gavel w-5 text-primary"></i>
+                                <span>政策速递</span>
+                            </a>
+                            <a href="news.html?category=science" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-flask w-5 text-primary"></i>
+                                <span>科普好文</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown relative group">
+                        <a href="events.html" class="text-primary font-medium border-b-2 border-primary flex items-center space-x-1 py-5">
+                            <span>创客空间</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="events.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-calendar-alt w-5 text-primary"></i>
+                                <span>创客空间</span>
+                            </a>
+                            <a href="marketplace.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-store w-5 text-primary"></i>
+                                <span>应用集市</span>
+                            </a>
+                            <a href="maker-space.html" class="flex items-center space-x-3 px-4 py-3 bg-gray-50 text-primary font-medium transition">
+                                <i class="fas fa-rocket w-5 text-primary"></i>
+                                <span>创客空间入驻</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="about.html" class="text-gray-600 hover:text-primary font-medium transition">关于我们</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="user-section" class="flex items-center space-x-4">
+                        <a href="login.html" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition">登录/注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero区域 -->
+    <section class="relative h-[600px] overflow-hidden" style="background-image: url('创客空间入驻.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+        <div class="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+            <div class="max-w-2xl">
+                <h1 class="text-5xl font-bold text-white mb-6">创客空间入驻</h1>
+                <p class="text-xl text-white/90 max-w-2xl">办公空间、投融资对接、政策申报等一站式创业孵化服务</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 主内容区 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- 入驻优势标题 -->
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-secondary mb-4">入驻优势</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">享受全方位创业支持，助力项目快速发展</p>
+        </div>
+        
+        <!-- 入驻优势 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="relative rounded-2xl overflow-hidden h-64 group maker-card">
+                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style="background-image: url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=400&h=300&fit=crop');"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6 text-center">
+                    <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-home text-xl text-white"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">免租政策</h3>
+                    <p class="text-white/80 text-sm">入驻前6个月免租金，降低创业初期成本</p>
+                </div>
+            </div>
+            <div class="relative rounded-2xl overflow-hidden h-64 group maker-card">
+                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style="background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&h=300&fit=crop');"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6 text-center">
+                    <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-wifi text-xl text-white"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">基础设施</h3>
+                    <p class="text-white/80 text-sm">高速网络、会议室、打印设备等完善配套</p>
+                </div>
+            </div>
+            <div class="relative rounded-2xl overflow-hidden h-64 group maker-card">
+                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style="background-image: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=300&fit=crop');"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6 text-center">
+                    <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-handshake text-xl text-white"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">投融资对接</h3>
+                    <p class="text-white/80 text-sm">定期举办投资人路演，对接优质资本</p>
+                </div>
+            </div>
+            <div class="relative rounded-2xl overflow-hidden h-64 group maker-card">
+                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style="background-image: url('https://images.unsplash.com/photo-1505506874110-6a7a69069a08?w=400&h=300&fit=crop');"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6 text-center">
+                    <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-file-alt text-xl text-white"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">政策申报</h3>
+                    <p class="text-white/80 text-sm">协助申请政府补贴、税收优惠等政策支持</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 入驻流程 -->
+        <div class="bg-white rounded-xl p-8 shadow-md mb-12">
+            <h3 class="text-2xl font-bold text-secondary mb-8 text-center">入驻流程</h3>
+            <div class="flex items-center justify-between">
+                <div class="flex-1 text-center">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-edit text-2xl text-white"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-secondary mb-2">提交申请</h4>
+                    <p class="text-gray-600 text-sm">填写入驻申请表，提交创业计划书</p>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-arrow-right text-2xl text-gray-300"></i>
+                </div>
+                <div class="flex-1 text-center">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-search text-2xl text-white"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-secondary mb-2">审核评估</h4>
+                    <p class="text-gray-600 text-sm">专业团队审核项目，评估入驻资格</p>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-arrow-right text-2xl text-gray-300"></i>
+                </div>
+                <div class="flex-1 text-center">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-file-signature text-2xl text-white"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-secondary mb-2">专人对接</h4>
+                    <p class="text-gray-600 text-sm">专人对接服务，全程跟进入驻事宜</p>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-arrow-right text-2xl text-gray-300"></i>
+                </div>
+                <div class="flex-1 text-center">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-rocket text-2xl text-white"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-secondary mb-2">正式入驻</h4>
+                    <p class="text-gray-600 text-sm">分配办公空间，开启创业之旅</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 立即申请按钮 -->
+        <div class="flex items-center justify-center py-8">
+            <button onclick="withAuthChain({action: '创客空间入驻', callbackName: 'openApplyModal', args: ['创客空间入驻']});" class="cursor-pointer bg-primary hover:bg-primary-dark text-white px-12 py-4 rounded-xl font-semibold text-lg transition-all duration-200 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 active:translate-y-0 active:shadow-md flex items-center space-x-2">
+                <i class="fas fa-paper-plane"></i>
+                <span>立即申请</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- 服务申请表单弹窗 -->
+    <div id="applyModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-secondary">服务申请</h3>
+                <button onclick="closeApplyModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="applyForm">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">服务选择</label>
+                        <input type="text" id="serviceType" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">实名认证状态</label>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">已认证</span>
+                            <span class="text-gray-500 text-sm">张三 | 440***********1234</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">联系方式</label>
+                        <input type="text" value="138****8888" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                    </div>
+                    
+                    <div id="makerFields" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">创业项目方向</label>
+                            <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option>人工智能</option>
+                                <option>物联网</option>
+                                <option>大数据</option>
+                                <option>电子商务</option>
+                                <option>其他</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">团队人数</label>
+                            <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option>1人</option>
+                                <option>2-5人</option>
+                                <option>6-10人</option>
+                                <option>10人以上</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">申请备注</label>
+                        <textarea id="applyNote" rows="4" placeholder="请描述您的具体需求..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+                    </div>
+                </div>
+                <div class="mt-6 flex space-x-4">
+                    <button type="button" onclick="submitApply()" class="flex-1 bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition">提交申请</button>
+                    <button type="button" onclick="closeApplyModal()" class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 全站通用页脚 -->
+    <footer class="bg-[#1a1a4e] text-white relative">
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+                <div class="footer-brand">
+                    <div class="flex items-center space-x-3 mb-5">
+                        <img src="logo.png" alt="云上OPC" class="w-9 h-9 rounded-xl">
+                        <span class="text-xl font-bold tracking-tight">云上OPC社区</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-1">AI协同 · 数据赋能 · 云服务 · 创业孵化</p>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">一站式线上综合服务赋能平台</p>
+                    <div class="flex items-center gap-4 text-xs text-gray-500">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-building text-primary/60"></i>深圳国家高技术产业创新中心</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs text-gray-500 mt-2">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-database text-primary/60"></i>粤港澳大湾区大数据中心</span>
+                    </div>
+                </div>
+                <div class="footer-support">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">服务支持</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-clock text-primary/70 text-xs"></i>
+                            </div>
+                            <span>周一至周五 9:00 - 18:00</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-envelope text-primary/70 text-xs"></i>
+                            </div>
+                            <span>gbanexus@hiic.com.cn</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-phone text-primary/70 text-xs"></i>
+                            </div>
+                            <span>400-888-9999</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">快速链接</h3>
+                    <div class="space-y-3">
+                        <a href="services.html#ai-models" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>AI模型服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="services.html#data-api" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>数据API服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="services.html#cloud" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>云资源服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="maker-space.html" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>创客空间入驻</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-14 pt-8 border-t border-white/10">
+                <p class="text-center text-gray-500 text-xs">© 2026 云上OPC社区 版权所有</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/common.js"></script>
+    <script>
+        function switchTab(tabId) {
+            localStorage.setItem('activeServiceTab', tabId);
+        }
+
+        function openApplyModal(serviceType) {
+            document.getElementById('serviceType').value = serviceType;
+            document.getElementById('applyNote').value = '';
+            document.getElementById('applyModal').classList.remove('hidden');
+            document.getElementById('applyModal').classList.add('flex');
+        }
+
+        function closeApplyModal() {
+            document.getElementById('applyModal').classList.add('hidden');
+            document.getElementById('applyModal').classList.remove('flex');
+        }
+
+        function submitApply() {
+            alert('申请已提交！我们会在1-3个工作日内与您联系。');
+            closeApplyModal();
+        }
+
+        document.getElementById('applyModal').addEventListener('click', function(e) {
+            if (e.target === this) closeApplyModal();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前沿资讯 - 云上OPC社区</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#7c3aed',
+                        'primary-dark': '#6d28d9',
+                        'primary-light': '#a78bfa',
+                        secondary: '#1e1b4b',
+                        accent: '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Noto Sans SC', sans-serif; }
+        .news-card { transition: all 0.3s ease; }
+        .news-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .nav-dropdown-menu { display: none; }
+        .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+        .article-card { transition: all 0.3s ease; border: 1px solid #f3f4f6; }
+        .article-card:hover { border-color: #e5e7eb; box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08); }
+        .category-tab { transition: all 0.2s ease; }
+        .category-tab.active { background-color: #7c3aed; color: white; border-color: #7c3aed; }
+        .hot-badge { background: linear-gradient(135deg, #ff6b6b, #ee5a5a); }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <img src="logo.png" alt="云上OPC" class="w-8 h-8">
+                        <span class="text-xl font-bold text-secondary">云上OPC社区</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-primary font-medium transition">首页</a>
+                    <div class="nav-dropdown relative group">
+                        <a href="services.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>能力中心</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="services.html#ai-models" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition" onclick="switchTab('ai-models'); return true;">
+                                <i class="fas fa-brain w-5 text-primary"></i>
+                                <span>AI模型服务</span>
+                            </a>
+                            <a href="services.html#data-api" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition" onclick="switchTab('data-api'); return true;">
+                                <i class="fas fa-database w-5 text-primary"></i>
+                                <span>数据API服务</span>
+                            </a>
+                            <a href="services.html#cloud" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition" onclick="switchTab('cloud'); return true;">
+                                <i class="fas fa-cloud w-5 text-primary"></i>
+                                <span>云资源服务</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown relative group">
+                        <a href="news.html" class="text-primary font-medium border-b-2 border-primary flex items-center space-x-1 py-5">
+                            <span>前沿资讯</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="news.html?category=policy" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-gavel w-5 text-primary"></i>
+                                <span>政策速递</span>
+                            </a>
+                            <a href="news.html?category=science" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-flask w-5 text-primary"></i>
+                                <span>科普好文</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown relative group">
+                        <a href="events.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>创客空间</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="events.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-calendar-alt w-5 text-primary"></i>
+                                <span>社区活动</span>
+                            </a>
+                            <a href="marketplace.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-store w-5 text-primary"></i>
+                                <span>应用集市</span>
+                            </a>
+                            <a href="maker-space.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-rocket w-5 text-primary"></i>
+                                <span>创客空间入驻</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="about.html" class="text-gray-600 hover:text-primary font-medium transition">关于我们</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="user-section" class="flex items-center space-x-4">
+                        <a href="login.html" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition">登录/注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-16 min-h-screen bg-gray-50">
+        <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- 页面标题 -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-secondary mb-2">前沿资讯</h1>
+                <p class="text-gray-500">聚焦AI产业政策、技术科普与创业方法论</p>
+            </div>
+
+            <!-- 搜索栏 -->
+            <div class="mb-6">
+                <div class="relative flex-1 max-w-md">
+                    <input type="text" id="searchInput" placeholder="搜索资讯标题或内容..."
+                        class="w-full px-4 py-3 pl-12 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+            </div>
+            
+            <!-- 分类标签 -->
+            <div class="mb-6 flex items-center space-x-2 flex-wrap gap-2">
+                <button onclick="switchCategory('all')" id="tab-all" class="category-tab active px-5 py-3 rounded-full border border-gray-200 text-sm font-medium text-gray-600 hover:border-primary hover:text-primary bg-white">
+                    全部
+                </button>
+                <button onclick="switchCategory('policy')" id="tab-policy" class="category-tab px-5 py-3 rounded-full border border-gray-200 text-sm font-medium text-gray-600 hover:border-primary hover:text-primary bg-white">
+                    政策速递
+                </button>
+                <button onclick="switchCategory('science')" id="tab-science" class="category-tab px-5 py-3 rounded-full border border-gray-200 text-sm font-medium text-gray-600 hover:border-primary hover:text-primary bg-white">
+                    科普好文
+                </button>
+            </div>
+
+            <!-- 文章列表 -->
+            <div id="news-container" class="space-y-4 mb-8">
+                <!-- 文章卡片将通过JS动态生成 -->
+            </div>
+
+            <!-- 分页 -->
+            <div class="flex justify-center items-center space-x-2 pt-4">
+                <button id="prevPage" class="px-4 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-chevron-left text-gray-600"></i>
+                </button>
+                <div id="pagination" class="flex space-x-2">
+                    <!-- 页码将通过JS动态生成 -->
+                </div>
+                <button id="nextPage" class="px-4 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    <i class="fas fa-chevron-right text-gray-600"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        // 能力中心下拉菜单跳转
+        function switchTab(tabId) {
+            localStorage.setItem('activeServiceTab', tabId);
+        }
+
+        // 资讯数据
+        const newsData = [
+            {
+                id: 1,
+                title: "《广东省支持人工智能OPC创新发展行动方案（2026-2028年）》",
+                content: "算力券降低算力成本；免费模型接口和安全检测服务；建设OPC生态社区实现'拎脑入驻'；跨境场景支持开拓葡语国家、东南亚市场。到2028年建成百个OPC社区、培育千家标杆企业。",
+                category: "policy",
+                categoryName: "政策速递",
+                publishTime: "2026-03-12",
+                source: "广东省发展改革委",
+                image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&h=250&fit=crop",
+                link: "https://amr.sz.gov.cn/xxgk/qt/ztlm/opcfwzq/zcwj/content/post_12694570.html"
+            },
+            {
+                id: 2,
+                title: "《深圳市打造人工智能OPC创业生态引领地行动计划（2026-2027年）》",
+                content: "落户补贴（博士/硕士/本科最高10万元）；入驻OPC社区享低成本工位；智能券抵扣算力/模型成本，训力券最高1000万、模型券最高200万、语料券最高200万；政务场景应用最高500万资助。",
+                category: "policy",
+                categoryName: "政策速递",
+                publishTime: "2026-01-14",
+                source: "深圳市工业和信息化局",
+                image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=250&fit=crop",
+                link: "https://www.sz.gov.cn/cn/xxgk/zfxxgj/tzgg/content/post_12602687.html"
+            },
+            {
+                id: 3,
+                title: "《广州市海珠区OPC创新发展十条》",
+                content: "智能体专区每年最高12个月工位费全免；算力补贴50%（年度上限20万）、数据补贴30%（年度上限10万）；引领性项目补贴30%，最高500万；生成式AI备案最高100万、深度合成备案最高20万。",
+                category: "policy",
+                categoryName: "政策速递",
+                publishTime: "2026-03-19",
+                source: "广州市海珠区",
+                image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400&h=250&fit=crop",
+                link: "https://zsj.gz.gov.cn/zwgk/zfxxgkml/zfxxgkzn/gzdt/content/post_10745642.html"
+            },
+            {
+                id: 4,
+                title: "《深圳市打造人工智能先锋城市若干措施》",
+                content: "训力券按合同金额50%资助（初创60%）最高1000万；语料券30%资助最高200万；模型券30%资助最高200万；开放50个政务场景；零租孵化器6个月至3年免租。",
+                category: "policy",
+                categoryName: "政策速递",
+                publishTime: "2025-12-20",
+                source: "深圳市政府",
+                image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=250&fit=crop",
+                link: "https://www.sz.gov.cn/zfgb/zcjd/content/post_11932960.html"
+            },
+            {
+                id: 5,
+                title: "《广州市促进人工智能产业高质量发展实施方案》",
+                content: "到2027年引育万家AI企业，智能体应用普及率超70%；建设10个共性技术服务平台、100个垂直大模型、1000个场景示范，打造万亿级AI生态圈。",
+                category: "policy",
+                categoryName: "政策速递",
+                publishTime: "2026-03-18",
+                source: "广州市政府办公厅",
+                image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=400&h=250&fit=crop",
+                link: "https://www.gz.gov.cn/zwgk/fggw/sfbgtwj/content/post_10743475.html"
+            },
+            {
+                id: 6,
+                title: "《广州市白云区支持人工智能和数据产业高质量发展若干措施》",
+                content: "支持人工智能和数据产业高质量发展，推动区域数字经济转型升级。",
+                category: "policy",
+                categoryName: "政策速递",
+                publishTime: "2026-03-31",
+                source: "广州市白云区政府",
+                image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop",
+                link: "https://www.gz.gov.cn/gzzcwjk/gzdata/content/post_10751591.html"
+            },
+            {
+                id: 7,
+                title: "《东莞市加快推动人工智能赋能制造业高质量发展若干措施》",
+                content: "算力券按实际服务额50%资助，每年最高100万；模型券最高100万资助；边端智算节点部署补贴30%，最高100万；先进制造场景投入3亿元，打造100个示范场景；设立50亿元子基金群。",
+                category: "policy",
+                categoryName: "政策速递",
+                publishTime: "2025-02-05",
+                source: "东莞市人民政府",
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop",
+                link: "https://www.dg.gov.cn/zwgk/zfxxgkml/szfbgs/zcwj/qtwj/content/post_4336091.html"
+            },
+            {
+                id: 8,
+                title: "《香港数码港人工智能资助计划》",
+                content: "特区政府拨款30亿港元，汇聚超400间AI初创企业；设立ABC服务中心（AI+大数据+网络安全）提供一站式服务；推出生成式AI沙盒，风险可控测试环境。",
+                category: "policy",
+                categoryName: "政策速递",
+                publishTime: "2024-12-01",
+                source: "香港数码港",
+                image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=250&fit=crop",
+                link: "https://www.cyberport.hk/zh-hk/digital_tech/ai/"
+            },
+            {
+                id: 9,
+                title: "MemPalace爆火的真相：AI创业的下半场，拼的不是智商，是记性",
+                content: "好莱坞影星米拉·乔沃维奇与工程师联合开源的AI记忆系统MemPalace，在长期记忆评测中斩获全球首个满分500题全对，运行成本仅年均0.7美元，累计收获27.5k Star。",
+                category: "science",
+                categoryName: "科普好文",
+                publishTime: "2026-04-09",
+                source: "GBAnexus",
+                image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=250&fit=crop",
+                link: "https://mp.weixin.qq.com/s/qgGFTyPj_-nQBAFU1S2rcw"
+            },
+            {
+                id: 10,
+                title: "OPC背后的新趋势：三个案例看\"AI+个体创业\"如何重塑商业形态",
+                content: "从跨境电商4个月突破500万销售额，到招聘平台月均服务50万人次，再到AI动画创作工具全球注册用户超6000个，三个真实案例展示AI如何赋能个体创业者。",
+                category: "science",
+                categoryName: "科普好文",
+                publishTime: "2026-03-27",
+                source: "GBAnexus",
+                image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop",
+                link: "https://mp.weixin.qq.com/s/ujl-toKV2l6NyorpHuvHeQ"
+            },
+            {
+                id: 11,
+                title: "当AI开始\"收税\"：词元，这个新单位正在悄悄掏空你的钱包？",
+                content: "2026年3月，国家数据局正式公布Token的中文官方译名为'词元'。我国日均词元调用量已突破140万亿，一个全新的'词元经济'正在加速形成，AI服务正从'买软件'转向'缴电费'模式。",
+                category: "science",
+                categoryName: "科普好文",
+                publishTime: "2026-03-26",
+                source: "GBAnexus",
+                image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=250&fit=crop",
+                link: "https://mp.weixin.qq.com/s/M8iFhvv7BlQAO593jlZHmQ"
+            }
+        ];
+
+        let currentPage = 1;
+        const itemsPerPage = 8;
+        let currentCategory = 'all';
+        let searchQuery = '';
+
+        // 基于文章ID生成稳定的伪随机数（确保切换分类时数据一致）
+        function seededRandom(seed) {
+            var x = Math.sin(seed * 9301 + 49297) * 49297;
+            return x - Math.floor(x);
+        }
+
+        // 为每篇文章预计算稳定的互动数据
+        newsData.forEach(function(item) {
+            item.views = item.views || Math.floor(seededRandom(item.id * 7) * 5000) + 1000;
+            item.likes = item.likes || Math.floor(seededRandom(item.id * 13) * 200) + 10;
+            item.comments = item.comments || Math.floor(seededRandom(item.id * 17) * 50) + 1;
+        });
+
+        // 切换分类
+        function switchCategory(category) {
+            currentCategory = category;
+            currentPage = 1;
+
+            // 更新标签样式
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById('tab-' + category).classList.add('active');
+
+            renderNews();
+        }
+
+        // 渲染资讯卡片
+        function renderNews() {
+            const container = document.getElementById('news-container');
+            let filteredData = newsData;
+
+            // 分类筛选
+            if (currentCategory !== 'all') {
+                filteredData = filteredData.filter(item => item.category === currentCategory);
+            }
+
+            // 搜索筛选
+            if (searchQuery) {
+                filteredData = filteredData.filter(item =>
+                    item.title.includes(searchQuery) || item.content.includes(searchQuery)
+                );
+            }
+
+            // 按发布时间降序排列（最新在前）
+            filteredData.sort((a, b) => new Date(b.publishTime) - new Date(a.publishTime));
+
+            // 分页
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageData = filteredData.slice(start, end);
+
+            // 渲染横向文章卡片
+            container.innerHTML = pageData.map(item => {
+                const isHot = item.isHot || false;
+                const tags = item.tags || [item.categoryName];
+
+                return `
+                <div class="article-card bg-white rounded-xl overflow-hidden cursor-pointer" onclick="${item.link ? `window.open('${item.link}', '_blank')` : ''}">
+                    <div class="flex flex-col md:flex-row">
+                        <!-- 左侧内容区 -->
+                        <div class="flex-1 p-6 md:pr-4">
+                            <!-- 标题行 -->
+                            <div class="flex items-start gap-2 mb-3">
+                                <h3 class="text-lg font-bold text-secondary leading-tight hover:text-primary transition">${item.title}</h3>
+                                ${isHot ? `<span class="hot-badge text-white text-xs px-2 py-0.5 rounded font-medium flex-shrink-0 mt-0.5">HOT</span>` : ''}
+                            </div>
+
+                            <!-- 摘要 -->
+                            <p class="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-2">${item.content}</p>
+
+                            <!-- 分类标签 -->
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                ${tags.map(tag => `<span class="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full">${tag}</span>`).join('')}
+                            </div>
+
+                            <!-- 底部元信息 -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4 text-gray-400 text-sm">
+                                    <span class="flex items-center space-x-1">
+                                        <i class="far fa-eye text-xs"></i>
+                                        <span>${item.views.toLocaleString()}</span>
+                                    </span>
+                                    <span class="flex items-center space-x-1">
+                                        <i class="far fa-comment text-xs"></i>
+                                        <span>${item.comments}</span>
+                                    </span>
+                                    <span class="flex items-center space-x-1">
+                                        <i class="far fa-thumbs-up text-xs"></i>
+                                        <span>${item.likes}</span>
+                                    </span>
+                                </div>
+                                <div class="flex items-center space-x-3 text-gray-400 text-sm">
+                                    <span class="flex items-center space-x-1">
+                                        <i class="far fa-user text-xs"></i>
+                                        <span>${item.source}</span>
+                                    </span>
+                                    <span>${item.publishTime}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 右侧图片区 -->
+                        <div class="md:w-64 lg:w-72 flex-shrink-0 p-4 md:pl-0">
+                            <div class="relative h-40 md:h-full rounded-lg overflow-hidden">
+                                <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            // 渲染分页
+            renderPagination(totalPages);
+        }
+
+        // 渲染分页
+        function renderPagination(totalPages) {
+            const pagination = document.getElementById('pagination');
+            let html = '';
+            
+            for (let i = 1; i <= totalPages; i++) {
+                html += `
+                    <button onclick="goToPage(${i})" class="px-4 py-2 rounded-lg transition ${
+                        i === currentPage 
+                            ? 'bg-primary text-white' 
+                            : 'border border-gray-300 hover:bg-gray-50'
+                    }">${i}</button>
+                `;
+            }
+            
+            pagination.innerHTML = html;
+
+            // 更新上一页/下一页按钮状态
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages;
+        }
+
+        // 跳转到指定页
+        function goToPage(page) {
+            currentPage = page;
+            renderNews();
+        }
+
+        // 事件监听
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderNews();
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            let filteredData = newsData;
+            if (currentCategory !== 'all') {
+                filteredData = filteredData.filter(item => item.category === currentCategory);
+            }
+            if (searchQuery) {
+                filteredData = filteredData.filter(item =>
+                    item.title.includes(searchQuery) || item.content.includes(searchQuery)
+                );
+            }
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderNews();
+            }
+        });
+
+        // 搜索功能
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            currentPage = 1;
+            renderNews();
+        });
+
+        // 解析URL参数
+        function getUrlParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        // 根据URL参数初始化分类
+        function initCategoryFromUrl() {
+            const category = getUrlParam('category');
+            if (category && ['policy', 'science'].includes(category)) {
+                currentCategory = category;
+                // 同步更新标签样式
+                document.querySelectorAll('.category-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                const tabEl = document.getElementById('tab-' + category);
+                if (tabEl) tabEl.classList.add('active');
+            }
+        }
+
+        // 初始化
+        initCategoryFromUrl();
+        renderNews();
+    </script>
+
+    <!-- 全站通用页脚 -->
+    <footer class="bg-[#1a1a4e] text-white relative">
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+                <div class="footer-brand">
+                    <div class="flex items-center space-x-3 mb-5">
+                        <img src="logo.png" alt="云上OPC" class="w-9 h-9 rounded-xl">
+                        <span class="text-xl font-bold tracking-tight">云上OPC社区</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-1">AI协同 · 数据赋能 · 云服务 · 创业孵化</p>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">一站式线上综合服务赋能平台</p>
+                    <div class="flex items-center gap-4 text-xs text-gray-500">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-building text-primary/60"></i>深圳国家高技术产业创新中心</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs text-gray-500 mt-2">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-database text-primary/60"></i>粤港澳大湾区大数据中心</span>
+                    </div>
+                </div>
+                <div class="footer-support">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">服务支持</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-clock text-primary/70 text-xs"></i>
+                            </div>
+                            <span>周一至周五 9:00 - 18:00</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-envelope text-primary/70 text-xs"></i>
+                            </div>
+                            <span>gbanexus@hiic.com.cn</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-phone text-primary/70 text-xs"></i>
+                            </div>
+                            <span>400-888-9999</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">快速链接</h3>
+                    <div class="space-y-3">
+                        <a href="services.html#ai-models" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>AI模型服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="services.html#data-api" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>数据API服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="services.html#cloud" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>云资源服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="maker-space.html" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>创客空间入驻</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-14 pt-8 border-t border-white/10">
+                <p class="text-center text-gray-500 text-xs">© 2026 云上OPC社区 版权所有</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

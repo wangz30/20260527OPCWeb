@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模型详情 - 云上OPC社区</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { light: '#9333ea', DEFAULT: '#7c3aed', dark: '#6d28d9' },
+                        'primary-dark': '#6d28d9',
+                        'primary-light': '#a78bfa',
+                        secondary: { DEFAULT: '#1e1b4b', light: '#334155' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        .nav-dropdown-menu { display: none; }
+        .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+        .modal-overlay { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px); }
+        .modal-enter { animation: modalEnter 0.3s ease-out; }
+        @keyframes modalEnter { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <img src="logo.png" alt="云上OPC" class="w-8 h-8">
+                        <span class="text-xl font-bold text-secondary">云上OPC社区</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-primary font-medium transition">首页</a>
+                    <div class="nav-dropdown relative group">
+                        <a href="services.html" class="text-primary font-medium border-b-2 border-primary flex items-center space-x-1 py-5">
+                            <span>能力中心</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="services.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-brain w-5 text-primary"></i>
+                                <span>AI模型服务</span>
+                            </a>
+                            <a href="services.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-database w-5 text-primary"></i>
+                                <span>数据API服务</span>
+                            </a>
+                            <a href="services.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-cloud w-5 text-primary"></i>
+                                <span>云资源服务</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown relative group">
+                        <a href="news.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>前沿资讯</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="news.html?category=policy" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-gavel w-5 text-primary"></i>
+                                <span>政策速递</span>
+                            </a>
+                            <a href="news.html?category=science" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-flask w-5 text-primary"></i>
+                                <span>科普好文</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown relative group">
+                        <a href="events.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>创客空间</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="events.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-calendar-alt w-5 text-primary"></i>
+                                <span>社区活动</span>
+                            </a>
+                            <a href="marketplace.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-store w-5 text-primary"></i>
+                                <span>应用集市</span>
+                            </a>
+                            <a href="maker-space.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-rocket w-5 text-primary"></i>
+                                <span>创客空间入驻</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="about.html" class="text-gray-600 hover:text-primary font-medium transition">关于我们</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="user-section" class="flex items-center space-x-4"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-16 min-h-screen">
+        <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- 返回按钮 -->
+            <a href="services.html" class="inline-flex items-center space-x-2 text-gray-500 hover:text-primary transition mb-6 text-sm">
+                <i class="fas fa-arrow-left"></i>
+                <span>返回能力中心</span>
+            </a>
+
+            <!-- 模型信息区 -->
+            <div id="model-detail-container" class="fade-in"></div>
+        </main>
+    </div>
+
+    <!-- 引导弹窗 -->
+    <div id="guideModal" class="hidden fixed inset-0 z-50 items-center justify-center modal-overlay">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-8 modal-enter">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-rocket text-2xl text-primary"></i>
+                </div>
+                <h3 class="text-xl font-bold text-secondary mb-2">开始使用</h3>
+                <p class="text-gray-600">按照以下步骤快速上手</p>
+            </div>
+
+            <div class="bg-primary/5 rounded-xl p-6 mb-6">
+                <p class="text-gray-700 leading-relaxed text-center">
+                    前往个人中心获取 API Key 和使用文档，<br>或在调试台测试模型效果。
+                </p>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                <button onclick="closeGuideModal()" class="text-gray-500 hover:text-gray-700 transition px-4 py-2">
+                    取消
+                </button>
+                <a href="profile.html#ai-workbench" class="inline-flex items-center space-x-2 bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-lg transition">
+                    <span>立即前往</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登录提示弹窗 -->
+    <div id="loginPromptModal" class="hidden fixed inset-0 z-50 items-center justify-center modal-overlay">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-10 modal-enter">
+            <div class="text-center">
+                <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-lock text-3xl text-primary"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-secondary mb-4">需要登录</h3>
+                <p class="text-gray-500 text-lg mb-8">请先登录并完成实名认证，即可使用该服务。</p>
+                <div class="flex items-center gap-4">
+                    <button onclick="closeLoginPromptModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-secondary px-6 py-3.5 rounded-xl text-lg font-medium transition">
+                        取消
+                    </button>
+                    <a href="login.html" class="flex-1 inline-flex items-center justify-center space-x-2 bg-primary hover:bg-primary-dark text-white px-6 py-3.5 rounded-xl text-lg font-medium transition">
+                        <span>去登录</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        // 模型数据
+        var modelData = {
+            'qwen-max': {
+                title: 'Qwen-Max', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '通义千问旗舰模型，支持复杂推理与多模态理解',
+                releaseDate: '2024-09-15', price: '¥0.02/1K tokens', context: '32K tokens',
+                modality: '文本、图片、代码', capability: '复杂推理',
+                scenarios: ['复杂问题求解', '多模态分析', '代码生成', '创意写作'],
+                tags: ['文本生成', '图片理解', '代码生成'],
+                intro: 'Qwen-Max是通义千问系列的旗舰模型，具备强大的多模态理解能力和复杂推理能力。支持文本、图片、代码等多种输入类型，适用于高难度任务处理。',
+                guide: ['前往个人中心获取API Key，即可开始调用', '在调试台中测试模型效果，调整参数', '查看帮助文档与示例代码，快速接入开发', '按Token消耗计费，余额不足时请及时充值']
+            },
+            'qwen-plus': {
+                title: 'Qwen-Plus', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '通义千问标准版，平衡性能与成本',
+                releaseDate: '2024-06-20', price: '¥0.008/1K tokens', context: '128K tokens',
+                modality: '文本', capability: '高效推理',
+                scenarios: ['日常对话', '文本生成', '内容摘要', '问答系统'],
+                tags: ['文本生成', '对话'],
+                intro: 'Qwen-Plus是通义千问系列的标准版模型，在性能与成本之间取得良好平衡。适合日常对话、文本生成等通用场景。',
+                guide: ['前往个人中心获取API Key，即可开始调用', '在调试台中测试模型效果，调整参数', '查看帮助文档与示例代码，快速接入开发', '按Token消耗计费，余额不足时请及时充值']
+            },
+            'qwen-coder': {
+                title: 'Qwen-Coder', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '专为代码生成与审查优化的专用模型',
+                releaseDate: '2024-08-10', price: '¥0.006/1K tokens', context: '64K tokens',
+                modality: '文本', capability: '代码生成、审查、优化',
+                scenarios: ['代码生成', '代码审查', '代码补全', '技术文档'],
+                tags: ['代码生成', '代码审查'],
+                intro: 'Qwen-Coder是专为代码生成与审查优化的专用模型，支持多种编程语言，具备代码补全、代码审查、代码优化等能力。',
+                guide: ['前往个人中心获取API Key，即可开始调用', '在调试台中测试模型效果，调整参数', '查看帮助文档与示例代码，快速接入开发', '按Token消耗计费，余额不足时请及时充值']
+            },
+            'deepseek-v3': {
+                title: 'DeepSeek-V3', vendor: 'DeepSeek', vendorIcon: 'D', vendorColor: 'bg-blue-600',
+                description: '深度求索最新通用模型，推理与数学能力突出',
+                releaseDate: '2024-12-26', price: '¥0.005/1K tokens', context: '64K tokens',
+                modality: '文本', capability: '超强推理、数学',
+                scenarios: ['数学求解', '逻辑推理', '文本生成', '数据分析'],
+                tags: ['文本生成', '推理', '数学'],
+                intro: 'DeepSeek-V3是深度求索发布的最新通用大模型，在推理能力和数学能力方面表现突出，支持多种复杂任务处理。',
+                guide: ['前往个人中心获取API Key，即可开始调用', '在调试台中测试模型效果，调整参数', '查看帮助文档与示例代码，快速接入开发', '按Token消耗计费，余额不足时请及时充值']
+            },
+            'deepseek-r1': {
+                title: 'DeepSeek-R1', vendor: 'DeepSeek', vendorIcon: 'D', vendorColor: 'bg-blue-600',
+                description: '深度求索推理专用模型，展示完整思维链',
+                releaseDate: '2025-01-20', price: '¥0.008/1K tokens', context: '32K tokens',
+                modality: '文本', capability: '逻辑推理、数学证明',
+                scenarios: ['逻辑推理', '数学证明', '问题求解', '思维分析'],
+                tags: ['思维链', '逻辑推理', '数学'],
+                intro: 'DeepSeek-R1是深度求索专为推理任务优化的模型，能够展示完整的思维链过程，适合需要透明推理逻辑的复杂问题求解。',
+                guide: ['前往个人中心获取API Key，即可开始调用', '在调试台中测试模型效果，调整参数', '查看帮助文档与示例代码，快速接入开发', '按Token消耗计费，余额不足时请及时充值']
+            },
+            'gpt-4o': {
+                title: 'GPT-4o', vendor: 'OpenAI', vendorIcon: 'O', vendorColor: 'bg-green-600',
+                description: 'OpenAI旗舰多模态模型，支持视觉与音频理解',
+                releaseDate: '2024-05-13', price: '¥0.04/1K tokens', context: '128K tokens',
+                modality: '文本、视觉、音频', capability: '实时交互',
+                scenarios: ['多模态分析', '视觉理解', '音频处理', '实时对话'],
+                tags: ['多模态', '视觉', '音频'],
+                intro: 'GPT-4o是OpenAI的旗舰多模态模型，支持文本、视觉和音频的原生理解与生成，具备实时交互能力。',
+                guide: ['前往个人中心获取API Key，即可开始调用', '在调试台中测试模型效果，调整参数', '查看帮助文档与示例代码，快速接入开发', '按Token消耗计费，余额不足时请及时充值']
+            },
+            'gpt-4o-mini': {
+                title: 'GPT-4o-mini', vendor: 'OpenAI', vendorIcon: 'O', vendorColor: 'bg-green-600',
+                description: 'OpenAI轻量版模型，高性价比适合日常任务',
+                releaseDate: '2024-07-18', price: '¥0.008/1K tokens', context: '128K tokens',
+                modality: '文本', capability: '快速响应',
+                scenarios: ['日常任务', '批量处理', '文本生成', '快速响应'],
+                tags: ['轻量', '高性价比', '日常'],
+                intro: 'GPT-4o-mini是OpenAI的轻量版模型，在保持较高性能的同时具有更高的性价比，适合日常任务和批量处理。',
+                guide: ['前往个人中心获取API Key，即可开始调用', '在调试台中测试模型效果，调整参数', '查看帮助文档与示例代码，快速接入开发', '按Token消耗计费，余额不足时请及时充值']
+            },
+            'claude-3.5-sonnet': {
+                title: 'Claude-3.5-Sonnet', vendor: 'Anthropic', vendorIcon: 'A', vendorColor: 'bg-orange-500',
+                description: 'Anthropic推荐模型，擅长长文本处理与深度分析',
+                releaseDate: '2024-06-20', price: '¥0.025/1K tokens', context: '200K tokens',
+                modality: '文本', capability: '深度分析',
+                scenarios: ['长文档分析', '深度研究', '学术写作', '报告生成'],
+                tags: ['长文本', '深度分析'],
+                intro: 'Claude-3.5-Sonnet是Anthropic推荐的模型，特别擅长长文本处理和深度分析，支持超长上下文窗口。',
+                guide: ['前往个人中心获取API Key，即可开始调用', '在调试台中测试模型效果，调整参数', '查看帮助文档与示例代码，快速接入开发', '按Token消耗计费，余额不足时请及时充值']
+            }
+        };
+
+        function getUrlParam(name) {
+            var params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        function renderModelDetail() {
+            var modelId = getUrlParam('id');
+            var model = modelData[modelId];
+
+            if (!model) {
+                document.getElementById('model-detail-container').innerHTML =
+                    '<div class="text-center py-20">' +
+                    '<i class="fas fa-exclamation-circle text-4xl text-gray-300 mb-4"></i>' +
+                    '<p class="text-gray-500 text-lg">未找到该模型信息</p>' +
+                    '<a href="services.html" class="inline-block mt-4 text-primary hover:text-primary-dark transition">返回能力中心</a>' +
+                    '</div>';
+                return;
+            }
+
+            var scenariosHtml = '';
+            for (var i = 0; i < model.scenarios.length; i++) {
+                scenariosHtml += '<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">' + model.scenarios[i] + '</span>';
+            }
+
+            var tagsHtml = '';
+            for (var j = 0; j < model.tags.length; j++) {
+                tagsHtml += '<span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-sm">' + model.tags[j] + '</span>';
+            }
+
+            document.getElementById('model-detail-container').innerHTML =
+                '<div class="bg-white rounded-2xl p-8 shadow-sm mb-6 relative">' +
+                    '<div class="flex items-start justify-between mb-5">' +
+                        '<div class="flex items-center space-x-4">' +
+                            '<div class="w-12 h-12 ' + model.vendorColor + ' rounded-xl flex items-center justify-center text-white text-lg font-bold">' + model.vendorIcon + '</div>' +
+                            '<div>' +
+                                '<h1 class="text-2xl font-bold text-secondary">' + model.title + '</h1>' +
+                                '<p class="text-gray-400 text-sm">' + model.vendor + '</p>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="text-right">' +
+                            '<span class="text-gray-400 text-xs"><i class="far fa-calendar-alt mr-1"></i>' + model.releaseDate + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<p class="text-gray-600 mb-5">' + model.description + '</p>' +
+                    '<div class="flex flex-wrap gap-2 mb-4">' + tagsHtml + '</div>' +
+                    '<div class="flex items-center space-x-3">' +
+                        '<span class="text-primary font-bold text-lg">' + model.price + '</span>' +
+                        '<span class="text-gray-400 text-xs">按Token计费</span>' +
+                    '</div>' +
+                    '<div class="absolute bottom-8 right-8">' +
+                        '<button onclick="handleExperienceClick()" class="bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-xl font-semibold transition flex items-center space-x-2 whitespace-nowrap">' +
+                            '<i class="fas fa-rocket text-sm"></i>' +
+                            '<span>立即体验</span>' +
+                        '</button>' +
+                    '</div>' +
+                '</div>' +
+
+                '<div class="space-y-6">' +
+                    '<div class="bg-white rounded-2xl p-6 shadow-sm">' +
+                        '<h3 class="text-base font-bold text-secondary mb-3"><i class="fas fa-info-circle text-primary mr-2"></i>模型介绍</h3>' +
+                        '<p class="text-gray-600 leading-relaxed text-sm">' + model.intro + '</p>' +
+                    '</div>' +
+
+                    '<div class="bg-white rounded-2xl p-6 shadow-sm">' +
+                        '<h3 class="text-base font-bold text-secondary mb-4"><i class="fas fa-sliders-h text-primary mr-2"></i>核心参数</h3>' +
+                        '<div class="grid grid-cols-2 gap-3">' +
+                            '<div class="bg-gray-50 rounded-lg p-3">' +
+                                '<span class="text-gray-400 text-xs">上下文长度</span>' +
+                                '<p class="text-secondary font-semibold text-sm mt-1">' + model.context + '</p>' +
+                            '</div>' +
+                            '<div class="bg-gray-50 rounded-lg p-3">' +
+                                '<span class="text-gray-400 text-xs">支持模态</span>' +
+                                '<p class="text-secondary font-semibold text-sm mt-1">' + model.modality + '</p>' +
+                            '</div>' +
+                            '<div class="bg-gray-50 rounded-lg p-3">' +
+                                '<span class="text-gray-400 text-xs">核心能力</span>' +
+                                '<p class="text-secondary font-semibold text-sm mt-1">' + model.capability + '</p>' +
+                            '</div>' +
+                            '<div class="bg-gray-50 rounded-lg p-3">' +
+                                '<span class="text-gray-400 text-xs">定价</span>' +
+                                '<p class="text-secondary font-semibold text-sm mt-1">' + model.price + '</p>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+        }
+
+        // 立即体验按钮点击处理：弹出引导弹窗
+        function handleExperienceClick() {
+            openGuideModal();
+        }
+
+        function openGuideModal() {
+            document.getElementById('guideModal').classList.remove('hidden');
+            document.getElementById('guideModal').classList.add('flex');
+        }
+
+        function closeGuideModal() {
+            document.getElementById('guideModal').classList.add('hidden');
+            document.getElementById('guideModal').classList.remove('flex');
+        }
+
+        document.getElementById('guideModal').addEventListener('click', function(e) {
+            if (e.target === this) closeGuideModal();
+        });
+
+        function openLoginPromptModal() {
+            document.getElementById('loginPromptModal').classList.remove('hidden');
+            document.getElementById('loginPromptModal').classList.add('flex');
+        }
+
+        function closeLoginPromptModal() {
+            document.getElementById('loginPromptModal').classList.add('hidden');
+            document.getElementById('loginPromptModal').classList.remove('flex');
+        }
+
+        document.getElementById('loginPromptModal').addEventListener('click', function(e) {
+            if (e.target === this) closeLoginPromptModal();
+        });
+
+        document.addEventListener('DOMContentLoaded', renderModelDetail);
+    </script>
+
+    <!-- 全站通用页脚 -->
+    <footer class="bg-[#1a1a4e] text-white relative">
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+                <div class="footer-brand">
+                    <div class="flex items-center space-x-3 mb-5">
+                        <img src="logo.png" alt="云上OPC" class="w-9 h-9 rounded-xl">
+                        <span class="text-xl font-bold tracking-tight">云上OPC社区</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-1">AI协同 · 数据赋能 · 云服务 · 创业孵化</p>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">一站式线上综合服务赋能平台</p>
+                    <div class="flex items-center gap-4 text-xs text-gray-500">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-building text-primary/60"></i>深圳国家高技术产业创新中心</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs text-gray-500 mt-2">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-database text-primary/60"></i>粤港澳大湾区大数据中心</span>
+                    </div>
+                </div>
+                <div class="footer-support">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">服务支持</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-clock text-primary/70 text-xs"></i>
+                            </div>
+                            <span>周一至周五 9:00 - 18:00</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-envelope text-primary/70 text-xs"></i>
+                            </div>
+                            <span>gbanexus@hiic.com.cn</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-phone text-primary/70 text-xs"></i>
+                            </div>
+                            <span>400-888-9999</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">快速链接</h3>
+                    <div class="space-y-3">
+                        <a href="services.html#ai-models" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>AI模型服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="services.html#data-api" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>数据API服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="services.html#cloud" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>云资源服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="maker-space.html" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>创客空间入驻</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-14 pt-8 border-t border-white/10">
+                <p class="text-center text-gray-500 text-xs">© 2026 云上OPC社区 版权所有</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

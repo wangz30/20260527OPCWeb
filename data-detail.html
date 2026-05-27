@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据详情 - 云上OPC社区</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { light: '#9333ea', DEFAULT: '#7c3aed', dark: '#6d28d9' },
+                        'primary-dark': '#6d28d9',
+                        'primary-light': '#a78bfa',
+                        secondary: { DEFAULT: '#1e1b4b', light: '#334155' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        .nav-dropdown-menu { display: none; }
+        .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+        .modal-overlay { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px); }
+        .modal-enter { animation: modalEnter 0.3s ease-out; }
+        @keyframes modalEnter { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <img src="logo.png" alt="云上OPC" class="w-8 h-8">
+                        <span class="text-xl font-bold text-secondary">云上OPC社区</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-primary font-medium transition">首页</a>
+                    <div class="nav-dropdown relative group">
+                        <a href="services.html" class="text-primary font-medium border-b-2 border-primary flex items-center space-x-1 py-5">
+                            <span>能力中心</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu absolute left-0 top-full bg-white shadow-xl rounded-xl border border-gray-200 min-w-[220px] py-2 z-50">
+                            <a href="services.html#ai-models" class="block px-6 py-3 text-gray-700 hover:bg-gray-50 text-sm font-medium transition">AI模型服务</a>
+                            <a href="services.html#data-api" class="block px-6 py-3 text-primary bg-purple-50 text-sm font-medium transition">数据API服务</a>
+                            <a href="services.html#cloud" class="block px-6 py-3 text-gray-700 hover:bg-gray-50 text-sm font-medium transition">云资源服务</a>
+                        </div>
+                    </div>
+                    <a href="marketplace.html" class="text-gray-600 hover:text-primary font-medium transition">应用集市</a>
+                    <a href="maker-space.html" class="text-gray-600 hover:text-primary font-medium transition">创客空间</a>
+                    <a href="events.html" class="text-gray-600 hover:text-primary font-medium transition">社区活动</a>
+                    <a href="news.html" class="text-gray-600 hover:text-primary font-medium transition">前沿资讯</a>
+                    <a href="about.html" class="text-gray-600 hover:text-primary font-medium transition">关于我们</a>
+                    <div id="user-section">
+                        <a href="login.html" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition">登录/注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="pt-24 pb-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="data-detail-container" class="fade-in"></div>
+        </div>
+    </main>
+
+    <!-- 服务申请表单弹窗 -->
+    <div id="applyModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-secondary">服务申请</h3>
+                <button onclick="closeApplyModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="applyForm">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">所需数据类型</label>
+                        <select id="dataApiTypeSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option>要素数据 - 企业工商信息查询</option>
+                            <option>要素数据 - 知识产权数据</option>
+                            <option>要素数据 - 企业关系图谱</option>
+                            <option>场景数据 - 招商引资数据</option>
+                            <option>场景数据 - 企业服务数据</option>
+                            <option>场景数据 - 精准营销数据</option>
+                            <option>主题数据 - 半导体产业链数据</option>
+                            <option>主题数据 - 人工智能产业数据</option>
+                            <option>主题数据 - 新能源产业数据</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">调用频率预估</label>
+                        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option>日均 < 1000 次</option>
+                            <option>日均 1000 - 10000 次</option>
+                            <option>日均 > 10000 次</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">申请备注</label>
+                        <textarea id="applyNote" rows="4" placeholder="请描述您的具体需求..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+                    </div>
+                </div>
+                <div class="mt-6 flex space-x-4">
+                    <button type="button" onclick="submitApply()" class="flex-1 bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition">提交申请</button>
+                    <button type="button" onclick="closeApplyModal()" class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        const dataProducts = {
+            'qiye-gongshang': {
+                name: '企业工商信息查询',
+                category: '要素数据',
+                icon: 'fa-building',
+                iconBg: 'bg-blue-100',
+                iconColor: 'text-blue-600',
+                description: '覆盖全国超5000万家企业工商注册信息，包括企业基本信息、股东结构、高管信息、变更记录等核心数据。',
+                features: ['企业基本信息查询', '股东及出资信息', '主要人员信息', '工商变更记录', '分支机构信息'],
+                industry: '通用',
+                scenario: '企业画像,风险评估',
+                dataFields: '企业名称、统一社会信用代码、法定代表人、注册资本、成立日期、经营范围、注册地址、经营状态',
+        updateFrequency: '每日更新',
+        apiEndpoint: '/api/v1/enterprise/basic'
+        },
+        'zhishi-chanquan': {
+        name: '知识产权数据',
+        category: '要素数据',
+        icon: 'fa-lightbulb',
+        iconBg: 'bg-yellow-100',
+        iconColor: 'text-yellow-600',
+        description: '涵盖专利、商标、著作权等知识产权全量数据，支持企业创新能力评估与技术布局分析。',
+        features: ['专利信息检索', '商标注册查询', '著作权登记信息', '知识产权质押', '技术领域分类'],
+        industry: '通用',
+        scenario: '企业画像,风险评估',
+        dataFields: '专利号、专利名称、申请人、申请日期、授权日期、专利类型、商标名称、商标类别',
+        updateFrequency: '每周更新',
+        apiEndpoint: '/api/v1/ip/query'
+        },
+        'qiye-guanxi': {
+        name: '企业关系图谱',
+        category: '要素数据',
+        icon: 'fa-project-diagram',
+        iconBg: 'bg-indigo-100',
+        iconColor: 'text-indigo-600',
+        description: '基于股权、投资、任职等关系构建企业关联网络，支持多层穿透查询与风险传导分析。',
+        features: ['股权穿透查询', '对外投资查询', '关联方识别', '实际控制人追溯', '风险传导分析'],
+        industry: '金融',
+        scenario: '风险评估,企业画像',
+        dataFields: '关联企业、持股比例、投资金额、关联自然人、控制路径、受益所有人',
+        updateFrequency: '每日更新',
+        apiEndpoint: '/api/v1/enterprise/relations'
+    },
+    'zhaoshang-yinzi': {
+        name: '招商引资数据',
+        category: '场景数据',
+        icon: 'fa-hand-holding-usd',
+        iconBg: 'bg-green-100',
+        iconColor: 'text-green-600',
+        description: '整合区域产业政策、园区资源、企业投资意向等数据，精准匹配招商引资需求与投资机会。',
+        features: ['产业政策查询', '园区资源匹配', '企业投资意向', '招商项目推荐', '区域竞争力分析'],
+        industry: '通用',
+        scenario: '招商引资,产业分析',
+        dataFields: '政策类型、扶持力度、园区面积、配套设施、投资金额区间、意向行业',
+        updateFrequency: '每月更新',
+        apiEndpoint: '/api/v1/investment/match'
+    },
+    'qiye-fuwu': {
+        name: '企业服务数据',
+        category: '场景数据',
+        icon: 'fa-concierge-bell',
+        iconBg: 'bg-teal-100',
+        iconColor: 'text-teal-600',
+        description: '提供企业全生命周期服务数据，涵盖注册登记、资质认证、政策申报、财税服务等场景。',
+        features: ['注册登记服务', '资质认证查询', '政策申报匹配', '财税服务对接', '法律服务资源'],
+        industry: '通用',
+        scenario: '企业服务,精准营销',
+        dataFields: '服务类型、服务商信息、服务价格、用户评价、覆盖区域、资质要求',
+        updateFrequency: '实时更新',
+        apiEndpoint: '/api/v1/enterprise/services'
+    },
+    'jingzhun-yingxiao': {
+        name: '精准营销数据',
+        category: '场景数据',
+        icon: 'fa-bullseye',
+        iconBg: 'bg-pink-100',
+        iconColor: 'text-pink-600',
+        description: '基于企业画像与行业标签，提供精准营销所需的目标客户筛选、市场洞察与商机挖掘数据。',
+        features: ['目标客户筛选', '行业标签体系', '商机智能推荐', '市场趋势分析', '竞品动态监测'],
+        industry: '互联网',
+        scenario: '精准营销,产业分析',
+        dataFields: '目标行业、企业规模、地域分布、采购意向、活跃度评分、触达渠道',
+        updateFrequency: '每日更新',
+        apiEndpoint: '/api/v1/marketing/targeting'
+    },
+    'bandaoti': {
+        name: '半导体产业链数据',
+        category: '主题数据',
+        icon: 'fa-microchip',
+        iconBg: 'bg-purple-100',
+        iconColor: 'text-purple-600',
+        description: '聚焦半导体与集成电路产业链，涵盖设计、制造、封测、设备材料等全链条企业及技术数据。',
+        features: ['产业链全景图谱', '企业技术路线', '产能产量数据', '进出口统计', '投融资动态'],
+        industry: '制造业',
+        scenario: '产业分析',
+        dataFields: '产业链环节、技术节点、产能规模、市场份额、专利布局、融资轮次',
+        updateFrequency: '每月更新',
+        apiEndpoint: '/api/v1/industry/semiconductor'
+    },
+    'rengong-zhineng': {
+        name: '人工智能产业数据',
+        category: '主题数据',
+        icon: 'fa-robot',
+        iconBg: 'bg-violet-100',
+        iconColor: 'text-violet-600',
+        description: '全面覆盖人工智能产业，包括大模型、算力、应用场景、人才、投融资等维度数据。',
+        features: ['AI企业数据库', '大模型能力评测', '算力资源分布', 'AI人才地图', '行业应用案例'],
+        industry: '互联网',
+        scenario: '产业分析',
+        dataFields: '企业类型、模型参数、算力规模、融资总额、人才数量、应用领域',
+        updateFrequency: '每月更新',
+        apiEndpoint: '/api/v1/industry/ai'
+    },
+    'xin-nengyuan': {
+        name: '新能源产业数据',
+        category: '主题数据',
+        icon: 'fa-solar-panel',
+        iconBg: 'bg-emerald-100',
+        iconColor: 'text-emerald-600',
+        description: '涵盖光伏、风电、储能、氢能等新能源领域，提供产业规划、技术趋势与市场分析数据。',
+        features: ['新能源企业库', '装机容量统计', '发电量数据', '技术路线对比', '政策补贴查询'],
+        industry: '制造业',
+        scenario: '产业分析',
+        dataFields: '能源类型、装机规模、发电效率、补贴标准、碳排放数据、并网状态',
+        updateFrequency: '每月更新',
+        apiEndpoint: '/api/v1/industry/newenergy'
+    }
+    };
+
+    function getUrlParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name);
+    }
+
+    function renderDataDetail() {
+        const id = getUrlParam('id');
+        const product = dataProducts[id];
+        const container = document.getElementById('data-detail-container');
+        if (!product) {
+            container.innerHTML = '<div class="text-center py-20"><i class="fas fa-exclamation-circle text-4xl text-gray-300 mb-4"></i><p class="text-gray-500 text-lg">未找到该数据产品</p><a href="services.html#data-api" class="mt-4 inline-block text-primary hover:text-primary-dark font-medium">返回数据API服务</a></div>';
+            return;
+        }
+
+        document.title = product.name + ' - 云上OPC社区';
+
+        container.innerHTML =
+        '<a href="services.html#data-api" class="inline-flex items-center text-gray-500 hover:text-primary mb-6 transition"><i class="fas fa-arrow-left mr-2"></i>返回数据API服务</a>' +
+        '<div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 mb-8">' +
+            '<div class="flex items-start justify-between mb-6">' +
+                '<div class="flex items-start gap-4">' +
+                    '<div class="w-16 h-16 ' + product.iconBg + ' rounded-2xl flex items-center justify-center flex-shrink-0">' +
+                        '<i class="fas ' + product.icon + ' text-2xl ' + product.iconColor + '"></i>' +
+                    '</div>' +
+                    '<div>' +
+                        '<div class="flex items-center gap-2 mb-1">' +
+                            '<span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full font-medium">' + product.category + '</span>' +
+                        '</div>' +
+                        '<h1 class="text-3xl font-bold text-secondary">' + product.name + '</h1>' +
+                    '</div>' +
+                '</div>' +
+                '<button onclick="handleApply()" class="inline-flex items-center gap-1.5 bg-primary text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm flex-shrink-0 self-end">' +
+                    '<i class="fas fa-paper-plane text-xs"></i>' +
+                    '<span>立即申请</span>' +
+                '</button>' +
+            '</div>' +
+            '<p class="text-gray-600 text-lg mb-8 leading-relaxed">' + product.description + '</p>' +
+            '<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">' +
+                '<div class="bg-gray-50 rounded-xl p-4"><span class="text-xs text-gray-400 block mb-1">适用行业</span><span class="text-sm font-medium text-secondary">' + product.industry + '</span></div>' +
+                '<div class="bg-gray-50 rounded-xl p-4"><span class="text-xs text-gray-400 block mb-1">应用场景</span><span class="text-sm font-medium text-secondary">' + product.scenario + '</span></div>' +
+                '<div class="bg-gray-50 rounded-xl p-4"><span class="text-xs text-gray-400 block mb-1">更新频率</span><span class="text-sm font-medium text-secondary">' + product.updateFrequency + '</span></div>' +
+            '</div>' +
+            '<div class="mb-8">' +
+                '<h3 class="text-lg font-bold text-secondary mb-3">核心功能</h3>' +
+                '<ul class="grid grid-cols-1 md:grid-cols-2 gap-2">' +
+                    product.features.map(function(f) { return '<li class="flex items-center space-x-2 text-gray-600"><i class="fas fa-check-circle text-green-500 text-sm"></i><span>' + f + '</span></li>'; }).join('') +
+                '</ul>' +
+            '</div>' +
+            '<div class="mb-8">' +
+                '<h3 class="text-lg font-bold text-secondary mb-3">数据字段</h3>' +
+                '<p class="text-gray-600 text-sm bg-gray-50 rounded-xl p-4">' + product.dataFields + '</p>' +
+            '</div>' +
+            '<div class="mb-8">' +
+                '<h3 class="text-lg font-bold text-secondary mb-3">API接口</h3>' +
+                '<div class="bg-gray-900 rounded-xl p-4 font-mono text-sm">' +
+                    '<span class="text-green-400">GET</span> <span class="text-white">' + product.apiEndpoint + '</span>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+    }
+
+    function handleApply() {
+        const id = getUrlParam('id');
+        const product = dataProducts[id];
+        if (product) {
+            withAuthChain({action: product.name + '申请', callbackName: 'openDataApplyModal', args: [product.name]});
+        } else {
+            withAuthChain({action: '数据API申请', targetUrl: 'services.html#data-api'});
+        }
+    }
+
+    function openDataApplyModal(serviceName) {
+        if (serviceName) {
+            var select = document.getElementById('dataApiTypeSelect');
+            for (var i = 0; i < select.options.length; i++) {
+                if (select.options[i].text.indexOf(serviceName) !== -1) {
+                    select.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+        document.getElementById('applyNote').value = '';
+        document.getElementById('applyModal').classList.remove('hidden');
+        document.getElementById('applyModal').classList.add('flex');
+    }
+
+    function closeApplyModal() {
+        document.getElementById('applyModal').classList.add('hidden');
+        document.getElementById('applyModal').classList.remove('flex');
+    }
+
+    function submitApply() {
+        closeApplyModal();
+        showToast('申请已提交，请至个人中心查看您的服务申请进度与服务文档');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        renderDataDetail();
+    });
+    </script>
+</body>
+</html>

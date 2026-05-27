@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云上OPC社区 - AI驱动的一人公司创业平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#7c3aed',
+                        'primary-dark': '#6d28d9',
+                        'primary-light': '#a78bfa',
+                        secondary: '#1e1b4b',
+                        accent: '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Noto Sans SC', sans-serif; }
+        .carousel-slide { transition: opacity 0.5s ease-in-out; }
+        .service-card { transition: all 0.3s ease; }
+        .service-card:hover { transform: translateY(-8px); }
+        .nav-dropdown-menu { display: none; }
+        .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+        .gradient-hero { background: linear-gradient(135deg, #1e1b4b 0%, #7c3aed 50%, #4c1d95 100%); }
+        .glass-effect { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .article-card { transition: all 0.3s ease; border: 1px solid #f3f4f6; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <img src="logo.png" alt="云上OPC" class="w-8 h-8">
+                        <span class="text-xl font-bold text-secondary">云上OPC社区</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-primary font-medium border-b-2 border-primary">首页</a>
+                    <div class="nav-dropdown relative group">
+                        <a href="services.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>能力中心</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="services.html#ai-models" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition" onclick="switchTab('ai-models'); return true;">
+                                <i class="fas fa-brain w-5 text-primary"></i>
+                                <span>AI模型服务</span>
+                            </a>
+                            <a href="services.html#data-api" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition" onclick="switchTab('data-api'); return true;">
+                                <i class="fas fa-database w-5 text-primary"></i>
+                                <span>数据API服务</span>
+                            </a>
+                            <a href="services.html#cloud" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition" onclick="switchTab('cloud'); return true;">
+                                <i class="fas fa-cloud w-5 text-primary"></i>
+                                <span>云资源服务</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown relative group">
+                        <a href="news.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>前沿资讯</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="news.html?category=policy" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-gavel w-5 text-primary"></i>
+                                <span>政策速递</span>
+                            </a>
+                            <a href="news.html?category=science" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-flask w-5 text-primary"></i>
+                                <span>科普好文</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown relative group">
+                        <a href="events.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>创客空间</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="events.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-calendar-alt w-5 text-primary"></i>
+                                <span>社区活动</span>
+                            </a>
+                            <a href="marketplace.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-store w-5 text-primary"></i>
+                                <span>应用集市</span>
+                            </a>
+                            <a href="maker-space.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-rocket w-5 text-primary"></i>
+                                <span>创客空间入驻</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="about.html" class="text-gray-600 hover:text-primary font-medium transition">关于我们</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="user-section" class="flex items-center space-x-4">
+                        <a href="login.html" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition">登录/注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 轮播图区域 -->
+    <section class="relative pt-16 h-[600px] overflow-hidden">
+        <div id="carousel" class="relative h-full">
+            <!-- 轮播项1 -->
+            <div class="carousel-slide absolute inset-0 opacity-100">
+                <div class="h-full flex items-center justify-center" style="background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.45)), url('首页banner1.jpeg') center center / cover no-repeat;">
+                    <div class="text-center text-white px-4">
+                        <h1 class="text-5xl font-bold mb-6">一站式AI能力聚合平台</h1>
+                        <p class="text-xl text-gray-100">一次接入，畅享GPT、Claude、DeepSeek等顶级模型能力，让OPC创业者专注业务创新</p>
+                    </div>
+                </div>
+            </div>
+            <!-- 轮播项2 -->
+            <div class="carousel-slide absolute inset-0 opacity-0">
+                <div class="h-full flex items-center justify-center" style="background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.45)), url('首页banner2.jpeg') center center / cover no-repeat;">
+                    <div class="text-center text-white px-4">
+                        <h1 class="text-5xl font-bold mb-6">OPC创业者的专属家园</h1>
+                        <p class="text-xl text-gray-100">汇聚万名AI创业者，共建共享粤港澳大湾区创业生态</p>
+                    </div>
+                </div>
+            </div>
+            <!-- 轮播项3 -->
+            <div class="carousel-slide absolute inset-0 opacity-0">
+                <div class="h-full flex items-center justify-center" style="background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.45)), url('首页banner3.jpeg') center center / cover no-repeat;">
+                    <div class="text-center text-white px-4">
+                        <h1 class="text-5xl font-bold mb-6">AI驱动的一人公司新时代</h1>
+                        <p class="text-xl text-gray-100">国家级数据API + 顶级AI模型，赋能每个创业者成为全能企业</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 轮播控制 -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3">
+            <button class="carousel-dot w-3 h-3 rounded-full bg-white opacity-100" data-slide="0"></button>
+            <button class="carousel-dot w-3 h-3 rounded-full bg-white opacity-50" data-slide="1"></button>
+            <button class="carousel-dot w-3 h-3 rounded-full bg-white opacity-50" data-slide="2"></button>
+        </div>
+        <button id="prev-slide" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button id="next-slide" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </section>
+
+    <!-- 核心服务快速入口 -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-secondary mb-4">核心服务</h2>
+                <p class="text-gray-600 text-lg">模型、数据、算力——一人公司需要的全部基础设施</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- AI模型服务 -->
+                <a href="services.html#ai-models" class="service-card group relative block rounded-2xl overflow-hidden cursor-pointer" style="aspect-ratio: 3/4;">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('首页核心服务1.png');"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div class="absolute inset-0 flex flex-col justify-end p-8">
+                        <div class="transform transition-transform duration-500 group-hover:-translate-y-2">
+                            <span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white mb-4 backdrop-blur-sm">AI模型</span>
+                            <h3 class="text-2xl font-bold text-white mb-2">AI模型服务</h3>
+                            <p class="text-white/80 text-sm leading-relaxed">GPT、Claude、DeepSeek 等主流大模型统一接入，按量计费</p>
+                        </div>
+                    </div>
+                    <div class="absolute top-6 right-6 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <i class="fas fa-arrow-right text-white text-sm"></i>
+                    </div>
+                </a>
+                <!-- 数据API服务 -->
+                <a href="services.html#data-api" class="service-card group relative block rounded-2xl overflow-hidden cursor-pointer" style="aspect-ratio: 3/4;">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('首页核心服务2.png');"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div class="absolute inset-0 flex flex-col justify-end p-8">
+                        <div class="transform transition-transform duration-500 group-hover:-translate-y-2">
+                            <span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white mb-4 backdrop-blur-sm">数据</span>
+                            <h3 class="text-2xl font-bold text-white mb-2">数据API服务</h3>
+                            <p class="text-white/80 text-sm leading-relaxed">企业、知识产权、产业要素等国家级数据接口一键接入</p>
+                        </div>
+                    </div>
+                    <div class="absolute top-6 right-6 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <i class="fas fa-arrow-right text-white text-sm"></i>
+                    </div>
+                </a>
+                <!-- 云资源服务 -->
+                <a href="services.html#cloud" class="service-card group relative block rounded-2xl overflow-hidden cursor-pointer" style="aspect-ratio: 3/4;">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('首页核心服务3.png');"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div class="absolute inset-0 flex flex-col justify-end p-8">
+                        <div class="transform transition-transform duration-500 group-hover:-translate-y-2">
+                            <span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white mb-4 backdrop-blur-sm">算力</span>
+                            <h3 class="text-2xl font-bold text-white mb-2">云资源服务</h3>
+                            <p class="text-white/80 text-sm leading-relaxed">弹性云服务器、对象存储、云数据库——灵活扩展，按需付费</p>
+                        </div>
+                    </div>
+                    <div class="absolute top-6 right-6 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <i class="fas fa-arrow-right text-white text-sm"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 前沿资讯 -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-secondary mb-4">前沿资讯</h2>
+                <p class="text-gray-600 text-lg mb-4">聚焦AI产业政策、技术科普与创业方法论</p>
+                <a href="news.html" class="inline-flex items-center space-x-2 text-primary hover:text-primary-dark font-medium transition group">
+                    <span>查看更多</span>
+                    <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+            <div id="news-masonry-container" class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6"></div>
+        </div>
+    </section>
+
+    <!-- 创客空间 -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-secondary mb-4">创客空间</h2>
+                <p class="text-gray-600 text-lg">社区活动、应用集市、创客空间入驻——一站式创业生态</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 社区活动 -->
+                <a href="events.html" class="service-card group relative block rounded-2xl overflow-hidden cursor-pointer" style="aspect-ratio: 3/4;">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('首页社区活动.png');"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div class="absolute inset-0 flex flex-col justify-end p-8">
+                        <div class="transform transition-transform duration-500 group-hover:-translate-y-2">
+                            <span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white mb-4 backdrop-blur-sm">社区</span>
+                            <h3 class="text-2xl font-bold text-white mb-2">社区活动</h3>
+                            <p class="text-white/80 text-sm leading-relaxed">汇聚创新力量，参与精彩活动，与同行者共同成长</p>
+                        </div>
+                    </div>
+                    <div class="absolute top-6 right-6 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <i class="fas fa-arrow-right text-white text-sm"></i>
+                    </div>
+                </a>
+                <!-- 应用集市 -->
+                <a href="marketplace.html" class="service-card group relative block rounded-2xl overflow-hidden cursor-pointer" style="aspect-ratio: 3/4;">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('首页应用集市.png');"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div class="absolute inset-0 flex flex-col justify-end p-8">
+                        <div class="transform transition-transform duration-500 group-hover:-translate-y-2">
+                            <span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white mb-4 backdrop-blur-sm">生态</span>
+                            <h3 class="text-2xl font-bold text-white mb-2">应用集市</h3>
+                            <p class="text-white/80 text-sm leading-relaxed">生态合作 · 开源工具 · 开发者技能共享</p>
+                        </div>
+                    </div>
+                    <div class="absolute top-6 right-6 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <i class="fas fa-arrow-right text-white text-sm"></i>
+                    </div>
+                </a>
+                <!-- 创客空间入驻 -->
+                <a href="maker-space.html" class="service-card group relative block rounded-2xl overflow-hidden cursor-pointer" style="aspect-ratio: 3/4;">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('首页创客空间入驻.png');"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div class="absolute inset-0 flex flex-col justify-end p-8">
+                        <div class="transform transition-transform duration-500 group-hover:-translate-y-2">
+                            <span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white mb-4 backdrop-blur-sm">入驻</span>
+                            <h3 class="text-2xl font-bold text-white mb-2">创客空间入驻</h3>
+                            <p class="text-white/80 text-sm leading-relaxed">办公空间、投融资对接、政策申报等创业支持服务</p>
+                        </div>
+                    </div>
+                    <div class="absolute top-6 right-6 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <i class="fas fa-arrow-right text-white text-sm"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 为什么选择我们 -->
+    <section class="relative h-[600px] overflow-hidden" style="background-image: url('为什么我们.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+        <div class="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+            <div class="max-w-2xl">
+                <div class="flex items-center space-x-3 mb-8">
+                    <img src="logo.png" alt="云上OPC" class="w-12 h-12 rounded-xl">
+                    <span class="text-white/80 text-lg font-medium">云上OPC社区</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">为什么选择云上OPC</h2>
+                <p class="text-white/70 text-lg mb-10 leading-relaxed">专为AI驱动的创业者打造，让技术壁垒归零，让业务创新提速</p>
+                
+                <div class="grid grid-cols-2 gap-8 mb-12">
+                    <div>
+                        <div class="text-xl font-bold text-white mb-1">模型 · 数据 · 云资源 · 创客空间</div>
+                        <div class="text-white/60 text-sm">4大核心能力一站式整合</div>
+                    </div>
+                    <div>
+                        <div class="text-xl font-bold text-white mb-1">毫秒级推理延迟，流畅体验</div>
+                        <div class="text-white/60 text-sm">高性能AI模型调用服务</div>
+                    </div>
+                    <div>
+                        <div class="text-xl font-bold text-white mb-1">全流程打通 服务+内容 社区闭环</div>
+                        <div class="text-white/60 text-sm">全量创业生态体系</div>
+                    </div>
+                    <div>
+                        <div class="text-xl font-bold text-white mb-1">权威产业数据，即开即用</div>
+                        <div class="text-white/60 text-sm">国家级数据接口无缝接入</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右侧装饰文字 -->
+        <div class="absolute right-8 top-1/2 -translate-y-1/2 hidden lg:block">
+            <div class="transform rotate-90 origin-center">
+                <p class="text-white/20 text-xl font-light tracking-[0.5em] whitespace-nowrap">AI 协同 · 数据赋能 · 云服务 · 创业孵化</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 全站通用页脚 -->
+    <footer class="bg-[#1a1a4e] text-white relative">
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+                <div class="footer-brand">
+                    <div class="flex items-center space-x-3 mb-5">
+                        <img src="logo.png" alt="云上OPC" class="w-9 h-9 rounded-xl">
+                        <span class="text-xl font-bold tracking-tight">云上OPC社区</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-1">AI协同 · 数据赋能 · 云服务 · 创业孵化</p>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">一站式线上综合服务赋能平台</p>
+                    <div class="flex items-center gap-4 text-xs text-gray-500">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-building text-primary/60"></i>深圳国家高技术产业创新中心</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs text-gray-500 mt-2">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-database text-primary/60"></i>粤港澳大湾区大数据中心</span>
+                    </div>
+                </div>
+                <div class="footer-support">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">服务支持</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-clock text-primary/70 text-xs"></i>
+                            </div>
+                            <span>周一至周五 9:00 - 18:00</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-envelope text-primary/70 text-xs"></i>
+                            </div>
+                            <span>gbanexus@hiic.com.cn</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-phone text-primary/70 text-xs"></i>
+                            </div>
+                            <span>400-888-9999</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">快速链接</h3>
+                    <div class="space-y-3">
+                        <a href="services.html#ai-models" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>AI模型服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="services.html#data-api" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>数据API服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="services.html#cloud" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>云资源服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="maker-space.html" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>创客空间入驻</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-14 pt-8 border-t border-white/10">
+                <p class="text-center text-gray-500 text-xs">© 2026 云上OPC社区 版权所有</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/common.js"></script>
+    <script>
+        // 能力中心下拉菜单跳转
+        function switchTab(tabId) {
+            localStorage.setItem('activeServiceTab', tabId);
+        }
+
+        // 轮播图功能
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+        let carouselInterval;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.style.opacity = i === index ? '1' : '0';
+            });
+            dots.forEach((dot, i) => {
+                dot.style.opacity = i === index ? '1' : '0.5';
+            });
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            showSlide((currentSlide + 1) % slides.length);
+        }
+
+        function prevSlide() {
+            showSlide((currentSlide - 1 + slides.length) % slides.length);
+        }
+
+        function startCarousel() {
+            carouselInterval = setInterval(nextSlide, 5000);
+        }
+
+        function stopCarousel() {
+            clearInterval(carouselInterval);
+        }
+
+        // 事件监听
+        document.getElementById('next-slide').addEventListener('click', () => {
+            stopCarousel();
+            nextSlide();
+            startCarousel();
+        });
+
+        document.getElementById('prev-slide').addEventListener('click', () => {
+            stopCarousel();
+            prevSlide();
+            startCarousel();
+        });
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                stopCarousel();
+                showSlide(index);
+                startCarousel();
+            });
+        });
+
+        const carousel = document.getElementById('carousel');
+        carousel.addEventListener('mouseenter', stopCarousel);
+        carousel.addEventListener('mouseleave', startCarousel);
+
+        // 启动轮播
+        startCarousel();
+
+        // 前沿资讯 - 瀑布流卡片
+        (function renderNewsSection() {
+            const articles = [
+                {
+                    title: "《广州市白云区支持人工智能和数据产业高质量发展若干措施》",
+                    content: "支持人工智能和数据产业高质量发展，推动区域数字经济转型升级。",
+                    category: "政策速递",
+                    source: "广州市白云区政府",
+                    publishTime: "2026-03-31",
+                    views: 1200,
+                    likes: 45,
+                    link: "https://www.gz.gov.cn/gzzcwjk/gzdata/content/post_10751591.html"
+                },
+                {
+                    title: "《广州市海珠区OPC创新发展十条》",
+                    content: "智能体专区每年最高12个月工位费全免；算力补贴50%（年度上限20万）、数据补贴30%（年度上限10万）；引领性项目补贴30%，最高500万；生成式AI备案最高100万、深度合成备案最高20万。",
+                    category: "政策速递",
+                    source: "广州市海珠区",
+                    publishTime: "2026-03-19",
+                    views: 3500,
+                    likes: 120,
+                    link: "https://zsj.gz.gov.cn/zwgk/zfxxgkml/zfxxgkzn/gzdt/content/post_10745642.html"
+                },
+                {
+                    title: "《广州市促进人工智能产业高质量发展实施方案》",
+                    content: "到2027年引育万家AI企业，智能体应用普及率超70%；建设10个共性技术服务平台、100个垂直大模型、1000个场景示范，打造万亿级AI生态圈。",
+                    category: "政策速递",
+                    source: "广州市政府办公厅",
+                    publishTime: "2026-03-18",
+                    views: 2800,
+                    likes: 98,
+                    link: "https://www.gz.gov.cn/zwgk/fggw/sfbgtwj/content/post_10743475.html"
+                },
+                {
+                    title: "MemPalace爆火的真相：AI创业的下半场，拼的不是智商，是记性",
+                    content: "好莱坞影星米拉·乔沃维奇与工程师联合开源的AI记忆系统MemPalace，在长期记忆评测中斩获全球首个满分500题全对，运行成本仅年均0.7美元。",
+                    category: "科普好文",
+                    source: "GBAnexus",
+                    publishTime: "2026-04-09",
+                    views: 5600,
+                    likes: 230,
+                    link: "https://mp.weixin.qq.com/s/qgGFTyPj_-nQBAFU1S2rcw"
+                },
+                {
+                    title: "OPC背后的新趋势：三个案例看'AI+个体创业'如何重塑商业形态",
+                    content: "从跨境电商4个月突破500万销售额，到招聘平台月均服务50万人次，再到AI动画创作工具全球注册用户超6000个，三个真实案例展示AI如何赋能个体创业者。",
+                    category: "科普好文",
+                    source: "GBAnexus",
+                    publishTime: "2026-03-27",
+                    views: 4200,
+                    likes: 175,
+                    link: "https://mp.weixin.qq.com/s/ujl-toKV2l6NyorpHuvHeQ"
+                },
+                {
+                    title: "当AI开始'收税'：词元，这个新单位正在悄悄掏空你的钱包？",
+                    content: "2026年3月，国家数据局正式公布Token的中文官方译名为'词元'。我国日均词元调用量已突破140万亿，一个全新的'词元经济'正在加速形成。",
+                    category: "科普好文",
+                    source: "GBAnexus",
+                    publishTime: "2026-03-26",
+                    views: 3800,
+                    likes: 156,
+                    link: "https://mp.weixin.qq.com/s/M8iFhvv7BlQAO593jlZHmQ"
+                }
+            ];
+
+            const container = document.getElementById('news-masonry-container');
+            if (!container) return;
+
+            function formatNumber(num) {
+                if (num >= 10000) return (num / 10000).toFixed(1) + 'w';
+                if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
+                return num.toString();
+            }
+
+            const gradients = [
+                'from-purple-100 to-white',
+                'from-blue-100 to-white',
+                'from-green-100 to-white',
+                'from-amber-100 to-white',
+                'from-pink-100 to-white',
+                'from-indigo-100 to-white'
+            ];
+
+            const categoryIcons = {
+                '政策速递': 'fa-gavel',
+                '科普好文': 'fa-flask'
+            };
+
+            const categoryColors = {
+                '政策速递': 'text-primary bg-purple-100',
+                '科普好文': 'text-blue-600 bg-blue-100'
+            };
+
+            var html = '';
+            articles.forEach(function(article, i) {
+                var gradientClass = gradients[i % gradients.length];
+                var iconClass = categoryIcons[article.category];
+                var colorClass = categoryColors[article.category];
+
+                html += '<a href="' + article.link + '" target="_blank" class="inline-block w-full break-inside-avoid article-card bg-white rounded-xl p-6 flex flex-col hover:shadow-lg transition cursor-pointer mb-6">';
+                html += '<div class="flex items-center justify-between mb-3">';
+                html += '<div class="flex items-center space-x-2">';
+                html += '<i class="fas ' + iconClass + ' text-xs ' + colorClass.split(' ')[0] + '"></i>';
+                html += '<span class="text-xs font-medium px-2 py-0.5 rounded-full ' + colorClass.split(' ')[1] + ' ' + colorClass.split(' ')[0] + '">' + article.category + '</span>';
+                html += '</div>';
+                html += '<div class="flex items-center space-x-3 text-gray-400 text-xs">';
+                html += '<span class="flex items-center space-x-1"><i class="far fa-eye text-[10px]"></i><span>' + formatNumber(article.views) + '</span></span>';
+                html += '<span class="flex items-center space-x-1"><i class="far fa-thumbs-up text-[10px]"></i><span>' + formatNumber(article.likes) + '</span></span>';
+                html += '</div>';
+                html += '</div>';
+                html += '<h3 class="text-base font-bold text-secondary mb-2 line-clamp-2 leading-snug">' + article.title + '</h3>';
+                html += '<p class="text-sm text-gray-500 line-clamp-3 mb-4">' + article.content + '</p>';
+                html += '<div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">';
+                html += '<span class="text-xs text-gray-400">' + article.source + '</span>';
+                html += '<span class="text-xs text-gray-400">' + article.publishTime + '</span>';
+                html += '</div>';
+                html += '</a>';
+            });
+
+            container.innerHTML = html;
+        })();
+    </script>
+</body>
+</html>

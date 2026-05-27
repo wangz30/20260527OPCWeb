@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - 云上OPC社区</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#7c3aed',
+                        'primary-dark': '#6d28d9',
+                        'primary-light': '#a78bfa',
+                        secondary: '#1e1b4b',
+                        accent: '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Noto Sans SC', sans-serif; }
+        .sidebar-item { transition: all 0.2s ease; }
+        .sidebar-item:hover, .sidebar-item.active { background-color: #f3f0ff; color: #7c3aed; }
+        .nav-dropdown-menu { display: none; }
+        .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+        .code-block { background: #1e1b4b; color: #e2e8f0; }
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #7c3aed;
+            background-color: #f9fafb;
+        }
+        .upload-area.has-file {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <img src="logo.png" alt="云上OPC" class="w-8 h-8">
+                        <span class="text-xl font-bold text-secondary">云上OPC社区</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-primary font-medium transition">首页</a>
+                    <div class="nav-dropdown relative group">
+                        <a href="services.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>能力中心</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="services.html#ai-models" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-brain w-5 text-primary"></i>
+                                <span>AI模型服务</span>
+                            </a>
+                            <a href="services.html#data-api" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-database w-5 text-primary"></i>
+                                <span>数据API服务</span>
+                            </a>
+                            <a href="services.html#cloud" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-cloud w-5 text-primary"></i>
+                                <span>云资源服务</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown relative group">
+                        <a href="news.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>前沿资讯</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="news.html?category=policy" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-gavel w-5 text-primary"></i>
+                                <span>政策速递</span>
+                            </a>
+                            <a href="news.html?category=science" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-flask w-5 text-primary"></i>
+                                <span>科普好文</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown relative group">
+                        <a href="events.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>创客空间</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="events.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-calendar-alt w-5 text-primary"></i>
+                                <span>社区活动</span>
+                            </a>
+                            <a href="marketplace.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-store w-5 text-primary"></i>
+                                <span>应用集市</span>
+                            </a>
+                            <a href="maker-space.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-rocket w-5 text-primary"></i>
+                                <span>创客空间入驻</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="about.html" class="text-gray-600 hover:text-primary font-medium transition">关于我们</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="user-section" class="flex items-center space-x-4">
+                        <a href="login.html" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition">登录/注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex pt-16 min-h-screen">
+        <!-- 左侧导航栏 -->
+        <aside class="w-64 bg-white shadow-lg fixed h-full overflow-y-auto z-40">
+            <div class="p-6">
+                <div id="profile-header" class="mb-8">
+                    <!-- 动态渲染 -->
+                </div>
+                <nav class="space-y-2">
+                    <a href="#" class="sidebar-item active flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-primary" data-section="account">
+                        <i class="fas fa-user w-5"></i>
+                        <span>账号管理</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-primary" data-section="wallet">
+                        <i class="fas fa-wallet w-5"></i>
+                        <span>钱包</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-primary" data-section="ai-workbench">
+                        <i class="fas fa-robot w-5"></i>
+                        <span>AI模型服务</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-primary" data-section="my-applications">
+                        <i class="fas fa-clipboard-list w-5"></i>
+                        <span>服务申请</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-primary" data-section="my-events">
+                        <i class="fas fa-calendar-check w-5"></i>
+                        <span>活动报名</span>
+                    </a>
+                    <hr class="my-4">
+                    <a href="#" onclick="logout()" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50">
+                        <i class="fas fa-sign-out-alt w-5"></i>
+                        <span>退出登录</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- 右侧内容区 -->
+        <main class="flex-1 ml-64 p-8">
+            <!-- 账号管理 -->
+            <section id="account-section" class="space-y-6">
+                <h2 class="text-2xl font-bold text-secondary">账号管理</h2>
+                
+                <!-- 基本信息卡片 -->
+                <div class="bg-white rounded-xl p-6 shadow-md">
+                    <h3 class="text-lg font-semibold text-secondary mb-4">基本信息</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">头像</label>
+                            <div class="flex items-center space-x-4">
+                                <div id="profile-avatar" class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">Z</div>
+                                <button class="text-primary hover:text-primary-dark text-sm">更换头像</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">用户名</label>
+                            <input type="text" id="profile-username" value="zhangsan" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+                            <input type="text" id="profile-name" value="张三" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">注册时间</label>
+                            <input type="text" id="profile-created" value="2026-01-15" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">手机号</label>
+                            <div class="flex space-x-2">
+                                <input type="text" id="profile-phone" value="138****8888" readonly class="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                                <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">修改</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">实名认证</label>
+                            <div id="realname-status-container" class="flex items-center space-x-2">
+                                <!-- 动态渲染 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 实名认证表单（仅未认证用户可见） -->
+                <div id="realname-form-card" class="bg-white rounded-xl p-6 shadow-md hidden">
+                    <h3 class="text-lg font-semibold text-secondary mb-4">实名认证</h3>
+                    <p class="text-gray-500 text-sm mb-6">完成实名认证后，即可使用充值、消费等服务。</p>
+                    <form id="realname-form" onsubmit="handleRealNameSubmit(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">真实姓名 <span class="text-red-500">*</span></label>
+                                <input type="text" id="realname-input" required placeholder="请输入真实姓名" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">身份证号 <span class="text-red-500">*</span></label>
+                                <input type="text" id="idcard-input" required placeholder="请输入18位身份证号" maxlength="18" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">身份证正面 <span class="text-red-500">*</span></label>
+                            <div id="idcard-front-upload" class="upload-area rounded-xl p-8 text-center cursor-pointer" onclick="document.getElementById('idcard-front-input').click()">
+                                <i class="fas fa-id-card text-3xl text-gray-400 mb-3"></i>
+                                <p class="text-gray-500 text-sm">点击上传身份证正面照片</p>
+                                <p id="idcard-front-filename" class="text-green-600 text-sm mt-2 hidden"></p>
+                                <input type="file" id="idcard-front-input" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'idcard-front-filename', 'idcard-front-upload')">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">身份证反面 <span class="text-red-500">*</span></label>
+                            <div id="idcard-back-upload" class="upload-area rounded-xl p-8 text-center cursor-pointer" onclick="document.getElementById('idcard-back-input').click()">
+                                <i class="fas fa-id-card text-3xl text-gray-400 mb-3"></i>
+                                <p class="text-gray-500 text-sm">点击上传身份证反面照片</p>
+                                <p id="idcard-back-filename" class="text-green-600 text-sm mt-2 hidden"></p>
+                                <input type="file" id="idcard-back-input" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'idcard-back-filename', 'idcard-back-upload')">
+                            </div>
+                        </div>
+                        <button type="submit" id="realname-submit-btn" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition">
+                            提交认证
+                        </button>
+                    </form>
+                </div>
+
+                <!-- 审核中提示（仅审核中用户可见） -->
+                <div id="realname-pending-card" class="bg-white rounded-xl p-6 shadow-md hidden">
+                    <div class="text-center py-8">
+                        <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-clock text-3xl text-yellow-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-secondary mb-2">认证审核中</h3>
+                        <p class="text-gray-500 mb-4">您的实名认证正在审核中，预计1-3个工作日完成。</p>
+                        <div id="audit-timer" class="text-sm text-primary font-medium"></div>
+                    </div>
+                </div>
+
+                <!-- 已认证详情（仅已认证用户可见） -->
+                <div id="realname-verified-card" class="bg-white rounded-xl p-6 shadow-md hidden">
+                    <h3 class="text-lg font-semibold text-secondary mb-4">实名认证信息</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+                            <input type="text" id="realname-display" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">身份证号</label>
+                            <input type="text" id="idcard-display" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 安全设置 -->
+                <div class="bg-white rounded-xl p-6 shadow-md">
+                    <h3 class="text-lg font-semibold text-secondary mb-4">安全设置</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between py-3 border-b border-gray-100">
+                            <div>
+                                <h4 class="font-medium text-secondary">登录密码</h4>
+                                <p class="text-sm text-gray-500">定期修改密码可以保护账号安全</p>
+                            </div>
+                            <button onclick="showPasswordModal()" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">修改密码</button>
+                        </div>
+                        <div class="flex items-center justify-between py-3">
+                            <div>
+                                <h4 class="font-medium text-secondary">手机绑定</h4>
+                                <p class="text-sm text-gray-500">已绑定：138****8888</p>
+                            </div>
+                            <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">更换手机</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 钱包 -->
+            <section id="wallet-section" class="space-y-6 hidden">
+                <h2 class="text-2xl font-bold text-secondary">钱包</h2>
+                
+                <!-- 未认证提示 -->
+                <div id="wallet-unverified" class="bg-white rounded-xl p-12 shadow-md text-center hidden">
+                    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-lock text-3xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-secondary mb-2">请先完成实名认证</h3>
+                    <p class="text-gray-500 mb-6">完成实名认证后，即可查看余额和充值。</p>
+                    <button onclick="switchSection('account')" class="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition">
+                        去认证
+                    </button>
+                </div>
+
+                <!-- 审核中提示 -->
+                <div id="wallet-pending" class="bg-white rounded-xl p-12 shadow-md text-center hidden">
+                    <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-clock text-3xl text-yellow-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-secondary mb-2">认证审核中</h3>
+                    <p class="text-gray-500">审核通过后即可使用钱包功能。</p>
+                </div>
+
+                <!-- 钱包主体（仅认证用户可见） -->
+                <div id="wallet-main" class="hidden">
+                    <!-- 余额卡片 -->
+                    <div class="bg-gradient-to-r from-primary to-primary-dark rounded-xl p-8 text-white shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-primary-light mb-2">当前余额</p>
+                                <h3 id="wallet-balance-display" class="text-4xl font-bold">¥0.00</h3>
+                            </div>
+                            <button onclick="showRechargeModal()" class="bg-white text-primary px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                                充值
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 交易记录 -->
+                    <div class="bg-white rounded-xl p-6 shadow-md mt-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold text-secondary">余额明细</h3>
+                            <div class="flex space-x-2">
+                                <button class="px-4 py-2 bg-primary text-white rounded-lg text-sm">全部</button>
+                                <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">充值记录</button>
+                                <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">消费记录</button>
+                            </div>
+                        </div>
+                        <div id="transaction-list">
+                            <div class="text-center py-12 text-gray-400">
+                                <i class="fas fa-receipt text-3xl mb-3"></i>
+                                <p>暂无交易记录</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI模型服务 -->
+            <section id="ai-workbench-section" class="space-y-6 hidden">
+                <h2 class="text-2xl font-bold text-secondary">AI模型服务</h2>
+                
+                <!-- API Key管理 -->
+                <div class="bg-white rounded-xl p-6 shadow-md">
+                    <h3 class="text-lg font-semibold text-secondary mb-4">API密钥</h3>
+                    <div class="space-y-4" id="apikey-section">
+                        <!-- 未生成状态 -->
+                        <div id="apikey-empty-state" class="text-center py-8">
+                            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-key text-2xl text-gray-400"></i>
+                            </div>
+                            <p class="text-gray-500 mb-4">您还没有 API Key</p>
+                            <button onclick="handleGenerateApiKey()" class="bg-primary text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-primary-dark transition">
+                                <i class="fas fa-plus mr-2"></i>生成 API Key
+                            </button>
+                        </div>
+                        <!-- 已生成状态 -->
+                        <div id="apikey-generated-state" class="hidden space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">API Key</label>
+                                <div class="flex space-x-2">
+                                    <input type="text" id="apikey-display" value="" readonly class="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 font-mono text-sm">
+                                    <button onclick="copyToClipboard(document.getElementById('apikey-display').value)" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">API网关 URL</label>
+                                <div class="flex space-x-2">
+                                    <input type="text" value="https://api.opc.com/v1/chat/completions" readonly class="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 font-mono text-sm">
+                                    <button onclick="copyToClipboard('https://api.opc.com/v1/chat/completions')" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button onclick="showResetKeyModal()" class="text-red-600 hover:text-red-700 text-sm font-medium">
+                                <i class="fas fa-sync-alt mr-1"></i>重置 API Key
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 在线调试台 -->
+                <div class="bg-white rounded-xl p-6 shadow-md">
+                    <h3 class="text-lg font-semibold text-secondary mb-4">在线调试台</h3>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">选择模型</label>
+                                <select id="debugModel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    <option value="gpt-4o">GPT-4o</option>
+                                    <option value="gpt-4o-mini">GPT-4o-mini</option>
+                                    <option value="claude-3.5-sonnet">Claude-3.5-Sonnet</option>
+                                    <option value="deepseek-v3">DeepSeek-V3</option>
+                                    <option value="deepseek-r1">DeepSeek-R1</option>
+                                    <option value="qwen-max">Qwen-Max</option>
+                                    <option value="qwen-plus">Qwen-Plus</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">温度 (Temperature)</label>
+                                <input type="range" id="temperature" min="0" max="2" step="0.1" value="0.7" class="w-full">
+                                <div class="flex justify-between text-xs text-gray-500">
+                                    <span>0</span>
+                                    <span id="tempValue">0.7</span>
+                                    <span>2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">输入 Prompt</label>
+                            <textarea id="debugPrompt" rows="4" placeholder="请输入您的问题..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+                        </div>
+                        <button onclick="runDebug()" class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition">
+                            <i class="fas fa-play mr-2"></i>调试运行
+                        </button>
+                        <div id="debugResult" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">响应结果</label>
+                            <div class="bg-gray-50 rounded-lg p-4 relative">
+                                <pre id="debugResponse" class="text-sm text-gray-700 whitespace-pre-wrap"></pre>
+                                <button onclick="copyToClipboard(document.getElementById('debugResponse').textContent)" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 调用记录 -->
+                <div class="bg-white rounded-xl p-6 shadow-md">
+                    <h3 class="text-lg font-semibold text-secondary mb-4">调用记录</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">时间</th>
+                                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">模型</th>
+                                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">Token消耗</th>
+                                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">状态</th>
+                                    <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">用时</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-100">
+                                    <td class="py-3 px-4 text-sm">2026-05-20 14:30</td>
+                                    <td class="py-3 px-4 text-sm">GPT-4o</td>
+                                    <td class="py-3 px-4 text-sm">1,250</td>
+                                    <td class="py-3 px-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm">成功</span></td>
+                                    <td class="py-3 px-4 text-sm">2.3s</td>
+                                </tr>
+                                <tr class="border-b border-gray-100">
+                                    <td class="py-3 px-4 text-sm">2026-05-20 14:28</td>
+                                    <td class="py-3 px-4 text-sm">DeepSeek-V3</td>
+                                    <td class="py-3 px-4 text-sm">640</td>
+                                    <td class="py-3 px-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm">成功</span></td>
+                                    <td class="py-3 px-4 text-sm">1.8s</td>
+                                </tr>
+                                <tr class="border-b border-gray-100">
+                                    <td class="py-3 px-4 text-sm">2026-05-20 14:25</td>
+                                    <td class="py-3 px-4 text-sm">Claude-3.5-Sonnet</td>
+                                    <td class="py-3 px-4 text-sm">2,100</td>
+                                    <td class="py-3 px-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm">成功</span></td>
+                                    <td class="py-3 px-4 text-sm">3.1s</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-sm">2026-05-20 14:20</td>
+                                    <td class="py-3 px-4 text-sm">Qwen-Max</td>
+                                    <td class="py-3 px-4 text-sm">890</td>
+                                    <td class="py-3 px-4"><span class="bg-red-100 text-red-700 px-2 py-1 rounded text-sm">失败</span></td>
+                                    <td class="py-3 px-4 text-sm">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 帮助文档与示例代码 -->
+                <div class="bg-white rounded-xl p-6 shadow-md">
+                    <h3 class="text-lg font-semibold text-secondary mb-4">帮助文档与示例代码</h3>
+                    <div class="space-y-4">
+                        <div class="flex space-x-2 mb-4">
+                            <button onclick="switchCodeLang('python')" class="code-lang-btn px-4 py-2 bg-primary text-white rounded-lg text-sm" data-lang="python">Python</button>
+                            <button onclick="switchCodeLang('javascript')" class="code-lang-btn px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50" data-lang="javascript">JavaScript</button>
+                            <button onclick="switchCodeLang('java')" class="code-lang-btn px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50" data-lang="java">Java</button>
+                            <button onclick="switchCodeLang('go')" class="code-lang-btn px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50" data-lang="go">Go</button>
+                        </div>
+                        <div class="relative">
+                            <pre id="codeBlock" class="code-block rounded-lg p-4 overflow-x-auto text-sm"></pre>
+                            <button onclick="copyCode()" class="absolute top-2 right-2 text-gray-400 hover:text-white transition">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 服务申请 -->
+            <section id="my-applications-section" class="space-y-6 hidden">
+                <h2 class="text-2xl font-bold text-secondary">服务申请</h2>
+                
+                <!-- 申请列表 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-secondary">申请记录</h3>
+                    </div>
+                    <div class="divide-y divide-gray-100">
+                        <div class="p-6 hover:bg-gray-50 transition cursor-pointer" onclick="showApplicationDetail('cloud-ecs')">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-server text-xl text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-secondary">弹性云服务器 ECS</h4>
+                                        <p class="text-sm text-gray-500">申请时间：2026-05-15</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">审核中</span>
+                                    <i class="fas fa-chevron-right text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6 hover:bg-gray-50 transition cursor-pointer" onclick="showApplicationDetail('data-api')">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-database text-xl text-green-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-secondary">要素数据API</h4>
+                                        <p class="text-sm text-gray-500">申请时间：2026-05-10</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">已通过</span>
+                                    <i class="fas fa-chevron-right text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6 hover:bg-gray-50 transition cursor-pointer" onclick="showApplicationDetail('maker-space')">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                                        <i class="fas fa-rocket text-xl text-orange-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-secondary">创客空间入驻</h4>
+                                        <p class="text-sm text-gray-500">申请时间：2026-05-01</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">审核评估中</span>
+                                    <i class="fas fa-chevron-right text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 活动报名记录 -->
+            <section id="my-events-section" class="space-y-6 hidden">
+                <h2 class="text-2xl font-bold text-secondary">活动报名</h2>
+                
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-secondary">我的报名记录</h3>
+                    </div>
+                    <div id="event-registrations-list" class="divide-y divide-gray-100">
+                        <div class="p-12 text-center text-gray-400">
+                            <i class="fas fa-calendar-alt text-4xl mb-3"></i>
+                            <p>暂无活动报名记录</p>
+                            <a href="events.html" class="mt-2 inline-block text-primary hover:text-primary-dark text-sm font-medium">去报名活动</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 申请详情页 -->
+            <section id="application-detail-section" class="space-y-6 hidden">
+                <div class="flex items-center space-x-4 mb-6">
+                    <button onclick="backToApplications()" class="text-gray-600 hover:text-primary transition">
+                        <i class="fas fa-arrow-left text-xl"></i>
+                    </button>
+                    <h2 class="text-2xl font-bold text-secondary">申请详情</h2>
+                </div>
+                
+                <div id="application-detail-content"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 修改密码弹窗 -->
+    <div id="passwordModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-secondary">修改密码</h3>
+                <button onclick="closePasswordModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">原密码</label>
+                    <input type="password" id="oldPassword" placeholder="请输入原密码" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">新密码</label>
+                    <input type="password" id="newPassword" placeholder="请输入新密码" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">确认新密码</label>
+                    <input type="password" id="confirmNewPassword" placeholder="再次输入新密码" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <button onclick="changePassword()" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary-dark transition">确认修改</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 充值弹窗 -->
+    <div id="rechargeModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-secondary">账户充值</h3>
+                <button onclick="closeRechargeModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">充值金额</label>
+                    <div class="grid grid-cols-3 gap-3 mb-3">
+                        <button type="button" onclick="selectAmount(100)" class="amount-btn py-2 border border-gray-300 rounded-lg hover:border-primary hover:text-primary transition">¥100</button>
+                        <button type="button" onclick="selectAmount(500)" class="amount-btn py-2 border border-gray-300 rounded-lg hover:border-primary hover:text-primary transition">¥500</button>
+                        <button type="button" onclick="selectAmount(1000)" class="amount-btn py-2 border border-gray-300 rounded-lg hover:border-primary hover:text-primary transition">¥1000</button>
+                    </div>
+                    <input type="number" id="customAmount" placeholder="自定义金额" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">支付方式</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="payment" value="alipay" class="text-primary focus:ring-primary">
+                            <span class="ml-3"><i class="fab fa-alipay text-blue-500 mr-2"></i>支付宝</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="payment" value="wechat" class="text-primary focus:ring-primary">
+                            <span class="ml-3"><i class="fab fa-weixin text-green-500 mr-2"></i>微信支付</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="payment" value="bank" class="text-primary focus:ring-primary">
+                            <span class="ml-3"><i class="fas fa-credit-card text-blue-700 mr-2"></i>银行卡</span>
+                        </label>
+                    </div>
+                </div>
+                <button onclick="submitRecharge()" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition">确认充值</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 重置API Key弹窗 -->
+    <div id="resetKeyModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-secondary">重置 API Key</h3>
+                <button onclick="closeResetKeyModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-2xl text-yellow-600"></i>
+                </div>
+                <p class="text-gray-600">重置后，旧API Key将立即失效，所有使用旧Key的请求将失败。是否确认重置？</p>
+            </div>
+            <div class="flex space-x-4">
+                <button onclick="confirmResetKey()" class="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition">确认重置</button>
+                <button onclick="closeResetKeyModal()" class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50 transition">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        // ==================== 页面级UI管理 ====================
+        let realNameData = { name: '', idCard: '' };
+        let auditTimer = null;
+
+        function updateProfileUI() {
+            // 头像 & Header
+            const header = document.getElementById('profile-header');
+            const avatar = document.getElementById('profile-avatar');
+            if (AppState.user) {
+                const initial = AppState.user.name.charAt(0).toUpperCase();
+                if (header) {
+                    header.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">${initial}</div>
+                            <div>
+                                <h3 class="font-bold text-secondary">${AppState.user.name}</h3>
+                                <p class="text-sm text-gray-500">${AppState.user.email}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                if (avatar) avatar.textContent = initial;
+            }
+
+            // 实名认证状态
+            const statusContainer = document.getElementById('realname-status-container');
+            const formCard = document.getElementById('realname-form-card');
+            const pendingCard = document.getElementById('realname-pending-card');
+            const verifiedCard = document.getElementById('realname-verified-card');
+            
+            // 先全部隐藏
+            if (statusContainer) statusContainer.innerHTML = '';
+            if (formCard) formCard.classList.add('hidden');
+            if (pendingCard) pendingCard.classList.add('hidden');
+            if (verifiedCard) verifiedCard.classList.add('hidden');
+
+            if (AppState.realNameStatus === 'unverified') {
+                // 未认证：显示"未认证"标签 + 表单
+                if (statusContainer) {
+                    statusContainer.innerHTML = `
+                        <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">未认证</span>
+                        <button onclick="document.getElementById('realname-form-card').scrollIntoView({behavior:'smooth'})" class="text-primary hover:text-primary-dark text-sm">去认证</button>
+                    `;
+                }
+                if (formCard) formCard.classList.remove('hidden');
+            } else if (AppState.realNameStatus === 'pending') {
+                // 审核中：显示"审核中"标签 + 审核中卡片
+                if (statusContainer) {
+                    statusContainer.innerHTML = `<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">审核中</span>`;
+                }
+                if (pendingCard) {
+                    pendingCard.classList.remove('hidden');
+                    const timerEl = document.getElementById('audit-timer');
+                    if (timerEl) timerEl.textContent = '正在审核中，请稍候...';
+                }
+            } else if (AppState.realNameStatus === 'verified') {
+                // 已认证：显示"已认证"标签 + 已认证详情
+                if (statusContainer) {
+                    statusContainer.innerHTML = `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">已认证</span>`;
+                }
+                if (verifiedCard) {
+                    verifiedCard.classList.remove('hidden');
+                    const nameDisplay = document.getElementById('realname-display');
+                    const idcardDisplay = document.getElementById('idcard-display');
+                    if (nameDisplay) nameDisplay.value = realNameData.name || '张三';
+                    if (idcardDisplay) idcardDisplay.value = realNameData.idCard ? maskString(realNameData.idCard, 3, 4) : '440***********1234';
+                }
+            }
+
+            // 钱包区域
+            const walletUnverified = document.getElementById('wallet-unverified');
+            const walletPending = document.getElementById('wallet-pending');
+            const walletMain = document.getElementById('wallet-main');
+            
+            if (walletUnverified) walletUnverified.classList.add('hidden');
+            if (walletPending) walletPending.classList.add('hidden');
+            if (walletMain) walletMain.classList.add('hidden');
+
+            if (AppState.realNameStatus === 'unverified') {
+                if (walletUnverified) walletUnverified.classList.remove('hidden');
+            } else if (AppState.realNameStatus === 'pending') {
+                if (walletPending) walletPending.classList.remove('hidden');
+            } else if (AppState.realNameStatus === 'verified') {
+                if (walletMain) {
+                    walletMain.classList.remove('hidden');
+                    const balanceDisplay = document.getElementById('wallet-balance-display');
+                    if (balanceDisplay) balanceDisplay.textContent = `¥${AppState.balance.toFixed(2)}`;
+                }
+            }
+        }
+
+        // ==================== 实名认证表单 ====================
+        function handleRealNameSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('realname-input').value.trim();
+            const idCard = document.getElementById('idcard-input').value.trim();
+            
+            if (!name) {
+                showToast('请输入真实姓名', 'error');
+                return;
+            }
+            if (!idCard || idCard.length !== 18) {
+                showToast('请输入正确的18位身份证号', 'error');
+                return;
+            }
+            
+            realNameData.name = name;
+            realNameData.idCard = idCard;
+            
+            // 提交认证
+            submitRealName({ name, idCard });
+            
+            // 禁用表单
+            document.getElementById('realname-submit-btn').disabled = true;
+            document.getElementById('realname-submit-btn').textContent = '提交中...';
+            document.getElementById('realname-submit-btn').classList.add('opacity-50');
+            
+            // 更新UI到审核中
+            setTimeout(() => {
+                updateProfileUI();
+                // 启动审核倒计时
+                startAuditTimer();
+            }, 500);
+        }
+
+        function startAuditTimer() {
+            const timerEl = document.getElementById('audit-timer');
+            let seconds = 5;
+            if (timerEl) timerEl.textContent = `预计审核时间：${seconds}秒`;
+            
+            if (auditTimer) clearInterval(auditTimer);
+            auditTimer = setInterval(() => {
+                seconds--;
+                if (timerEl) timerEl.textContent = `预计审核时间：${seconds}秒`;
+                if (seconds <= 0) {
+                    clearInterval(auditTimer);
+                }
+            }, 1000);
+        }
+
+        // ==================== 文件上传 ====================
+        function handleFileSelect(input, filenameId, uploadId) {
+            const filenameEl = document.getElementById(filenameId);
+            const uploadEl = document.getElementById(uploadId);
+            if (input.files && input.files.length > 0) {
+                if (filenameEl) {
+                    filenameEl.textContent = `已选择：${input.files[0].name}`;
+                    filenameEl.classList.remove('hidden');
+                }
+                if (uploadEl) uploadEl.classList.add('has-file');
+            }
+        }
+
+        // ==================== 侧边栏切换 ====================
+        function switchSection(section) {
+            document.querySelectorAll('.sidebar-item[data-section]').forEach(i => i.classList.remove('active'));
+            const targetItem = document.querySelector(`.sidebar-item[data-section="${section}"]`);
+            if (targetItem) targetItem.classList.add('active');
+
+            document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+            const targetSection = document.getElementById(`${section}-section`);
+            if (targetSection) targetSection.classList.remove('hidden');
+
+            // 切换到钱包时刷新余额
+            if (section === 'wallet') {
+                updateProfileUI();
+            }
+            // 切换到活动报名时刷新记录
+            if (section === 'my-events') {
+                renderEventRegistrations();
+            }
+        }
+
+        // ==================== 活动报名渲染 ====================
+        function renderEventRegistrations() {
+            const list = document.getElementById('event-registrations-list');
+            const registrations = getEventRegistrations();
+            
+            if (registrations.length === 0) {
+                list.innerHTML = '<div class="p-12 text-center text-gray-400"><i class="fas fa-calendar-alt text-4xl mb-3"></i><p>暂无活动报名记录</p><a href="events.html" class="mt-2 inline-block text-primary hover:text-primary-dark text-sm font-medium">去报名活动</a></div>';
+                return;
+            }
+
+            const statusColors = {
+                '已报名': 'bg-green-100 text-green-700',
+                '已参加': 'bg-blue-100 text-blue-700',
+                '已取消': 'bg-gray-100 text-gray-500'
+            };
+
+            const iconMap = {
+                '已报名': 'fa-check-circle text-green-500',
+                '已参加': 'fa-check-double text-blue-500',
+                '已取消': 'fa-times-circle text-gray-400'
+            };
+
+            const sorted = registrations.reverse();
+
+            list.innerHTML = sorted.map(function(r) {
+                const colorClass = statusColors[r.status] || 'bg-yellow-100 text-yellow-700';
+                const iconClass = iconMap[r.status] || 'fa-clock text-yellow-500';
+                return '<div class="p-6 hover:bg-gray-50 transition">' +
+                    '<div class="flex items-center justify-between">' +
+                        '<div class="flex items-center space-x-4">' +
+                            '<div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">' +
+                                '<i class="fas ' + iconClass + ' text-xl"></i>' +
+                            '</div>' +
+                            '<div>' +
+                                '<h4 class="font-semibold text-secondary">' + r.eventName + '</h4>' +
+                                '<p class="text-sm text-gray-500">' + r.eventDate + ' | ' + r.eventLocation + '</p>' +
+                                '<p class="text-xs text-gray-400 mt-1">报名时间：' + new Date(r.registeredAt).toLocaleDateString('zh-CN') + '</p>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="flex items-center space-x-4">' +
+                            '<span class="' + colorClass + ' px-3 py-1 rounded-full text-sm">' + r.status + '</span>' +
+                            (r.status === '已报名' ? '<button onclick="cancelRegistration(\'' + r.id + '\')" class="text-red-500 hover:text-red-700 text-sm font-medium">取消报名</button>' : '') +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        function cancelRegistration(eventId) {
+            cancelEventRegistration(eventId);
+            renderEventRegistrations();
+            showToast('报名已取消');
+        }
+
+        document.querySelectorAll('.sidebar-item[data-section]').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = item.dataset.section;
+                switchSection(section);
+            });
+        });
+
+        // ==================== URL Hash ====================
+        function initSectionFromHash() {
+            const hash = window.location.hash.replace('#', '');
+            if (hash) {
+                const sectionMap = {
+                    'account': 'account',
+                    'wallet': 'wallet',
+                    'ai-workbench': 'ai-workbench',
+                    'ai-model': 'ai-workbench',
+                    'ai-models': 'ai-workbench',
+                    'my-applications': 'my-applications',
+                    'applications': 'my-applications',
+                    'my-events': 'my-events',
+                    'events': 'my-events',
+                    'registrations': 'my-events'
+                };
+                const section = sectionMap[hash] || hash;
+                switchSection(section);
+            }
+        }
+        initSectionFromHash();
+
+        // ==================== 温度滑块 ====================
+        document.getElementById('temperature')?.addEventListener('input', (e) => {
+            document.getElementById('tempValue').textContent = e.target.value;
+        });
+
+        // ==================== API Key 管理 ====================
+        let currentApiKey = '';
+
+        function handleGenerateApiKey() {
+            // 检查余额
+            if (AppState.balance <= 0) {
+                showAuthModal({
+                    title: '余额不足',
+                    message: '当前余额为 0，无法生成 API Key。请先充值。',
+                    icon: 'fa-wallet',
+                    btnText: '去充值',
+                    next: 'recharge'
+                });
+                return;
+            }
+            // 生成 API Key
+            const newKey = 'sk-opc-' + Array.from({length: 32}, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+            currentApiKey = newKey;
+            document.getElementById('apikey-display').value = newKey;
+            document.getElementById('apikey-empty-state').classList.add('hidden');
+            document.getElementById('apikey-generated-state').classList.remove('hidden');
+            showToast('API Key 生成成功');
+        }
+
+        function confirmResetKey() {
+            closeResetKeyModal();
+            const newKey = 'sk-opc-' + Array.from({length: 32}, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+            currentApiKey = newKey;
+            document.getElementById('apikey-display').value = newKey;
+            showToast('API Key 已重置');
+        }
+
+        // ==================== 调试运行 ====================
+        function runDebug() {
+            // 检查余额
+            if (AppState.balance <= 0) {
+                showAuthModal({
+                    title: '余额不足',
+                    message: '当前余额为 0，无法调用模型。请先充值后再进行调试。',
+                    icon: 'fa-wallet',
+                    btnText: '去充值',
+                    next: 'recharge'
+                });
+                return;
+            }
+            const prompt = document.getElementById('debugPrompt').value;
+            if (!prompt) {
+                showToast('请输入Prompt', 'error');
+                return;
+            }
+            const model = document.getElementById('debugModel').value;
+            const resultDiv = document.getElementById('debugResult');
+            const responsePre = document.getElementById('debugResponse');
+            responsePre.textContent = `模型：${model}\n响应：您好！我是${model}，一个AI助手。我可以帮助您回答问题、撰写文本、翻译语言、编写代码等多种任务。有什么我可以帮您的吗？\n\nToken消耗：156\n用时：1.2s`;
+            resultDiv.classList.remove('hidden');
+        }
+
+        // ==================== 代码示例 ====================
+        const codeExamples = {
+            python: `import requests
+
+url = "https://api.opc.com/v1/chat/completions"
+headers = {
+    "Authorization": "Bearer sk-opc-7a8b9c0d1e2f3g4h5i6j7k8l9m0n1o2p",
+    "Content-Type": "application/json"
+}
+data = {
+    "model": "gpt-4o",
+    "messages": [
+        {"role": "user", "content": "你好，请介绍一下自己"}
+    ],
+    "temperature": 0.7
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())`,
+            javascript: `const axios = require('axios');
+
+const url = 'https://api.opc.com/v1/chat/completions';
+const headers = {
+    'Authorization': 'Bearer sk-opc-7a8b9c0d1e2f3g4h5i6j7k8l9m0n1o2p',
+    'Content-Type': 'application/json'
+};
+const data = {
+    model: 'gpt-4o',
+    messages: [
+        { role: 'user', content: '你好，请介绍一下自己' }
+    ],
+    temperature: 0.7
+};
+
+axios.post(url, data, { headers })
+    .then(response => console.log(response.data))
+    .catch(error => console.error(error));`,
+            java: `import java.net.http.*;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.opc.com/v1/chat/completions"))
+    .header("Authorization", "Bearer sk-opc-7a8b9c0d1e2f3g4h5i6j7k8l9m0n1o2p")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString("""
+        {
+            "model": "gpt-4o",
+            "messages": [
+                {"role": "user", "content": "你好，请介绍一下自己"}
+            ],
+            "temperature": 0.7
+        }
+        """))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());`,
+            go: `package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.opc.com/v1/chat/completions"
+    payload := map[string]interface{}{
+        "model": "gpt-4o",
+        "messages": []map[string]string{
+            {"role": "user", "content": "你好，请介绍一下自己"},
+        },
+        "temperature": 0.7,
+    }
+    
+    jsonData, _ := json.Marshal(payload)
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer sk-opc-7a8b9c0d1e2f3g4h5i6j7k8l9m0n1o2p")
+    req.Header.Set("Content-Type", "application/json")
+    
+    client := &http.Client{}
+    resp, _ := client.Do(req)
+    defer resp.Body.Close()
+    
+    var result map[string]interface{}
+    json.NewDecoder(resp.Body).Decode(&result)
+    fmt.Println(result)
+}`
+        };
+
+        let currentLang = 'python';
+        document.getElementById('codeBlock').textContent = codeExamples.python;
+
+        function switchCodeLang(lang) {
+            currentLang = lang;
+            document.getElementById('codeBlock').textContent = codeExamples[lang];
+            document.querySelectorAll('.code-lang-btn').forEach(btn => {
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('bg-primary', 'text-white');
+                    btn.classList.remove('border', 'border-gray-300', 'hover:bg-gray-50');
+                } else {
+                    btn.classList.remove('bg-primary', 'text-white');
+                    btn.classList.add('border', 'border-gray-300', 'hover:bg-gray-50');
+                }
+            });
+        }
+
+        function copyCode() {
+            copyToClipboard(codeExamples[currentLang]);
+        }
+
+        // ==================== 申请详情 ====================
+        const applicationDetails = {
+            'cloud-ecs': {
+                title: '弹性云服务器 ECS',
+                icon: 'fa-server',
+                iconColor: 'text-blue-600',
+                iconBg: 'bg-blue-100',
+                status: '审核中',
+                statusClass: 'bg-yellow-100 text-yellow-700',
+                applyTime: '2026-05-15',
+                type: 'cloud',
+                content: `
+                    <div class="bg-white rounded-xl p-6 shadow-md">
+                        <h3 class="text-lg font-semibold text-secondary mb-4">申请信息</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">服务类型</span>
+                                <span class="text-secondary">云资源服务</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">申请时间</span>
+                                <span class="text-secondary">2026-05-15</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">当前状态</span>
+                                <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">审核中</span>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-100 pt-4 mt-4">
+                            <h4 class="font-medium text-secondary mb-2">申请内容</h4>
+                            <p class="text-gray-600 text-sm">配置：2核4G，系统盘40GB，带宽5Mbps</p>
+                            <p class="text-gray-600 text-sm">用途：部署AI应用服务</p>
+                        </div>
+                        <div class="border-t border-gray-100 pt-4 mt-4">
+                            <h4 class="font-medium text-secondary mb-2">审核进度</h4>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 30%"></div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">预计审核时间：1-3个工作日</p>
+                        </div>
+                    </div>
+                `
+            },
+            'data-api': {
+                title: '要素数据API',
+                icon: 'fa-database',
+                iconColor: 'text-green-600',
+                iconBg: 'bg-green-100',
+                status: '已通过',
+                statusClass: 'bg-green-100 text-green-700',
+                applyTime: '2026-05-10',
+                type: 'data-api',
+                content: `
+                    <div class="bg-white rounded-xl p-6 shadow-md">
+                        <h3 class="text-lg font-semibold text-secondary mb-4">申请信息</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">服务类型</span>
+                                <span class="text-secondary">数据API服务</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">申请时间</span>
+                                <span class="text-secondary">2026-05-10</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">当前状态</span>
+                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">已通过</span>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-100 pt-4 mt-4">
+                            <h4 class="font-medium text-secondary mb-2">服务交付</h4>
+                            <p class="text-gray-600 text-sm mb-4">您的数据API服务已开通，请下载以下文档进行对接：</p>
+                            <div class="space-y-3">
+                                <a href="#" class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
+                                        <i class="fas fa-file-pdf text-red-600"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-secondary">产品规格书.pdf</h5>
+                                        <p class="text-sm text-gray-500">数据API产品详细规格说明</p>
+                                    </div>
+                                    <i class="fas fa-download text-gray-400 ml-auto"></i>
+                                </a>
+                                <a href="#" class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                                        <i class="fas fa-file-code text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-secondary">服务接口文档.pdf</h5>
+                                        <p class="text-sm text-gray-500">API接口调用指南与示例</p>
+                                    </div>
+                                    <i class="fas fa-download text-gray-400 ml-auto"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            'maker-space': {
+                title: '创客空间入驻',
+                icon: 'fa-rocket',
+                iconColor: 'text-orange-600',
+                iconBg: 'bg-orange-100',
+                status: '审核评估中',
+                statusClass: 'bg-blue-100 text-blue-700',
+                applyTime: '2026-05-01',
+                type: 'maker-space',
+                content: `
+                    <div class="bg-white rounded-xl p-6 shadow-md">
+                        <h3 class="text-lg font-semibold text-secondary mb-4">申请信息</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">服务类型</span>
+                                <span class="text-secondary">创客空间入驻</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">申请时间</span>
+                                <span class="text-secondary">2026-05-01</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">当前状态</span>
+                                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">审核评估中</span>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-100 pt-4 mt-4">
+                            <h4 class="font-medium text-secondary mb-4">入驻进度</h4>
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm text-gray-600">当前进度</span>
+                                    <span class="text-sm text-primary font-medium">50%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-primary h-2 rounded-full" style="width: 50%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        function showApplicationDetail(applicationId) {
+            const detail = applicationDetails[applicationId];
+            if (!detail) return;
+            document.getElementById('my-applications-section').classList.add('hidden');
+            document.getElementById('application-detail-section').classList.remove('hidden');
+            document.getElementById('application-detail-content').innerHTML = detail.content;
+        }
+
+        function backToApplications() {
+            document.getElementById('application-detail-section').classList.add('hidden');
+            document.getElementById('my-applications-section').classList.remove('hidden');
+        }
+
+        // ==================== 弹窗控制 ====================
+        function showPasswordModal() {
+            document.getElementById('passwordModal').classList.remove('hidden');
+            document.getElementById('passwordModal').classList.add('flex');
+        }
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.add('hidden');
+            document.getElementById('passwordModal').classList.remove('flex');
+        }
+
+        function showRechargeModal() {
+            document.getElementById('rechargeModal').classList.remove('hidden');
+            document.getElementById('rechargeModal').classList.add('flex');
+        }
+        function closeRechargeModal() {
+            document.getElementById('rechargeModal').classList.add('hidden');
+            document.getElementById('rechargeModal').classList.remove('flex');
+        }
+
+        function showResetKeyModal() {
+            document.getElementById('resetKeyModal').classList.remove('hidden');
+            document.getElementById('resetKeyModal').classList.add('flex');
+        }
+        function closeResetKeyModal() {
+            document.getElementById('resetKeyModal').classList.add('hidden');
+            document.getElementById('resetKeyModal').classList.remove('flex');
+        }
+
+        function selectAmount(amount) {
+            document.getElementById('customAmount').value = amount;
+        }
+
+        function submitRecharge() {
+            const amount = parseFloat(document.getElementById('customAmount').value);
+            if (!amount || amount <= 0) {
+                showToast('请输入正确的充值金额', 'error');
+                return;
+            }
+            closeRechargeModal();
+            addBalance(amount);
+        }
+
+        function changePassword() {
+            closePasswordModal();
+            showToast('密码修改成功');
+        }
+
+        function confirmResetKey() {
+            closeResetKeyModal();
+            showToast('API Key已重置');
+        }
+
+        // ==================== 初始化 ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                updateProfileUI();
+            }, 100);
+        });
+    </script>
+
+    <!-- 全站通用页脚 -->
+    <footer class="bg-[#1a1a4e] text-white relative ml-64">
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+                <div class="footer-brand">
+                    <div class="flex items-center space-x-3 mb-5">
+                        <img src="logo.png" alt="云上OPC" class="w-9 h-9 rounded-xl">
+                        <span class="text-xl font-bold tracking-tight">云上OPC社区</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-1">AI协同 · 数据赋能 · 云服务 · 创业孵化</p>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">一站式线上综合服务赋能平台</p>
+                    <div class="flex items-center gap-4 text-xs text-gray-500">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-building text-primary/60"></i>深圳国家高技术产业创新中心</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs text-gray-500 mt-2">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-database text-primary/60"></i>粤港澳大湾区大数据中心</span>
+                    </div>
+                </div>
+                <div class="footer-support">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">服务支持</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-clock text-primary/70 text-xs"></i>
+                            </div>
+                            <span>周一至周五 9:00 - 18:00</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-envelope text-primary/70 text-xs"></i>
+                            </div>
+                            <span>gbanexus@hiic.com.cn</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-phone text-primary/70 text-xs"></i>
+                            </div>
+                            <span>400-888-9999</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">快速链接</h3>
+                    <div class="space-y-3">
+                        <a href="services.html#ai-models" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>AI模型服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="services.html#data-api" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>数据API服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="services.html#cloud" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>云资源服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="maker-space.html" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>创客空间入驻</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-14 pt-8 border-t border-white/10">
+                <p class="text-center text-gray-500 text-xs">© 2026 云上OPC社区 版权所有</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

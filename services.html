@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>能力中心 - 云上OPC社区</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#7c3aed',
+                        'primary-dark': '#6d28d9',
+                        'primary-light': '#a78bfa',
+                        secondary: '#1e1b4b',
+                        accent: '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Noto Sans SC', sans-serif; }
+        .service-card { transition: all 0.3s ease; }
+        .service-card:hover { transform: translateY(-4px); }
+        .nav-dropdown-menu { display: none; }
+        .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+        .model-card { transition: all 0.3s ease; }
+        .model-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <img src="logo.png" alt="云上OPC" class="w-8 h-8">
+                        <span class="text-xl font-bold text-secondary">云上OPC社区</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-primary font-medium transition">首页</a>
+                    <div class="nav-dropdown relative group">
+                        <a href="services.html" class="text-primary font-medium border-b-2 border-primary flex items-center space-x-1 py-5">
+                            <span>能力中心</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="javascript:void(0)" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition" onclick="switchTab('ai-models')">
+                                <i class="fas fa-brain w-5 text-primary"></i>
+                                <span>AI模型服务</span>
+                            </a>
+                            <a href="javascript:void(0)" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition" onclick="switchTab('data-api')">
+                                <i class="fas fa-database w-5 text-primary"></i>
+                                <span>数据API服务</span>
+                            </a>
+                            <a href="javascript:void(0)" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition" onclick="switchTab('cloud')">
+                                <i class="fas fa-cloud w-5 text-primary"></i>
+                                <span>云资源服务</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown relative group">
+                        <a href="news.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>前沿资讯</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="news.html?category=policy" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-gavel w-5 text-primary"></i>
+                                <span>政策速递</span>
+                            </a>
+                            <a href="news.html?category=science" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-flask w-5 text-primary"></i>
+                                <span>科普好文</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown relative group">
+                        <a href="events.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>创客空间</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="events.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-calendar-alt w-5 text-primary"></i>
+                                <span>社区活动</span>
+                            </a>
+                            <a href="marketplace.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-store w-5 text-primary"></i>
+                                <span>应用集市</span>
+                            </a>
+                            <a href="javascript:void(0)" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition" onclick="switchTab('maker-space')">
+                                <i class="fas fa-rocket w-5 text-primary"></i>
+                                <span>创客空间入驻</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="about.html" class="text-gray-600 hover:text-primary font-medium transition">关于我们</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="user-section" class="flex items-center space-x-4">
+                        <a href="login.html" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition">登录/注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-16 min-h-screen">
+        <!-- 主内容区 -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- AI模型服务 -->
+            <div id="ai-models" class="tab-content active">
+                <div class="mb-6">
+                    <h1 class="text-4xl font-extrabold text-secondary mb-3">AI模型服务</h1>
+                </div>
+
+                <!-- 搜索栏 -->
+                <div class="mb-4">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="modelSearchInput" placeholder="搜索模型名称、模型厂商、应用场景" class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent text-gray-700 placeholder-gray-400 bg-white shadow-sm">
+                    </div>
+                </div>
+
+                <!-- 筛选区域 -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-8">
+                    <!-- 标签式筛选 -->
+                    <div class="space-y-4">
+                        <!-- 模型类型 -->
+                        <div class="flex items-start">
+                            <span class="text-sm text-gray-500 w-24 flex-shrink-0 pt-2.5">模型类型</span>
+                            <div class="flex flex-wrap gap-2 filter-tag-group" data-filter="model-type">
+                                <span class="filter-tag active px-3 py-1 rounded-full text-sm cursor-pointer border border-primary bg-primary text-white transition" data-value="全部">全部</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="文本生成">文本生成</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="图像理解">图像理解</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="文生图">文生图</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="视频理解">视频理解</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="视频生成">视频生成</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="语音生成">语音生成</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="文本向量">文本向量</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="结果重排">结果重排</span>
+                            </div>
+                        </div>
+
+                        <!-- 模态 -->
+                        <div class="flex items-start">
+                            <span class="text-sm text-gray-500 w-24 flex-shrink-0 pt-2.5">模态</span>
+                            <div class="flex flex-wrap gap-2 filter-tag-group" data-filter="modality">
+                                <span class="filter-tag active px-3 py-1 rounded-full text-sm cursor-pointer border border-primary bg-primary text-white transition" data-value="全部">全部</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="纯文本">纯文本</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="文本+图像">文本+图像</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="文本+语音">文本+语音</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="文本+视频">文本+视频</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="全模态">全模态</span>
+                            </div>
+                        </div>
+
+                        <!-- 上下文长度 -->
+                        <div class="flex items-start">
+                            <span class="text-sm text-gray-500 w-24 flex-shrink-0 pt-2.5">上下文长度</span>
+                            <div class="flex flex-wrap gap-2 filter-tag-group" data-filter="context">
+                                <span class="filter-tag active px-3 py-1 rounded-full text-sm cursor-pointer border border-primary bg-primary text-white transition" data-value="全部">全部</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="≤16K">≤16K</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="16K-64K">16K-64K</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="64K-128K">64K-128K</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="128K-1M">128K-1M</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="≥1M">≥1M</span>
+                            </div>
+                        </div>
+
+                        <!-- 应用场景 -->
+                        <div class="flex items-start">
+                            <span class="text-sm text-gray-500 w-24 flex-shrink-0 pt-2.5">应用场景</span>
+                            <div class="flex flex-wrap gap-2 filter-tag-group" data-filter="scenario">
+                                <span class="filter-tag active px-3 py-1 rounded-full text-sm cursor-pointer border border-primary bg-primary text-white transition" data-value="全部">全部</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="RAG">RAG</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="通用助手">通用助手</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="文案创作">文案创作</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="长文本处理">长文本处理</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="数学推理">数学推理</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="代码生成">代码生成</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="快速响应">快速响应</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="多模态理解">多模态理解</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="语音合成">语音合成</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="图像生成">图像生成</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="AIGC内容创作">AIGC内容创作</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模型厂商分组展示 -->
+                <div class="space-y-12" id="modelGroupsContainer">
+                    <!-- 通义千问 -->
+                    <div class="model-group" data-vendor="通义千问">
+                        <h3 class="text-2xl font-bold text-secondary mb-6 flex items-center">
+                            <span class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white text-sm mr-3">阿</span>
+                            通义千问 Qwen
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='model-detail.html?id=qwen-max'"
+                                 data-model-name="Qwen-Max"
+                                 data-vendor="通义千问"
+                                 data-model-type="文本生成,图像理解"
+                                 data-modality="文本+图像"
+                                 data-context="32K"
+                                 data-scenario="通用助手,文案创作,多模态理解,AIGC内容创作"
+                                 data-release="2024-09-15">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">Qwen-Max</h4>
+                                    <span class="text-gray-400 text-xs">发布：2024-09-15</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">通义千问旗舰模型，支持复杂推理与多模态理解</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">文本生成</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">图片理解</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">代码生成</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">上下文长度：32K | 支持多模态理解 | 复杂推理</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-primary font-semibold">¥0.02/1K tokens</span>
+                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'Qwen-Max体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即体验</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='model-detail.html?id=qwen-plus'"
+                                 data-model-name="Qwen-Plus"
+                                 data-vendor="通义千问"
+                                 data-model-type="文本生成"
+                                 data-modality="纯文本"
+                                 data-context="128K"
+                                 data-scenario="通用助手,文案创作,长文本处理,快速响应"
+                                 data-release="2024-06-20">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">Qwen-Plus</h4>
+                                    <span class="text-gray-400 text-xs">发布：2024-06-20</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">通义千问标准版，平衡性能与成本</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">文本生成</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">对话</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">上下文长度：128K | 高效推理 | 日常任务</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-primary font-semibold">¥0.008/1K tokens</span>
+                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'Qwen-Plus体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即体验</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='model-detail.html?id=qwen-coder'"
+                                 data-model-name="Qwen-Coder"
+                                 data-vendor="通义千问"
+                                 data-model-type="文本生成"
+                                 data-modality="纯文本"
+                                 data-context="64K"
+                                 data-scenario="代码生成,快速响应,AIGC内容创作"
+                                 data-release="2024-08-10">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">Qwen-Coder</h4>
+                                    <span class="text-gray-400 text-xs">发布：2024-08-10</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">专为代码生成与审查优化的专用模型</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">代码生成</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">代码审查</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">上下文长度：64K | 多语言支持 | 代码优化</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-primary font-semibold">¥0.006/1K tokens</span>
+                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'Qwen-Coder体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即体验</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DeepSeek -->
+                    <div class="model-group" data-vendor="DeepSeek">
+                        <h3 class="text-2xl font-bold text-secondary mb-6 flex items-center">
+                            <span class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-sm mr-3">D</span>
+                            DeepSeek 深度求索
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='model-detail.html?id=deepseek-v3'"
+                                 data-model-name="DeepSeek-V3"
+                                 data-vendor="DeepSeek"
+                                 data-model-type="文本生成"
+                                 data-modality="纯文本"
+                                 data-context="64K"
+                                 data-scenario="通用助手,数学推理,快速响应,AIGC内容创作"
+                                 data-release="2024-12-26">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">DeepSeek-V3</h4>
+                                    <span class="text-gray-400 text-xs">发布：2024-12-26</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">深度求索最新通用模型，推理与数学能力突出</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">文本生成</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">推理</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">数学</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">上下文长度：64K | 超强推理 | 数学能力突出</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-primary font-semibold">¥0.005/1K tokens</span>
+                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'DeepSeek-V3体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即体验</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='model-detail.html?id=deepseek-r1'"
+                                 data-model-name="DeepSeek-R1"
+                                 data-vendor="DeepSeek"
+                                 data-model-type="文本生成"
+                                 data-modality="纯文本"
+                                 data-context="32K"
+                                 data-scenario="数学推理,通用助手,AIGC内容创作"
+                                 data-release="2025-01-20">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">DeepSeek-R1</h4>
+                                    <span class="text-gray-400 text-xs">发布：2025-01-20</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">深度求索推理专用模型，展示完整思维链</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">逻辑推理</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">数学证明</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">上下文长度：32K | 思维链展示 | 复杂问题求解</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-primary font-semibold">¥0.008/1K tokens</span>
+                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'DeepSeek-R1体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即体验</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GPT -->
+                    <div class="model-group" data-vendor="GPT">
+                        <h3 class="text-2xl font-bold text-secondary mb-6 flex items-center">
+                            <span class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white text-sm mr-3">G</span>
+                            GPT OpenAI
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='model-detail.html?id=gpt-4o'"
+                                 data-model-name="GPT-4o"
+                                 data-vendor="GPT"
+                                 data-model-type="文本生成,图像理解,语音生成"
+                                 data-modality="全模态"
+                                 data-context="128K"
+                                 data-scenario="通用助手,多模态理解,语音合成,图像生成,AIGC内容创作"
+                                 data-release="2024-05-13">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">GPT-4o</h4>
+                                    <span class="text-gray-400 text-xs">发布：2024-05-13</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">OpenAI旗舰多模态模型，支持视觉与音频理解</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">多模态</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">视觉</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">音频</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">上下文长度：128K | 原生多模态 | 实时交互</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-primary font-semibold">¥0.04/1K tokens</span>
+                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'GPT-4o体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即体验</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='model-detail.html?id=gpt-4o-mini'"
+                                 data-model-name="GPT-4o-mini"
+                                 data-vendor="GPT"
+                                 data-model-type="文本生成"
+                                 data-modality="纯文本"
+                                 data-context="128K"
+                                 data-scenario="通用助手,快速响应,RAG"
+                                 data-release="2024-07-18">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">GPT-4o-mini</h4>
+                                    <span class="text-gray-400 text-xs">发布：2024-07-18</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">OpenAI轻量版模型，高性价比适合日常任务</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">文本生成</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">快速响应</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">上下文长度：128K | 高性价比 | 日常任务</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-primary font-semibold">¥0.008/1K tokens</span>
+                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'GPT-4o-mini体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即体验</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Claude -->
+                    <div class="model-group" data-vendor="Claude">
+                        <h3 class="text-2xl font-bold text-secondary mb-6 flex items-center">
+                            <span class="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center text-white text-sm mr-3">C</span>
+                            Claude Anthropic
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='model-detail.html?id=claude-3.5-sonnet'"
+                                 data-model-name="Claude-3.5-Sonnet"
+                                 data-vendor="Claude"
+                                 data-model-type="文本生成,图像理解"
+                                 data-modality="文本+图像"
+                                 data-context="200K"
+                                 data-scenario="通用助手,文案创作,长文本处理,AIGC内容创作"
+                                 data-release="2024-06-20">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">Claude-3.5-Sonnet</h4>
+                                    <span class="text-gray-400 text-xs">发布：2024-06-20</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">Anthropic推荐模型，擅长长文本处理与深度分析</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">长文本</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">分析</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">写作</span>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">上下文长度：200K | 超长文本处理 | 深度分析</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-primary font-semibold">¥0.025/1K tokens</span>
+                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'Claude-3.5-Sonnet体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即体验</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 无结果提示 -->
+                <div id="noModelResults" class="hidden text-center py-16">
+                    <i class="fas fa-search text-4xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500 text-lg">未找到符合条件的模型</p>
+                    <button onclick="resetModelFilters()" class="mt-4 text-primary hover:text-primary-dark font-medium">清除筛选条件</button>
+                </div>
+            </div>
+
+            <!-- 数据API服务 -->
+            <div id="data-api" class="tab-content">
+                <div class="mb-8">
+                    <h1 class="text-4xl font-extrabold text-secondary mb-3">数据API服务</h1>
+                </div>
+
+                <!-- 搜索栏 -->
+                <div class="mb-4">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="dataApiSearchInput" placeholder="搜索数据名称、数据类型、应用场景" class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent text-gray-700 placeholder-gray-400 bg-white shadow-sm">
+                    </div>
+                </div>
+
+                <!-- 筛选区域 -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-8">
+                    <!-- 标签式筛选 -->
+                    <div class="space-y-4">
+                        <!-- 数据类型 -->
+                        <div class="flex items-start">
+                            <span class="text-sm text-gray-500 w-24 flex-shrink-0 pt-2.5">数据类型</span>
+                            <div class="flex flex-wrap gap-2 filter-tag-group" data-filter="dataType">
+                                <span class="filter-tag active px-3 py-1 rounded-full text-sm cursor-pointer border border-primary bg-primary text-white transition" data-value="全部">全部</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="要素数据">要素数据</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="场景数据">场景数据</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="主题数据">主题数据</span>
+                            </div>
+                        </div>
+
+                        <!-- 适用行业 -->
+                        <div class="flex items-start">
+                            <span class="text-sm text-gray-500 w-24 flex-shrink-0 pt-2.5">适用行业</span>
+                            <div class="flex flex-wrap gap-2 filter-tag-group" data-filter="industry">
+                                <span class="filter-tag active px-3 py-1 rounded-full text-sm cursor-pointer border border-primary bg-primary text-white transition" data-value="全部">全部</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="通用">通用</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="金融">金融</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="制造业">制造业</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="互联网">互联网</span>
+                            </div>
+                        </div>
+
+                        <!-- 应用场景 -->
+                        <div class="flex items-start">
+                            <span class="text-sm text-gray-500 w-24 flex-shrink-0 pt-2.5">应用场景</span>
+                            <div class="flex flex-wrap gap-2 filter-tag-group" data-filter="scenario">
+                                <span class="filter-tag active px-3 py-1 rounded-full text-sm cursor-pointer border border-primary bg-primary text-white transition" data-value="全部">全部</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="企业画像">企业画像</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="风险评估">风险评估</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="精准营销">精准营销</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="招商引资">招商引资</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="产业分析">产业分析</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 数据分类分组展示 -->
+                <div class="space-y-12" id="dataGroupsContainer">
+                    <!-- 要素数据 -->
+                    <div class="data-group" data-category="要素数据">
+                        <h3 class="text-2xl font-bold text-secondary mb-6 flex items-center">
+                            <span class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white text-sm mr-3">要</span>
+                            要素数据
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='data-detail.html?id=qiye-gongshang'"
+                                 data-data-type="要素数据" data-industry="通用" data-scenario="企业画像,风险评估">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">企业工商信息查询</h4>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">覆盖全国超5000万家企业工商注册信息，包括基本信息、股东结构、高管信息等核心数据</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">企业信息</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">股东查询</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">工商变更</span>
+                                </div>
+                                <p class="text-gray-600 text-sm">行业：通用 | 场景：企业画像、风险评估</p>
+                                <div class="mt-4 flex justify-end">
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '企业工商信息查询申请', callbackName: 'openApplyModal', args: ['数据API服务', '企业工商信息查询']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即申请</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='data-detail.html?id=zhishi-chanquan'"
+                                 data-data-type="要素数据" data-industry="通用" data-scenario="企业画像,风险评估">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">知识产权数据</h4>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">涵盖专利、商标、著作权等知识产权全量数据，支持企业创新能力评估与技术布局分析</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">专利检索</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">商标查询</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">著作权</span>
+                                </div>
+                                <p class="text-gray-600 text-sm">行业：通用 | 场景：企业画像、风险评估</p>
+                                <div class="mt-4 flex justify-end">
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '知识产权数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '知识产权数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即申请</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='data-detail.html?id=qiye-guanxi'"
+                                 data-data-type="要素数据" data-industry="金融" data-scenario="风险评估,企业画像">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">企业关系图谱</h4>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">基于股权、投资、任职等关系构建企业关联网络，支持多层穿透查询与风险传导分析</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">股权穿透</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">关联方识别</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">实际控制人</span>
+                                </div>
+                                <p class="text-gray-600 text-sm">行业：金融 | 场景：风险评估、企业画像</p>
+                                <div class="mt-4 flex justify-end">
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '企业关系图谱申请', callbackName: 'openApplyModal', args: ['数据API服务', '企业关系图谱']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即申请</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 场景数据 -->
+                    <div class="data-group" data-category="场景数据">
+                        <h3 class="text-2xl font-bold text-secondary mb-6 flex items-center">
+                            <span class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center text-white text-sm mr-3">场</span>
+                            场景数据
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='data-detail.html?id=zhaoshang-yinzi'"
+                                 data-data-type="场景数据" data-industry="通用" data-scenario="招商引资,产业分析">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">招商引资数据</h4>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">整合区域产业政策、园区资源、企业投资意向等数据，精准匹配招商引资需求与投资机会</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">产业政策</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">园区资源</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">投资意向</span>
+                                </div>
+                                <p class="text-gray-600 text-sm">行业：通用 | 场景：招商引资、产业分析</p>
+                                <div class="mt-4 flex justify-end">
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '招商引资数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '招商引资数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即申请</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='data-detail.html?id=qiye-fuwu'"
+                                 data-data-type="场景数据" data-industry="通用" data-scenario="企业服务,精准营销">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">企业服务数据</h4>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">提供企业全生命周期服务数据，涵盖注册登记、资质认证、政策申报、财税服务等场景</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">资质认证</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">政策申报</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">财税服务</span>
+                                </div>
+                                <p class="text-gray-600 text-sm">行业：通用 | 场景：企业服务、精准营销</p>
+                                <div class="mt-4 flex justify-end">
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '企业服务数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '企业服务数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即申请</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='data-detail.html?id=jingzhun-yingxiao'"
+                                 data-data-type="场景数据" data-industry="互联网" data-scenario="精准营销,产业分析">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">精准营销数据</h4>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">基于企业画像与行业标签，提供精准营销所需的目标客户筛选、市场洞察与商机挖掘数据</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">客户筛选</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">商机推荐</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">市场洞察</span>
+                                </div>
+                                <p class="text-gray-600 text-sm">行业：互联网 | 场景：精准营销、产业分析</p>
+                                <div class="mt-4 flex justify-end">
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '精准营销数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '精准营销数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即申请</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 主题数据 -->
+                    <div class="data-group" data-category="主题数据">
+                        <h3 class="text-2xl font-bold text-secondary mb-6 flex items-center">
+                            <span class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center text-white text-sm mr-3">主</span>
+                            主题数据
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='data-detail.html?id=bandaoti'"
+                                 data-data-type="主题数据" data-industry="制造业" data-scenario="产业分析">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">半导体产业链数据</h4>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">聚焦半导体与集成电路产业链，涵盖设计、制造、封测、设备材料等全链条企业及技术数据</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">产业链图谱</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">产能产量</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">技术路线</span>
+                                </div>
+                                <p class="text-gray-600 text-sm">行业：制造业 | 场景：产业分析</p>
+                                <div class="mt-4 flex justify-end">
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '半导体产业链数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '半导体产业链数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即申请</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='data-detail.html?id=rengong-zhineng'"
+                                 data-data-type="主题数据" data-industry="互联网" data-scenario="产业分析">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">人工智能产业数据</h4>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">全面覆盖人工智能产业，包括大模型、算力、应用场景、人才、投融资等维度数据</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">大模型评测</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">算力分布</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">AI人才</span>
+                                </div>
+                                <p class="text-gray-600 text-sm">行业：互联网 | 场景：产业分析</p>
+                                <div class="mt-4 flex justify-end">
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '人工智能产业数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '人工智能产业数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即申请</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
+                                 onclick="window.location.href='data-detail.html?id=xin-nengyuan'"
+                                 data-data-type="主题数据" data-industry="制造业" data-scenario="产业分析">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-lg font-bold text-secondary">新能源产业数据</h4>
+                                </div>
+                                <p class="text-gray-500 text-sm mb-3">涵盖光伏、风电、储能、氢能等新能源领域，提供产业规划、技术趋势与市场分析数据</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">光伏风电</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">储能氢能</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">政策补贴</span>
+                                </div>
+                                <p class="text-gray-600 text-sm">行业：制造业 | 场景：产业分析</p>
+                                <div class="mt-4 flex justify-end">
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '新能源产业数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '新能源产业数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                        <i class="fas fa-paper-plane text-xs"></i>
+                                        <span>立即申请</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 云资源服务 -->
+            <div id="cloud" class="tab-content">
+                <div class="mb-8">
+                    <h1 class="text-4xl font-extrabold text-secondary mb-3">云资源服务</h1>
+                </div>
+
+                <!-- 搜索栏 -->
+                <div class="mb-4">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="cloudSearchInput" placeholder="搜索服务名称、资源类型、应用场景" class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent text-gray-700 placeholder-gray-400 bg-white shadow-sm">
+                    </div>
+                </div>
+
+                <!-- 筛选区域 -->
+                <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 mb-8">
+                    <!-- 标签式筛选 -->
+                    <div class="space-y-4">
+                        <!-- 服务类型 -->
+                        <div class="flex items-start">
+                            <span class="text-sm text-gray-500 w-24 flex-shrink-0 pt-2.5">服务类型</span>
+                            <div class="flex flex-wrap gap-2 filter-tag-group" data-filter="serviceType">
+                                <span class="filter-tag active px-3 py-1 rounded-full text-sm cursor-pointer border border-primary bg-primary text-white transition" data-value="全部">全部</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="计算">计算</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="存储">存储</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="数据库">数据库</span>
+                            </div>
+                        </div>
+
+                        <!-- 适用场景 -->
+                        <div class="flex items-start">
+                            <span class="text-sm text-gray-500 w-24 flex-shrink-0 pt-2.5">适用场景</span>
+                            <div class="flex flex-wrap gap-2 filter-tag-group" data-filter="scenario">
+                                <span class="filter-tag active px-3 py-1 rounded-full text-sm cursor-pointer border border-primary bg-primary text-white transition" data-value="全部">全部</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="Web应用">Web应用</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="数据分析">数据分析</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="内容分发">内容分发</span>
+                                <span class="filter-tag px-3 py-1 rounded-full text-sm cursor-pointer border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition" data-value="备份归档">备份归档</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer" data-service-type="计算" data-scenario="Web应用,数据分析">
+                        <div class="flex items-center mb-2">
+                            <h4 class="text-lg font-bold text-secondary">弹性云服务器 ECS</h4>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-3">主流镜像（CentOS 7.9/Ubuntu 20.04等），带宽灵活，起步配置充足，99.99%可用，支持按需伸缩与CDN加速。</p>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">主流镜像</span>
+                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">弹性伸缩</span>
+                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">按需付费</span>
+                        </div>
+                        <p class="text-gray-600 text-sm">资源类型：计算资源 | 规格：按需配置</p>
+                        <div class="mt-4 flex justify-end">
+                            <button onclick="withAuthChain({action: 'ECS申请', callbackName: 'openApplyModal', args: ['云资源服务', 'ECS']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                <i class="fas fa-paper-plane text-xs"></i>
+                                <span>立即申请</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer" data-service-type="存储" data-scenario="内容分发,备份归档">
+                        <div class="flex items-center mb-2">
+                            <h4 class="text-lg font-bold text-secondary">对象存储服务 OBS</h4>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-3">高可靠、低成本，适用图片/视频/文档等。默认20GB，可扩至40GB+（更高可申请），海量存储，极致弹性。</p>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">99.99%可用性</span>
+                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">CDN加速</span>
+                        </div>
+                        <p class="text-gray-600 text-sm">资源类型：对象存储 | 容量：按需扩展</p>
+                        <div class="mt-4 flex justify-end">
+                            <button onclick="withAuthChain({action: 'OBS申请', callbackName: 'openApplyModal', args: ['云资源服务', 'OBS']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                <i class="fas fa-paper-plane text-xs"></i>
+                                <span>立即申请</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer" data-service-type="存储" data-scenario="数据分析">
+                        <div class="flex items-center mb-2">
+                            <h4 class="text-lg font-bold text-secondary">弹性文件服务 SFS</h4>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-3">高性能共享存储，多节点并发，适合容器、大数据分析。默认50GB，支持弹性扩容（更高可申请），POSIX兼容。</p>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">POSIX兼容</span>
+                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">自动扩展</span>
+                        </div>
+                        <p class="text-gray-600 text-sm">资源类型：文件存储 | 性能：高IOPS</p>
+                        <div class="mt-4 flex justify-end">
+                            <button onclick="withAuthChain({action: 'SFS申请', callbackName: 'openApplyModal', args: ['云资源服务', 'SFS']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                <i class="fas fa-paper-plane text-xs"></i>
+                                <span>立即申请</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer" data-service-type="数据库" data-scenario="Web应用">
+                        <div class="flex items-center mb-2">
+                            <h4 class="text-lg font-bold text-secondary">云数据库 RDS</h4>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-3">全托管关系型数据库（MySQL）。默认100GB/300GB存储，8核32GB超高规格，自动备份、读写分离、监控告警。</p>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">自动备份</span>
+                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">读写分离</span>
+                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">监控告警</span>
+                        </div>
+                        <p class="text-gray-600 text-sm">资源类型：关系型数据库 | 规格：8核32GB</p>
+                        <div class="mt-4 flex justify-end">
+                            <button onclick="withAuthChain({action: 'RDS申请', callbackName: 'openApplyModal', args: ['云资源服务', 'RDS']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                <i class="fas fa-paper-plane text-xs"></i>
+                                <span>立即申请</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 flex flex-col items-center justify-center text-center" data-coming-soon="true">
+                        <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-3">
+                            <i class="fas fa-ellipsis-h text-xl text-primary"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-secondary mb-2">更多云资源服务</h4>
+                        <p class="text-gray-500 text-sm">敬请期待</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 全站通用页脚 -->
+    <footer class="bg-[#1a1a4e] text-white relative">
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+                <div class="footer-brand">
+                    <div class="flex items-center space-x-3 mb-5">
+                        <img src="logo.png" alt="云上OPC" class="w-9 h-9 rounded-xl">
+                        <span class="text-xl font-bold tracking-tight">云上OPC社区</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-1">AI协同 · 数据赋能 · 云服务 · 创业孵化</p>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">一站式线上综合服务赋能平台</p>
+                    <div class="flex items-center gap-4 text-xs text-gray-500">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-building text-primary/60"></i>深圳国家高技术产业创新中心</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs text-gray-500 mt-2">
+                        <span class="flex items-center gap-1.5"><i class="fas fa-database text-primary/60"></i>粤港澳大湾区大数据中心</span>
+                    </div>
+                </div>
+                <div class="footer-support">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">服务支持</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-clock text-primary/70 text-xs"></i>
+                            </div>
+                            <span>周一至周五 9:00 - 18:00</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-envelope text-primary/70 text-xs"></i>
+                            </div>
+                            <span>gbanexus@hiic.com.cn</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-phone text-primary/70 text-xs"></i>
+                            </div>
+                            <span>400-888-9999</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">快速链接</h3>
+                    <div class="space-y-3">
+                        <a href="services.html#ai-models" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>AI模型服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="services.html#data-api" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>数据API服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="services.html#cloud" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>云资源服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="maker-space.html" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>创客空间入驻</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-14 pt-8 border-t border-white/10">
+                <p class="text-center text-gray-500 text-xs">© 2026 云上OPC社区 版权所有</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 服务申请表单弹窗 -->
+    <div id="applyModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-secondary">服务申请</h3>
+                <button onclick="closeApplyModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="applyForm">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">实名认证状态</label>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">已认证</span>
+                            <span class="text-gray-500 text-sm">张三 | 440***********1234</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">联系方式</label>
+                        <input type="text" value="138****8888" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                    </div>
+                    
+                    <div id="dataApiFields" class="hidden space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">所需数据类型</label>
+                            <select id="dataApiTypeSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option>要素数据 - 企业工商信息查询</option>
+                                <option>要素数据 - 知识产权数据</option>
+                                <option>要素数据 - 企业关系图谱</option>
+                                <option>场景数据 - 招商引资数据</option>
+                                <option>场景数据 - 企业服务数据</option>
+                                <option>场景数据 - 精准营销数据</option>
+                                <option>主题数据 - 半导体产业链数据</option>
+                                <option>主题数据 - 人工智能产业数据</option>
+                                <option>主题数据 - 新能源产业数据</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">调用频率预估</label>
+                            <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option>日均 < 1000 次</option>
+                                <option>日均 1000 - 10000 次</option>
+                                <option>日均 > 10000 次</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="cloudFields" class="hidden space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">所需资源类型</label>
+                            <select id="cloudTypeSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option>弹性云服务器 ECS</option>
+                                <option>对象存储服务 OBS</option>
+                                <option>弹性文件服务 SFS</option>
+                                <option>云数据库 RDS</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">配置规格</label>
+                            <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option>入门级（2核4G）</option>
+                                <option>标准级（4核16G）</option>
+                                <option>企业级（8核32G）</option>
+                                <option>自定义配置</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">申请备注</label>
+                        <textarea id="applyNote" rows="4" placeholder="请描述您的具体需求..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+                    </div>
+                </div>
+                <div class="mt-6 flex space-x-4">
+                    <button type="button" onclick="submitApply()" class="flex-1 bg-primary text-white py-3 rounded-lg hover:bg-primary-dark transition">提交申请</button>
+                    <button type="button" onclick="closeApplyModal()" class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- AI模型引导弹窗 -->
+    <div id="aiGuideModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-lg w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-secondary">开始使用AI模型</h3>
+                <button onclick="closeAiGuideModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="space-y-6">
+                <div class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-key text-primary"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-secondary mb-1">获取API Key</h4>
+                        <p class="text-gray-600 text-sm">前往个人中心获取您的专属API Key，用于调用所有AI模型</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-flask text-primary"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-secondary mb-1">在线调试</h4>
+                        <p class="text-gray-600 text-sm">在个人中心的调试台中测试不同模型，调整参数，查看响应效果</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-code text-primary"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-secondary mb-1">接入开发</h4>
+                        <p class="text-gray-600 text-sm">查看帮助文档与示例代码，快速将AI能力集成到您的应用中</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-wallet text-primary"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-secondary mb-1">按量计费</h4>
+                        <p class="text-gray-600 text-sm">按Token消耗计费，无最低消费，余额不足时请及时充值</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 flex space-x-4">
+                <a href="profile.html#ai-workbench" onclick="withAuthChain({action: 'AI工作台', targetUrl: 'profile.html#ai-workbench'}); return false;" class="flex-1 bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition text-center">立即前往</a>
+                <button onclick="closeAiGuideModal()" class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition">稍后再说</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模型详情弹窗 -->
+    <div id="modelDetailModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="modelDetailTitle" class="text-2xl font-bold text-secondary">模型详情</h3>
+                <button onclick="closeModelDetail()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="modelDetailContent">
+                <!-- 动态填充内容 -->
+            </div>
+            <div class="mt-8 flex space-x-4">
+                <a href="profile.html#ai-workbench" onclick="withAuthChain({action: 'AI工作台', targetUrl: 'profile.html#ai-workbench'}); return false;" class="flex-1 bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition text-center">立即前往</a>
+                <button onclick="closeModelDetail()" class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        // 服务申请弹窗
+        function openApplyModal(serviceType, serviceName) {
+            document.getElementById('dataApiFields').classList.add('hidden');
+            document.getElementById('cloudFields').classList.add('hidden');
+            document.getElementById('applyNote').value = '';
+            if (serviceType === '数据API服务') {
+                document.getElementById('dataApiFields').classList.remove('hidden');
+                if (serviceName) {
+                    var select = document.getElementById('dataApiTypeSelect');
+                    for (var i = 0; i < select.options.length; i++) {
+                        if (select.options[i].text.indexOf(serviceName) !== -1) {
+                            select.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+            } else if (serviceType === '云资源服务') {
+                document.getElementById('cloudFields').classList.remove('hidden');
+                if (serviceName) {
+                    var select2 = document.getElementById('cloudTypeSelect');
+                    for (var j = 0; j < select2.options.length; j++) {
+                        if (select2.options[j].text.indexOf(serviceName) !== -1) {
+                            select2.selectedIndex = j;
+                            break;
+                        }
+                    }
+                }
+            }
+            document.getElementById('applyModal').classList.remove('hidden');
+            document.getElementById('applyModal').classList.add('flex');
+        }
+
+        function closeApplyModal() {
+            document.getElementById('applyModal').classList.add('hidden');
+            document.getElementById('applyModal').classList.remove('flex');
+        }
+
+        function submitApply() {
+            closeApplyModal();
+            showToast('申请已提交，请至个人中心查看您的服务申请进度与服务文档');
+        }
+
+        // AI模型引导弹窗
+        function openAiGuideModal() {
+            document.getElementById('aiGuideModal').classList.remove('hidden');
+            document.getElementById('aiGuideModal').classList.add('flex');
+        }
+
+        function closeAiGuideModal() {
+            document.getElementById('aiGuideModal').classList.add('hidden');
+            document.getElementById('aiGuideModal').classList.remove('flex');
+        }
+
+        // 模型详情数据
+        const modelDetails = {
+            'qwen-max': {
+                title: 'Qwen-Max',
+                description: '通义千问旗舰模型，支持复杂推理与多模态理解',
+                releaseDate: '2024-09-15',
+                content: `
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">模型介绍</h4>
+                            <p class="text-gray-600">Qwen-Max是通义千问系列的旗舰模型，具备强大的多模态理解能力和复杂推理能力。支持文本、图片、代码等多种输入类型，适用于高难度任务处理。</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">核心参数</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">上下文长度</span>
+                                    <p class="text-secondary font-medium">32K tokens</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">支持模态</span>
+                                    <p class="text-secondary font-medium">文本、图片、代码</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">推理能力</span>
+                                    <p class="text-secondary font-medium">复杂推理</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">定价</span>
+                                    <p class="text-secondary font-medium">¥0.02/1K tokens</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">适用场景</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">复杂问题求解</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">多模态分析</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">代码生成</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">创意写作</span>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-secondary mb-2"><i class="fas fa-lightbulb text-primary mr-2"></i>使用引导</h4>
+                            <ul class="text-gray-600 text-sm space-y-2">
+                                <li>• 前往个人中心获取API Key，即可开始调用</li>
+                                <li>• 在调试台中测试模型效果，调整参数</li>
+                                <li>• 查看帮助文档与示例代码，快速接入开发</li>
+                                <li>• 按Token消耗计费，余额不足时请及时充值</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'qwen-plus': {
+                title: 'Qwen-Plus',
+                description: '通义千问标准版，平衡性能与成本',
+                releaseDate: '2024-06-20',
+                content: `
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">模型介绍</h4>
+                            <p class="text-gray-600">Qwen-Plus是通义千问系列的标准版模型，在性能与成本之间取得良好平衡。适合日常对话、文本生成等通用场景。</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">核心参数</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">上下文长度</span>
+                                    <p class="text-secondary font-medium">128K tokens</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">支持模态</span>
+                                    <p class="text-secondary font-medium">文本</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">推理能力</span>
+                                    <p class="text-secondary font-medium">高效推理</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">定价</span>
+                                    <p class="text-secondary font-medium">¥0.008/1K tokens</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">适用场景</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">日常对话</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">文本生成</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">内容摘要</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">问答系统</span>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-secondary mb-2"><i class="fas fa-lightbulb text-primary mr-2"></i>使用引导</h4>
+                            <ul class="text-gray-600 text-sm space-y-2">
+                                <li>• 前往个人中心获取API Key，即可开始调用</li>
+                                <li>• 在调试台中测试模型效果，调整参数</li>
+                                <li>• 查看帮助文档与示例代码，快速接入开发</li>
+                                <li>• 按Token消耗计费，余额不足时请及时充值</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'qwen-coder': {
+                title: 'Qwen-Coder',
+                description: '专为代码生成与审查优化的专用模型',
+                releaseDate: '2024-08-10',
+                content: `
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">模型介绍</h4>
+                            <p class="text-gray-600">Qwen-Coder是专为代码生成与审查优化的专用模型，支持多种编程语言，具备代码补全、代码审查、代码优化等能力。</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">核心参数</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">上下文长度</span>
+                                    <p class="text-secondary font-medium">64K tokens</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">支持语言</span>
+                                    <p class="text-secondary font-medium">Python、Java、JS等</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">代码能力</span>
+                                    <p class="text-secondary font-medium">生成、审查、优化</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">定价</span>
+                                    <p class="text-secondary font-medium">¥0.006/1K tokens</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">适用场景</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">代码生成</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">代码审查</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">代码补全</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">技术文档</span>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-secondary mb-2"><i class="fas fa-lightbulb text-primary mr-2"></i>使用引导</h4>
+                            <ul class="text-gray-600 text-sm space-y-2">
+                                <li>• 前往个人中心获取API Key，即可开始调用</li>
+                                <li>• 在调试台中测试模型效果，调整参数</li>
+                                <li>• 查看帮助文档与示例代码，快速接入开发</li>
+                                <li>• 按Token消耗计费，余额不足时请及时充值</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'deepseek-v3': {
+                title: 'DeepSeek-V3',
+                description: '深度求索最新通用模型，推理与数学能力突出',
+                releaseDate: '2024-12-26',
+                content: `
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">模型介绍</h4>
+                            <p class="text-gray-600">DeepSeek-V3是深度求索发布的最新通用大模型，在推理能力和数学能力方面表现突出，支持多种复杂任务处理。</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">核心参数</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">上下文长度</span>
+                                    <p class="text-secondary font-medium">64K tokens</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">推理能力</span>
+                                    <p class="text-secondary font-medium">超强推理</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">数学能力</span>
+                                    <p class="text-secondary font-medium">突出</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">定价</span>
+                                    <p class="text-secondary font-medium">¥0.005/1K tokens</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">适用场景</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">数学求解</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">逻辑推理</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">文本生成</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">数据分析</span>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-secondary mb-2"><i class="fas fa-lightbulb text-primary mr-2"></i>使用引导</h4>
+                            <ul class="text-gray-600 text-sm space-y-2">
+                                <li>• 前往个人中心获取API Key，即可开始调用</li>
+                                <li>• 在调试台中测试模型效果，调整参数</li>
+                                <li>• 查看帮助文档与示例代码，快速接入开发</li>
+                                <li>• 按Token消耗计费，余额不足时请及时充值</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'deepseek-r1': {
+                title: 'DeepSeek-R1',
+                description: '深度求索推理专用模型，展示完整思维链',
+                releaseDate: '2025-01-20',
+                content: `
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">模型介绍</h4>
+                            <p class="text-gray-600">DeepSeek-R1是深度求索专为推理任务优化的模型，能够展示完整的思维链过程，适合需要透明推理逻辑的复杂问题求解。</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">核心参数</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">上下文长度</span>
+                                    <p class="text-secondary font-medium">32K tokens</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">思维链</span>
+                                    <p class="text-secondary font-medium">完整展示</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">推理类型</span>
+                                    <p class="text-secondary font-medium">逻辑推理、数学证明</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">定价</span>
+                                    <p class="text-secondary font-medium">¥0.008/1K tokens</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">适用场景</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">逻辑推理</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">数学证明</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">问题求解</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">思维分析</span>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-secondary mb-2"><i class="fas fa-lightbulb text-primary mr-2"></i>使用引导</h4>
+                            <ul class="text-gray-600 text-sm space-y-2">
+                                <li>• 前往个人中心获取API Key，即可开始调用</li>
+                                <li>• 在调试台中测试模型效果，调整参数</li>
+                                <li>• 查看帮助文档与示例代码，快速接入开发</li>
+                                <li>• 按Token消耗计费，余额不足时请及时充值</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'gpt-4o': {
+                title: 'GPT-4o',
+                description: 'OpenAI旗舰多模态模型，支持视觉与音频理解',
+                releaseDate: '2024-05-13',
+                content: `
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">模型介绍</h4>
+                            <p class="text-gray-600">GPT-4o是OpenAI的旗舰多模态模型，支持文本、视觉和音频的原生理解与生成，具备实时交互能力。</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">核心参数</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">上下文长度</span>
+                                    <p class="text-secondary font-medium">128K tokens</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">支持模态</span>
+                                    <p class="text-secondary font-medium">文本、视觉、音频</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">交互能力</span>
+                                    <p class="text-secondary font-medium">实时交互</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">定价</span>
+                                    <p class="text-secondary font-medium">¥0.04/1K tokens</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">适用场景</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">多模态分析</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">视觉理解</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">音频处理</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">实时对话</span>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-secondary mb-2"><i class="fas fa-lightbulb text-primary mr-2"></i>使用引导</h4>
+                            <ul class="text-gray-600 text-sm space-y-2">
+                                <li>• 前往个人中心获取API Key，即可开始调用</li>
+                                <li>• 在调试台中测试模型效果，调整参数</li>
+                                <li>• 查看帮助文档与示例代码，快速接入开发</li>
+                                <li>• 按Token消耗计费，余额不足时请及时充值</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'gpt-4o-mini': {
+                title: 'GPT-4o-mini',
+                description: 'OpenAI轻量版模型，高性价比适合日常任务',
+                releaseDate: '2024-07-18',
+                content: `
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">模型介绍</h4>
+                            <p class="text-gray-600">GPT-4o-mini是OpenAI的轻量版模型，在保持较高性能的同时具有更高的性价比，适合日常任务和批量处理。</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">核心参数</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">上下文长度</span>
+                                    <p class="text-secondary font-medium">128K tokens</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">响应速度</span>
+                                    <p class="text-secondary font-medium">快速</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">性价比</span>
+                                    <p class="text-secondary font-medium">高</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">定价</span>
+                                    <p class="text-secondary font-medium">¥0.008/1K tokens</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">适用场景</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">日常任务</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">批量处理</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">文本生成</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">快速响应</span>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-secondary mb-2"><i class="fas fa-lightbulb text-primary mr-2"></i>使用引导</h4>
+                            <ul class="text-gray-600 text-sm space-y-2">
+                                <li>• 前往个人中心获取API Key，即可开始调用</li>
+                                <li>• 在调试台中测试模型效果，调整参数</li>
+                                <li>• 查看帮助文档与示例代码，快速接入开发</li>
+                                <li>• 按Token消耗计费，余额不足时请及时充值</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'claude-3.5-sonnet': {
+                title: 'Claude-3.5-Sonnet',
+                description: 'Anthropic推荐模型，擅长长文本处理与深度分析',
+                releaseDate: '2024-06-20',
+                content: `
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">模型介绍</h4>
+                            <p class="text-gray-600">Claude-3.5-Sonnet是Anthropic推荐的模型，特别擅长长文本处理和深度分析，支持超长上下文窗口。</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">核心参数</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">上下文长度</span>
+                                    <p class="text-secondary font-medium">200K tokens</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">文本处理</span>
+                                    <p class="text-secondary font-medium">超长文本</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">分析能力</span>
+                                    <p class="text-secondary font-medium">深度分析</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <span class="text-gray-500 text-sm">定价</span>
+                                    <p class="text-secondary font-medium">¥0.025/1K tokens</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-secondary mb-2">适用场景</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">长文档分析</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">深度研究</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">学术写作</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">报告生成</span>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-secondary mb-2"><i class="fas fa-lightbulb text-primary mr-2"></i>使用引导</h4>
+                            <ul class="text-gray-600 text-sm space-y-2">
+                                <li>• 前往个人中心获取API Key，即可开始调用</li>
+                                <li>• 在调试台中测试模型效果，调整参数</li>
+                                <li>• 查看帮助文档与示例代码，快速接入开发</li>
+                                <li>• 按Token消耗计费，余额不足时请及时充值</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        // 打开模型详情弹窗
+        function openModelDetail(modelId) {
+            const detail = modelDetails[modelId];
+            if (!detail) return;
+
+            document.getElementById('modelDetailTitle').textContent = detail.title;
+
+            // 在内容顶部插入发布时间
+            let contentWithDate = detail.content;
+            if (detail.releaseDate) {
+                const dateBadge = `<div class="mb-4"><span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-600"><i class="far fa-calendar-alt mr-2"></i>发布时间：${detail.releaseDate}</span></div>`;
+                contentWithDate = dateBadge + contentWithDate;
+            }
+
+            document.getElementById('modelDetailContent').innerHTML = contentWithDate;
+            document.getElementById('modelDetailModal').classList.remove('hidden');
+            document.getElementById('modelDetailModal').classList.add('flex');
+        }
+
+        // 关闭模型详情弹窗
+        function closeModelDetail() {
+            document.getElementById('modelDetailModal').classList.add('hidden');
+            document.getElementById('modelDetailModal').classList.remove('flex');
+        }
+
+        // 筛选标签点击事件
+        document.querySelectorAll('.filter-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                const group = this.closest('.filter-tag-group');
+                const filterType = group.dataset.filter;
+                const selectedValue = this.dataset.value;
+
+                // 同一组内只能选一个（单选模式）
+                group.querySelectorAll('.filter-tag').forEach(t => {
+                    t.classList.remove('active', 'bg-primary', 'text-white', 'border-primary');
+                    t.classList.add('border-gray-200', 'text-gray-600');
+                });
+                this.classList.add('active', 'bg-primary', 'text-white', 'border-primary');
+                this.classList.remove('border-gray-200', 'text-gray-600');
+
+                applyModelFilters();
+            });
+        });
+
+        // 搜索输入事件
+        const searchInput = document.getElementById('modelSearchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                applyModelFilters();
+            });
+        }
+
+        // 获取当前激活的筛选条件（标签模式）
+        function getActiveFilters() {
+            const filters = {
+                'model-type': [],
+                'modality': [],
+                'context': [],
+                'scenario': []
+            };
+
+            document.querySelectorAll('.filter-tag-group').forEach(group => {
+                const filterType = group.dataset.filter;
+                const activeTag = group.querySelector('.filter-tag.active');
+                if (activeTag) {
+                    const value = activeTag.dataset.value;
+                    if (value !== '全部') {
+                        filters[filterType].push(value);
+                    }
+                }
+            });
+
+            return filters;
+        }
+
+        // 上下文长度数值解析（用于区间比较）
+        function parseContextValue(contextStr) {
+            const match = contextStr.match(/(\d+)/);
+            return match ? parseInt(match[1]) : 0;
+        }
+
+        // 检查上下文是否匹配区间
+        function matchesContextRange(contextValue, rangeValue) {
+            const val = parseContextValue(contextValue);
+            switch(rangeValue) {
+                case '≤16K': return val <= 16;
+                case '16K-64K': return val > 16 && val <= 64;
+                case '64K-128K': return val > 64 && val <= 128;
+                case '128K-1M': return val > 128 && val < 1024;
+                case '≥1M': return val >= 1024;
+                default: return contextValue === rangeValue;
+            }
+        }
+
+        // 应用筛选和搜索
+        function applyModelFilters() {
+            const searchTerm = document.getElementById('modelSearchInput').value.toLowerCase().trim();
+            const activeFilters = getActiveFilters();
+            const modelCards = document.querySelectorAll('.model-card');
+            const modelGroups = document.querySelectorAll('.model-group');
+            let visibleCardCount = 0;
+
+            modelCards.forEach(card => {
+                const modelName = (card.dataset.modelName || '').toLowerCase();
+                const vendor = (card.dataset.vendor || '').toLowerCase();
+                const scenarios = (card.dataset.scenario || '').toLowerCase();
+                const modelType = (card.dataset.modelType || '').toLowerCase();
+                const modality = (card.dataset.modality || '').toLowerCase();
+                const context = (card.dataset.context || '').toLowerCase();
+
+                // 搜索匹配
+                let matchesSearch = true;
+                if (searchTerm) {
+                    matchesSearch = modelName.includes(searchTerm) ||
+                                    vendor.includes(searchTerm) ||
+                                    scenarios.includes(searchTerm);
+                }
+
+                // 筛选匹配
+                let matchesFilters = true;
+
+                // 模型类型筛选（多选，OR逻辑）
+                if (activeFilters['model-type'].length > 0) {
+                    const types = modelType.split(',');
+                    matchesFilters = matchesFilters && activeFilters['model-type'].some(t => types.includes(t.toLowerCase()));
+                }
+
+                // 模态筛选（多选，OR逻辑）
+                if (activeFilters['modality'].length > 0) {
+                    matchesFilters = matchesFilters && activeFilters['modality'].some(m => modality === m.toLowerCase());
+                }
+
+                // 上下文长度筛选（多选，OR逻辑 - 区间匹配）
+                if (activeFilters['context'].length > 0) {
+                    matchesFilters = matchesFilters && activeFilters['context'].some(c => matchesContextRange(context, c));
+                }
+
+                // 应用场景筛选（多选，AND逻辑 - 必须同时满足所有选中的场景）
+                if (activeFilters['scenario'].length > 0) {
+                    matchesFilters = matchesFilters && activeFilters['scenario'].every(s => scenarios.includes(s.toLowerCase()));
+                }
+
+                if (matchesSearch && matchesFilters) {
+                    card.style.display = '';
+                    visibleCardCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // 更新厂商分组的显示/隐藏
+            modelGroups.forEach(group => {
+                const visibleCards = group.querySelectorAll('.model-card:not([style*="display: none"])');
+                if (visibleCards.length === 0) {
+                    group.style.display = 'none';
+                } else {
+                    group.style.display = '';
+                }
+            });
+
+            // 显示/隐藏无结果提示
+            const noResults = document.getElementById('noModelResults');
+            if (visibleCardCount === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        }
+
+        // 重置筛选
+        function resetModelFilters() {
+            // 清空搜索框
+            const searchInput = document.getElementById('modelSearchInput');
+            if (searchInput) searchInput.value = '';
+
+            // 重置所有筛选标签
+            document.querySelectorAll('#ai-models .filter-tag-group').forEach(group => {
+                group.querySelectorAll('.filter-tag').forEach(t => {
+                    if (t.dataset.value === '全部') {
+                        t.classList.add('active', 'bg-primary', 'text-white', 'border-primary');
+                        t.classList.remove('border-gray-200', 'text-gray-600');
+                    } else {
+                        t.classList.remove('active', 'bg-primary', 'text-white', 'border-primary');
+                        t.classList.add('border-gray-200', 'text-gray-600');
+                    }
+                });
+            });
+
+            // 重新应用筛选（显示所有）
+            applyModelFilters();
+        }
+
+        // ===== 数据API服务筛选 =====
+        function applyDataApiFilters() {
+            const searchTerm = document.getElementById('dataApiSearchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('#data-api .model-card');
+
+            // 获取当前激活的筛选标签
+            const filters = {};
+            document.querySelectorAll('#data-api .filter-tag-group').forEach(group => {
+                const filterType = group.dataset.filter;
+                const activeTag = group.querySelector('.filter-tag.active');
+                if (activeTag) {
+                    filters[filterType] = activeTag.dataset.value;
+                }
+            });
+
+            cards.forEach(card => {
+                if (card.dataset.comingSoon === 'true') return;
+                const title = (card.querySelector('h4')?.textContent || '').toLowerCase();
+                const desc = (card.querySelector('p')?.textContent || '').toLowerCase();
+                const tags = Array.from(card.querySelectorAll('span[class*="bg-primary"]')).map(s => s.textContent.toLowerCase()).join(' ');
+                const text = title + ' ' + desc + ' ' + tags;
+
+                // 搜索匹配
+                let matchesSearch = true;
+                if (searchTerm) {
+                    matchesSearch = text.includes(searchTerm);
+                }
+
+                // 标签筛选匹配
+                let matchesFilter = true;
+                Object.keys(filters).forEach(filterType => {
+                    const selectedValue = filters[filterType];
+                    if (selectedValue !== '全部') {
+                        const cardValue = card.dataset[filterType.replace('-', '')] || '';
+                        if (!cardValue.includes(selectedValue)) {
+                            matchesFilter = false;
+                        }
+                    }
+                });
+
+                if (matchesSearch && matchesFilter) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // 更新数据分类组的显示/隐藏
+            const dataGroups = document.querySelectorAll('#data-api .data-group');
+            dataGroups.forEach(group => {
+                const visibleCards = group.querySelectorAll('.model-card:not([style*="display: none"])');
+                if (visibleCards.length === 0) {
+                    group.style.display = 'none';
+                } else {
+                    group.style.display = '';
+                }
+            });
+        }
+
+        function resetDataApiFilters() {
+            const searchInput = document.getElementById('dataApiSearchInput');
+            if (searchInput) searchInput.value = '';
+            document.querySelectorAll('#data-api .filter-tag-group').forEach(group => {
+                group.querySelectorAll('.filter-tag').forEach(t => {
+                    if (t.dataset.value === '全部') {
+                        t.classList.add('active', 'bg-primary', 'text-white', 'border-primary');
+                        t.classList.remove('border-gray-200', 'text-gray-600');
+                    } else {
+                        t.classList.remove('active', 'bg-primary', 'text-white', 'border-primary');
+                        t.classList.add('border-gray-200', 'text-gray-600');
+                    }
+                });
+            });
+            applyDataApiFilters();
+        }
+
+        // 数据API筛选标签点击
+        document.querySelectorAll('#data-api .filter-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                const group = this.closest('.filter-tag-group');
+                group.querySelectorAll('.filter-tag').forEach(t => {
+                    t.classList.remove('active', 'bg-primary', 'text-white', 'border-primary');
+                    t.classList.add('border-gray-200', 'text-gray-600');
+                });
+                this.classList.add('active', 'bg-primary', 'text-white', 'border-primary');
+                this.classList.remove('border-gray-200', 'text-gray-600');
+                // 标签筛选逻辑预留，待卡片添加data属性后启用
+                applyDataApiFilters();
+            });
+        });
+
+        // 数据API搜索
+        const dataApiSearchInput = document.getElementById('dataApiSearchInput');
+        if (dataApiSearchInput) {
+            dataApiSearchInput.addEventListener('input', function() {
+                applyDataApiFilters();
+            });
+        }
+
+        // ===== 云资源服务筛选 =====
+        function applyCloudFilters() {
+            const searchTerm = document.getElementById('cloudSearchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('#cloud .model-card');
+
+            // 获取当前激活的筛选标签
+            const filters = {};
+            document.querySelectorAll('#cloud .filter-tag-group').forEach(group => {
+                const filterType = group.dataset.filter;
+                const activeTag = group.querySelector('.filter-tag.active');
+                if (activeTag) {
+                    filters[filterType] = activeTag.dataset.value;
+                }
+            });
+
+            cards.forEach(card => {
+                if (card.dataset.comingSoon === 'true') return;
+                const title = (card.querySelector('h4')?.textContent || '').toLowerCase();
+                const desc = (card.querySelector('p')?.textContent || '').toLowerCase();
+                const tags = Array.from(card.querySelectorAll('span[class*="bg-primary"]')).map(s => s.textContent.toLowerCase()).join(' ');
+                const text = title + ' ' + desc + ' ' + tags;
+
+                // 搜索匹配
+                let matchesSearch = true;
+                if (searchTerm) {
+                    matchesSearch = text.includes(searchTerm);
+                }
+
+                // 标签筛选匹配
+                let matchesFilter = true;
+                Object.keys(filters).forEach(filterType => {
+                    const selectedValue = filters[filterType];
+                    if (selectedValue !== '全部') {
+                        const cardValue = card.dataset[filterType.replace('-', '')] || '';
+                        if (!cardValue.includes(selectedValue)) {
+                            matchesFilter = false;
+                        }
+                    }
+                });
+
+                if (matchesSearch && matchesFilter) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function resetCloudFilters() {
+            const searchInput = document.getElementById('cloudSearchInput');
+            if (searchInput) searchInput.value = '';
+            document.querySelectorAll('#cloud .filter-tag-group').forEach(group => {
+                group.querySelectorAll('.filter-tag').forEach(t => {
+                    if (t.dataset.value === '全部') {
+                        t.classList.add('active', 'bg-primary', 'text-white', 'border-primary');
+                        t.classList.remove('border-gray-200', 'text-gray-600');
+                    } else {
+                        t.classList.remove('active', 'bg-primary', 'text-white', 'border-primary');
+                        t.classList.add('border-gray-200', 'text-gray-600');
+                    }
+                });
+            });
+            applyCloudFilters();
+        }
+
+        // 云资源筛选标签点击
+        document.querySelectorAll('#cloud .filter-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                const group = this.closest('.filter-tag-group');
+                group.querySelectorAll('.filter-tag').forEach(t => {
+                    t.classList.remove('active', 'bg-primary', 'text-white', 'border-primary');
+                    t.classList.add('border-gray-200', 'text-gray-600');
+                });
+                this.classList.add('active', 'bg-primary', 'text-white', 'border-primary');
+                this.classList.remove('border-gray-200', 'text-gray-600');
+                // 标签筛选逻辑预留，待卡片添加data属性后启用
+                applyCloudFilters();
+            });
+        });
+
+        // 云资源搜索
+        const cloudSearchInput = document.getElementById('cloudSearchInput');
+        if (cloudSearchInput) {
+            cloudSearchInput.addEventListener('input', function() {
+                applyCloudFilters();
+            });
+        }
+
+        // 切换选项卡函数
+        function switchTab(tabId) {
+            // 显示对应内容区，隐藏其他
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            const targetContent = document.getElementById(tabId);
+            if (targetContent) targetContent.classList.add('active');
+
+            // 更新导航栏高亮：maker-space 属于创客空间板块
+            const abilityNav = document.querySelector('a[href="services.html"]');
+            const makerNav = document.querySelector('a[href="events.html"]');
+            if (tabId === 'maker-space') {
+                if (abilityNav) {
+                    abilityNav.classList.remove('text-primary', 'border-b-2', 'border-primary');
+                    abilityNav.classList.add('text-gray-600', 'hover:text-primary');
+                }
+                if (makerNav) {
+                    makerNav.classList.remove('text-gray-600', 'hover:text-primary');
+                    makerNav.classList.add('text-primary', 'border-b-2', 'border-primary');
+                }
+            } else {
+                if (abilityNav) {
+                    abilityNav.classList.remove('text-gray-600', 'hover:text-primary');
+                    abilityNav.classList.add('text-primary', 'border-b-2', 'border-primary');
+                }
+                if (makerNav) {
+                    makerNav.classList.remove('text-primary', 'border-b-2', 'border-primary');
+                    makerNav.classList.add('text-gray-600', 'hover:text-primary');
+                }
+            }
+
+            // 更新URL但不触发原生hash滚动
+            const url = new URL(window.location);
+            url.hash = tabId;
+            history.replaceState(null, '', url);
+
+            // 滚动到页面顶部
+            window.scrollTo(0, 0);
+        }
+
+        // 页面加载时检查锚点并自动切换
+        // 在浏览器处理hash滚动前，立即截取并清除hash
+        (function() {
+            var rawHash = window.location.hash;
+            if (rawHash) {
+                window._pendingTab = rawHash.replace('#', '');
+                // 立即清除hash，阻止浏览器原生滚动
+                if (history.replaceState) {
+                    history.replaceState(null, '', window.location.pathname + window.location.search);
+                }
+            }
+        })();
+
+        window.addEventListener('DOMContentLoaded', function() {
+            if (window._pendingTab) {
+                var validTabs = ['ai-models', 'data-api', 'cloud', 'maker-space'];
+                if (validTabs.indexOf(window._pendingTab) !== -1) {
+                    switchTab(window._pendingTab);
+                }
+                delete window._pendingTab;
+            }
+            // 双重保障：延迟再次滚到顶部，击败任何残留的原生滚动
+            window.scrollTo(0, 0);
+            setTimeout(function() { window.scrollTo(0, 0); }, 50);
+            setTimeout(function() { window.scrollTo(0, 0); }, 200);
+        });
+    </script>
+</body>
+</html>
