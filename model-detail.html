@@ -346,7 +346,7 @@
 
         // 立即体验按钮点击处理：弹出引导弹窗
         function handleExperienceClick() {
-            openGuideModal();
+            withAuthChain({action: '模型体验', callbackName: 'openGuideModal', args: []});
         }
 
         function openGuideModal() {
