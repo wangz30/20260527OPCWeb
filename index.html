@@ -574,10 +574,7 @@
                 html += '<i class="fas ' + iconClass + ' text-xs ' + colorClass.split(' ')[0] + '"></i>';
                 html += '<span class="text-xs font-medium px-2 py-0.5 rounded-full ' + colorClass.split(' ')[1] + ' ' + colorClass.split(' ')[0] + '">' + article.category + '</span>';
                 html += '</div>';
-                html += '<div class="flex items-center space-x-3 text-gray-400 text-xs">';
-                html += '<span class="flex items-center space-x-1"><i class="far fa-eye text-[10px]"></i><span>' + formatNumber(article.views) + '</span></span>';
-                html += '<span class="flex items-center space-x-1"><i class="far fa-thumbs-up text-[10px]"></i><span>' + formatNumber(article.likes) + '</span></span>';
-                html += '</div>';
+
                 html += '</div>';
                 html += '<h3 class="text-base font-bold text-secondary mb-2 line-clamp-2 leading-snug">' + article.title + '</h3>';
                 html += '<p class="text-sm text-gray-500 line-clamp-3 mb-4">' + article.content + '</p>';
