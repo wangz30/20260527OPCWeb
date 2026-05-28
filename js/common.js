@@ -3,7 +3,7 @@ const AppState = {
     isLoggedIn: false,
     user: null,
     currentPage: 'home',
-    // 实名认证状态: 'unverified' | 'pending' | 'verified'
+    // 实名认证状态: 'unverified' | 'pending' | 'verified' | 'enterprise_verified'
     realNameStatus: 'unverified',
     // 钱包余额
     balance: 0,

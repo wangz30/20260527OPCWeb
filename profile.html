@@ -164,37 +164,28 @@
                 <!-- 基本信息卡片 -->
                 <div class="bg-white rounded-xl p-6 shadow-md">
                     <h3 class="text-lg font-semibold text-secondary mb-4">基本信息</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">头像</label>
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-6">
                             <div class="flex items-center space-x-4">
                                 <div id="profile-avatar" class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">Z</div>
                                 <button class="text-primary hover:text-primary-dark text-sm">更换头像</button>
                             </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">用户名</label>
-                            <input type="text" id="profile-username" value="zhangsan" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
-                            <input type="text" id="profile-name" value="张三" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">注册时间</label>
-                            <input type="text" id="profile-created" value="2026-01-15" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">手机号</label>
-                            <div class="flex space-x-2">
-                                <input type="text" id="profile-phone" value="138****8888" readonly class="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
-                                <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">修改</button>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">实名认证</label>
                             <div id="realname-status-container" class="flex items-center space-x-2">
                                 <!-- 动态渲染 -->
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">用户名</label>
+                                <input type="text" id="profile-username" value="zhangsan" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+                                <input type="text" id="profile-name" value="张三" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">手机号</label>
+                                <input type="text" id="profile-phone" value="138****8888" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
                             </div>
                         </div>
                     </div>
@@ -213,24 +204,6 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">身份证号 <span class="text-red-500">*</span></label>
                                 <input type="text" id="idcard-input" required placeholder="请输入18位身份证号" maxlength="18" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">身份证正面 <span class="text-red-500">*</span></label>
-                            <div id="idcard-front-upload" class="upload-area rounded-xl p-8 text-center cursor-pointer" onclick="document.getElementById('idcard-front-input').click()">
-                                <i class="fas fa-id-card text-3xl text-gray-400 mb-3"></i>
-                                <p class="text-gray-500 text-sm">点击上传身份证正面照片</p>
-                                <p id="idcard-front-filename" class="text-green-600 text-sm mt-2 hidden"></p>
-                                <input type="file" id="idcard-front-input" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'idcard-front-filename', 'idcard-front-upload')">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">身份证反面 <span class="text-red-500">*</span></label>
-                            <div id="idcard-back-upload" class="upload-area rounded-xl p-8 text-center cursor-pointer" onclick="document.getElementById('idcard-back-input').click()">
-                                <i class="fas fa-id-card text-3xl text-gray-400 mb-3"></i>
-                                <p class="text-gray-500 text-sm">点击上传身份证反面照片</p>
-                                <p id="idcard-back-filename" class="text-green-600 text-sm mt-2 hidden"></p>
-                                <input type="file" id="idcard-back-input" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'idcard-back-filename', 'idcard-back-upload')">
                             </div>
                         </div>
                         <button type="submit" id="realname-submit-btn" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition">
@@ -714,7 +687,6 @@
                             <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">${initial}</div>
                             <div>
                                 <h3 class="font-bold text-secondary">${AppState.user.name}</h3>
-                                <p class="text-sm text-gray-500">${AppState.user.email}</p>
                             </div>
                         </div>
                     `;
@@ -735,18 +707,13 @@
             if (verifiedCard) verifiedCard.classList.add('hidden');
 
             if (AppState.realNameStatus === 'unverified') {
-                // 未认证：显示"未认证"标签 + 表单
                 if (statusContainer) {
-                    statusContainer.innerHTML = `
-                        <span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">未认证</span>
-                        <button onclick="document.getElementById('realname-form-card').scrollIntoView({behavior:'smooth'})" class="text-primary hover:text-primary-dark text-sm">去认证</button>
-                    `;
+                    statusContainer.innerHTML = `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">未认证</span>`;
                 }
                 if (formCard) formCard.classList.remove('hidden');
             } else if (AppState.realNameStatus === 'pending') {
-                // 审核中：显示"审核中"标签 + 审核中卡片
                 if (statusContainer) {
-                    statusContainer.innerHTML = `<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">审核中</span>`;
+                    statusContainer.innerHTML = `<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">认证中</span>`;
                 }
                 if (pendingCard) {
                     pendingCard.classList.remove('hidden');
@@ -754,9 +721,8 @@
                     if (timerEl) timerEl.textContent = '正在审核中，请稍候...';
                 }
             } else if (AppState.realNameStatus === 'verified') {
-                // 已认证：显示"已认证"标签 + 已认证详情
                 if (statusContainer) {
-                    statusContainer.innerHTML = `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">已认证</span>`;
+                    statusContainer.innerHTML = `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">个人实名认证</span>`;
                 }
                 if (verifiedCard) {
                     verifiedCard.classList.remove('hidden');
@@ -764,6 +730,17 @@
                     const idcardDisplay = document.getElementById('idcard-display');
                     if (nameDisplay) nameDisplay.value = realNameData.name || '张三';
                     if (idcardDisplay) idcardDisplay.value = realNameData.idCard ? maskString(realNameData.idCard, 3, 4) : '440***********1234';
+                }
+            } else if (AppState.realNameStatus === 'enterprise_verified') {
+                if (statusContainer) {
+                    statusContainer.innerHTML = `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">企业认证</span>`;
+                }
+                if (verifiedCard) {
+                    verifiedCard.classList.remove('hidden');
+                    const nameDisplay = document.getElementById('realname-display');
+                    const idcardDisplay = document.getElementById('idcard-display');
+                    if (nameDisplay) nameDisplay.value = realNameData.name || '某企业';
+                    if (idcardDisplay) idcardDisplay.value = realNameData.idCard ? maskString(realNameData.idCard, 3, 4) : '911***********1234';
                 }
             }
 
@@ -780,7 +757,7 @@
                 if (walletUnverified) walletUnverified.classList.remove('hidden');
             } else if (AppState.realNameStatus === 'pending') {
                 if (walletPending) walletPending.classList.remove('hidden');
-            } else if (AppState.realNameStatus === 'verified') {
+            } else if (AppState.realNameStatus === 'verified' || AppState.realNameStatus === 'enterprise_verified') {
                 if (walletMain) {
                     walletMain.classList.remove('hidden');
                     const balanceDisplay = document.getElementById('wallet-balance-display');

@@ -32,6 +32,9 @@
         .model-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        .modal-overlay { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px); }
+        .modal-enter { animation: modalEnter 0.3s ease-out; }
+        @keyframes modalEnter { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -222,14 +225,15 @@
                                 </div>
                                 <p class="text-gray-500 text-sm mb-3">通义千问旗舰模型，支持复杂推理与多模态理解</p>
                                 <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">文本生成</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">图片理解</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">代码生成</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">通用助手</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">文案创作</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">多模态理解</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">AIGC内容创作</span>
                                 </div>
                                 <p class="text-gray-600 text-sm mb-3">上下文长度：32K | 支持多模态理解 | 复杂推理</p>
                                 <div class="flex justify-between items-center">
                                     <span class="text-primary font-semibold">¥0.02/1K tokens</span>
-                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'Qwen-Max体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                    <a href="javascript:void(0)" onclick="event.stopPropagation(); withAuthChain({action: 'Qwen-Max体验', callbackName: 'openAiGuideModal', args: []}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即体验</span>
                                     </a>
@@ -250,13 +254,15 @@
                                 </div>
                                 <p class="text-gray-500 text-sm mb-3">通义千问标准版，平衡性能与成本</p>
                                 <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">文本生成</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">对话</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">通用助手</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">文案创作</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">长文本处理</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">快速响应</span>
                                 </div>
                                 <p class="text-gray-600 text-sm mb-3">上下文长度：128K | 高效推理 | 日常任务</p>
                                 <div class="flex justify-between items-center">
                                     <span class="text-primary font-semibold">¥0.008/1K tokens</span>
-                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'Qwen-Plus体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                    <a href="javascript:void(0)" onclick="event.stopPropagation(); withAuthChain({action: 'Qwen-Plus体验', callbackName: 'openAiGuideModal', args: []}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即体验</span>
                                     </a>
@@ -278,12 +284,13 @@
                                 <p class="text-gray-500 text-sm mb-3">专为代码生成与审查优化的专用模型</p>
                                 <div class="flex flex-wrap gap-2 mb-3">
                                     <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">代码生成</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">代码审查</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">快速响应</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">AIGC内容创作</span>
                                 </div>
                                 <p class="text-gray-600 text-sm mb-3">上下文长度：64K | 多语言支持 | 代码优化</p>
                                 <div class="flex justify-between items-center">
                                     <span class="text-primary font-semibold">¥0.006/1K tokens</span>
-                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'Qwen-Coder体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                    <a href="javascript:void(0)" onclick="event.stopPropagation(); withAuthChain({action: 'Qwen-Coder体验', callbackName: 'openAiGuideModal', args: []}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即体验</span>
                                     </a>
@@ -314,14 +321,15 @@
                                 </div>
                                 <p class="text-gray-500 text-sm mb-3">深度求索最新通用模型，推理与数学能力突出</p>
                                 <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">文本生成</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">推理</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">数学</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">通用助手</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">数学推理</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">快速响应</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">AIGC内容创作</span>
                                 </div>
                                 <p class="text-gray-600 text-sm mb-3">上下文长度：64K | 超强推理 | 数学能力突出</p>
                                 <div class="flex justify-between items-center">
                                     <span class="text-primary font-semibold">¥0.005/1K tokens</span>
-                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'DeepSeek-V3体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                    <a href="javascript:void(0)" onclick="event.stopPropagation(); withAuthChain({action: 'DeepSeek-V3体验', callbackName: 'openAiGuideModal', args: []}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即体验</span>
                                     </a>
@@ -342,13 +350,14 @@
                                 </div>
                                 <p class="text-gray-500 text-sm mb-3">深度求索推理专用模型，展示完整思维链</p>
                                 <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">逻辑推理</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">数学证明</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">数学推理</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">通用助手</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">AIGC内容创作</span>
                                 </div>
                                 <p class="text-gray-600 text-sm mb-3">上下文长度：32K | 思维链展示 | 复杂问题求解</p>
                                 <div class="flex justify-between items-center">
                                     <span class="text-primary font-semibold">¥0.008/1K tokens</span>
-                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'DeepSeek-R1体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                    <a href="javascript:void(0)" onclick="event.stopPropagation(); withAuthChain({action: 'DeepSeek-R1体验', callbackName: 'openAiGuideModal', args: []}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即体验</span>
                                     </a>
@@ -379,14 +388,16 @@
                                 </div>
                                 <p class="text-gray-500 text-sm mb-3">OpenAI旗舰多模态模型，支持视觉与音频理解</p>
                                 <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">多模态</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">视觉</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">音频</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">通用助手</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">多模态理解</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">语音合成</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">图像生成</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">AIGC内容创作</span>
                                 </div>
                                 <p class="text-gray-600 text-sm mb-3">上下文长度：128K | 原生多模态 | 实时交互</p>
                                 <div class="flex justify-between items-center">
                                     <span class="text-primary font-semibold">¥0.04/1K tokens</span>
-                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'GPT-4o体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                    <a href="javascript:void(0)" onclick="event.stopPropagation(); withAuthChain({action: 'GPT-4o体验', callbackName: 'openAiGuideModal', args: []}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即体验</span>
                                     </a>
@@ -407,13 +418,14 @@
                                 </div>
                                 <p class="text-gray-500 text-sm mb-3">OpenAI轻量版模型，高性价比适合日常任务</p>
                                 <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">文本生成</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">通用助手</span>
                                     <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">快速响应</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">RAG</span>
                                 </div>
                                 <p class="text-gray-600 text-sm mb-3">上下文长度：128K | 高性价比 | 日常任务</p>
                                 <div class="flex justify-between items-center">
                                     <span class="text-primary font-semibold">¥0.008/1K tokens</span>
-                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'GPT-4o-mini体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                    <a href="javascript:void(0)" onclick="event.stopPropagation(); withAuthChain({action: 'GPT-4o-mini体验', callbackName: 'openAiGuideModal', args: []}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即体验</span>
                                     </a>
@@ -444,14 +456,15 @@
                                 </div>
                                 <p class="text-gray-500 text-sm mb-3">Anthropic推荐模型，擅长长文本处理与深度分析</p>
                                 <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">长文本</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">分析</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">写作</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">通用助手</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">文案创作</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">长文本处理</span>
+                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">AIGC内容创作</span>
                                 </div>
                                 <p class="text-gray-600 text-sm mb-3">上下文长度：200K | 超长文本处理 | 深度分析</p>
                                 <div class="flex justify-between items-center">
                                     <span class="text-primary font-semibold">¥0.025/1K tokens</span>
-                                    <a href="profile.html#ai-workbench" onclick="event.stopPropagation(); withAuthChain({action: 'Claude-3.5-Sonnet体验', targetUrl: 'profile.html#ai-workbench'}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                    <a href="javascript:void(0)" onclick="event.stopPropagation(); withAuthChain({action: 'Claude-3.5-Sonnet体验', callbackName: 'openAiGuideModal', args: []}); return false;" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即体验</span>
                                     </a>
@@ -537,18 +550,17 @@
                             <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
                                  onclick="window.location.href='data-detail.html?id=qiye-gongshang'"
                                  data-data-type="要素数据" data-industry="通用" data-scenario="企业画像,风险评估">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h4 class="text-lg font-bold text-secondary">企业工商信息查询</h4>
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="text-lg font-bold text-secondary leading-tight">企业工商信息查询</h4>
+                                    <div class="flex flex-wrap gap-1.5 justify-end flex-shrink-0 ml-3">
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">企业画像</span>
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">风险评估</span>
+                                    </div>
                                 </div>
-                                <p class="text-gray-500 text-sm mb-3">覆盖全国超5000万家企业工商注册信息，包括基本信息、股东结构、高管信息等核心数据</p>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">企业信息</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">股东查询</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">工商变更</span>
-                                </div>
-                                <p class="text-gray-600 text-sm">行业：通用 | 场景：企业画像、风险评估</p>
-                                <div class="mt-4 flex justify-end">
-                                    <button onclick="event.stopPropagation(); withAuthChain({action: '企业工商信息查询申请', callbackName: 'openApplyModal', args: ['数据API服务', '企业工商信息查询']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                <p class="text-gray-500 text-sm mb-3 line-clamp-2">覆盖全国超5000万家企业工商注册信息，包括基本信息、股东结构、高管信息等核心数据</p>
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-50">
+                                    <span class="bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full text-xs">行业：通用</span>
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '企业工商信息查询申请', callbackName: 'openApplyModal', args: ['数据API服务', '企业工商信息查询']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm flex-shrink-0">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即申请</span>
                                     </button>
@@ -557,18 +569,17 @@
                             <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
                                  onclick="window.location.href='data-detail.html?id=zhishi-chanquan'"
                                  data-data-type="要素数据" data-industry="通用" data-scenario="企业画像,风险评估">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h4 class="text-lg font-bold text-secondary">知识产权数据</h4>
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="text-lg font-bold text-secondary leading-tight">知识产权数据</h4>
+                                    <div class="flex flex-wrap gap-1.5 justify-end flex-shrink-0 ml-3">
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">企业画像</span>
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">风险评估</span>
+                                    </div>
                                 </div>
-                                <p class="text-gray-500 text-sm mb-3">涵盖专利、商标、著作权等知识产权全量数据，支持企业创新能力评估与技术布局分析</p>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">专利检索</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">商标查询</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">著作权</span>
-                                </div>
-                                <p class="text-gray-600 text-sm">行业：通用 | 场景：企业画像、风险评估</p>
-                                <div class="mt-4 flex justify-end">
-                                    <button onclick="event.stopPropagation(); withAuthChain({action: '知识产权数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '知识产权数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                <p class="text-gray-500 text-sm mb-3 line-clamp-2">涵盖专利、商标、著作权等知识产权全量数据，支持企业创新能力评估与技术布局分析</p>
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-50">
+                                    <span class="bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full text-xs">行业：通用</span>
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '知识产权数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '知识产权数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm flex-shrink-0">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即申请</span>
                                     </button>
@@ -577,18 +588,17 @@
                             <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
                                  onclick="window.location.href='data-detail.html?id=qiye-guanxi'"
                                  data-data-type="要素数据" data-industry="金融" data-scenario="风险评估,企业画像">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h4 class="text-lg font-bold text-secondary">企业关系图谱</h4>
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="text-lg font-bold text-secondary leading-tight">企业关系图谱</h4>
+                                    <div class="flex flex-wrap gap-1.5 justify-end flex-shrink-0 ml-3">
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">风险评估</span>
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">企业画像</span>
+                                    </div>
                                 </div>
-                                <p class="text-gray-500 text-sm mb-3">基于股权、投资、任职等关系构建企业关联网络，支持多层穿透查询与风险传导分析</p>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">股权穿透</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">关联方识别</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">实际控制人</span>
-                                </div>
-                                <p class="text-gray-600 text-sm">行业：金融 | 场景：风险评估、企业画像</p>
-                                <div class="mt-4 flex justify-end">
-                                    <button onclick="event.stopPropagation(); withAuthChain({action: '企业关系图谱申请', callbackName: 'openApplyModal', args: ['数据API服务', '企业关系图谱']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                <p class="text-gray-500 text-sm mb-3 line-clamp-2">基于股权、投资、任职等关系构建企业关联网络，支持多层穿透查询与风险传导分析</p>
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-50">
+                                    <span class="bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full text-xs">行业：金融</span>
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '企业关系图谱申请', callbackName: 'openApplyModal', args: ['数据API服务', '企业关系图谱']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm flex-shrink-0">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即申请</span>
                                     </button>
@@ -607,18 +617,17 @@
                             <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
                                  onclick="window.location.href='data-detail.html?id=zhaoshang-yinzi'"
                                  data-data-type="场景数据" data-industry="通用" data-scenario="招商引资,产业分析">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h4 class="text-lg font-bold text-secondary">招商引资数据</h4>
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="text-lg font-bold text-secondary leading-tight">招商引资数据</h4>
+                                    <div class="flex flex-wrap gap-1.5 justify-end flex-shrink-0 ml-3">
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">招商引资</span>
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">产业分析</span>
+                                    </div>
                                 </div>
-                                <p class="text-gray-500 text-sm mb-3">整合区域产业政策、园区资源、企业投资意向等数据，精准匹配招商引资需求与投资机会</p>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">产业政策</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">园区资源</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">投资意向</span>
-                                </div>
-                                <p class="text-gray-600 text-sm">行业：通用 | 场景：招商引资、产业分析</p>
-                                <div class="mt-4 flex justify-end">
-                                    <button onclick="event.stopPropagation(); withAuthChain({action: '招商引资数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '招商引资数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                <p class="text-gray-500 text-sm mb-3 line-clamp-2">整合区域产业政策、园区资源、企业投资意向等数据，精准匹配招商引资需求与投资机会</p>
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-50">
+                                    <span class="bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full text-xs">行业：通用</span>
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '招商引资数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '招商引资数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm flex-shrink-0">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即申请</span>
                                     </button>
@@ -626,19 +635,17 @@
                             </div>
                             <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
                                  onclick="window.location.href='data-detail.html?id=qiye-fuwu'"
-                                 data-data-type="场景数据" data-industry="通用" data-scenario="企业服务,精准营销">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h4 class="text-lg font-bold text-secondary">企业服务数据</h4>
+                                 data-data-type="场景数据" data-industry="通用" data-scenario="精准营销">
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="text-lg font-bold text-secondary leading-tight">企业服务数据</h4>
+                                    <div class="flex flex-wrap gap-1.5 justify-end flex-shrink-0 ml-3">
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">精准营销</span>
+                                    </div>
                                 </div>
-                                <p class="text-gray-500 text-sm mb-3">提供企业全生命周期服务数据，涵盖注册登记、资质认证、政策申报、财税服务等场景</p>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">资质认证</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">政策申报</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">财税服务</span>
-                                </div>
-                                <p class="text-gray-600 text-sm">行业：通用 | 场景：企业服务、精准营销</p>
-                                <div class="mt-4 flex justify-end">
-                                    <button onclick="event.stopPropagation(); withAuthChain({action: '企业服务数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '企业服务数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                <p class="text-gray-500 text-sm mb-3 line-clamp-2">提供企业全生命周期服务数据，涵盖注册登记、资质认证、政策申报、财税服务等场景</p>
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-50">
+                                    <span class="bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full text-xs">行业：通用</span>
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '企业服务数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '企业服务数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm flex-shrink-0">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即申请</span>
                                     </button>
@@ -647,18 +654,17 @@
                             <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
                                  onclick="window.location.href='data-detail.html?id=jingzhun-yingxiao'"
                                  data-data-type="场景数据" data-industry="互联网" data-scenario="精准营销,产业分析">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h4 class="text-lg font-bold text-secondary">精准营销数据</h4>
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="text-lg font-bold text-secondary leading-tight">精准营销数据</h4>
+                                    <div class="flex flex-wrap gap-1.5 justify-end flex-shrink-0 ml-3">
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">精准营销</span>
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">产业分析</span>
+                                    </div>
                                 </div>
-                                <p class="text-gray-500 text-sm mb-3">基于企业画像与行业标签，提供精准营销所需的目标客户筛选、市场洞察与商机挖掘数据</p>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">客户筛选</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">商机推荐</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">市场洞察</span>
-                                </div>
-                                <p class="text-gray-600 text-sm">行业：互联网 | 场景：精准营销、产业分析</p>
-                                <div class="mt-4 flex justify-end">
-                                    <button onclick="event.stopPropagation(); withAuthChain({action: '精准营销数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '精准营销数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                <p class="text-gray-500 text-sm mb-3 line-clamp-2">基于企业画像与行业标签，提供精准营销所需的目标客户筛选、市场洞察与商机挖掘数据</p>
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-50">
+                                    <span class="bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full text-xs">行业：互联网</span>
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '精准营销数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '精准营销数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm flex-shrink-0">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即申请</span>
                                     </button>
@@ -677,18 +683,16 @@
                             <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
                                  onclick="window.location.href='data-detail.html?id=bandaoti'"
                                  data-data-type="主题数据" data-industry="制造业" data-scenario="产业分析">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h4 class="text-lg font-bold text-secondary">半导体产业链数据</h4>
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="text-lg font-bold text-secondary leading-tight">半导体产业链数据</h4>
+                                    <div class="flex flex-wrap gap-1.5 justify-end flex-shrink-0 ml-3">
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">产业分析</span>
+                                    </div>
                                 </div>
-                                <p class="text-gray-500 text-sm mb-3">聚焦半导体与集成电路产业链，涵盖设计、制造、封测、设备材料等全链条企业及技术数据</p>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">产业链图谱</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">产能产量</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">技术路线</span>
-                                </div>
-                                <p class="text-gray-600 text-sm">行业：制造业 | 场景：产业分析</p>
-                                <div class="mt-4 flex justify-end">
-                                    <button onclick="event.stopPropagation(); withAuthChain({action: '半导体产业链数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '半导体产业链数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                <p class="text-gray-500 text-sm mb-3 line-clamp-2">聚焦半导体与集成电路产业链，涵盖设计、制造、封测、设备材料等全链条企业及技术数据</p>
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-50">
+                                    <span class="bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full text-xs">行业：制造业</span>
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '半导体产业链数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '半导体产业链数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm flex-shrink-0">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即申请</span>
                                     </button>
@@ -697,18 +701,16 @@
                             <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
                                  onclick="window.location.href='data-detail.html?id=rengong-zhineng'"
                                  data-data-type="主题数据" data-industry="互联网" data-scenario="产业分析">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h4 class="text-lg font-bold text-secondary">人工智能产业数据</h4>
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="text-lg font-bold text-secondary leading-tight">人工智能产业数据</h4>
+                                    <div class="flex flex-wrap gap-1.5 justify-end flex-shrink-0 ml-3">
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">产业分析</span>
+                                    </div>
                                 </div>
-                                <p class="text-gray-500 text-sm mb-3">全面覆盖人工智能产业，包括大模型、算力、应用场景、人才、投融资等维度数据</p>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">大模型评测</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">算力分布</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">AI人才</span>
-                                </div>
-                                <p class="text-gray-600 text-sm">行业：互联网 | 场景：产业分析</p>
-                                <div class="mt-4 flex justify-end">
-                                    <button onclick="event.stopPropagation(); withAuthChain({action: '人工智能产业数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '人工智能产业数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                <p class="text-gray-500 text-sm mb-3 line-clamp-2">全面覆盖人工智能产业，包括大模型、算力、应用场景、人才、投融资等维度数据</p>
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-50">
+                                    <span class="bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full text-xs">行业：互联网</span>
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '人工智能产业数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '人工智能产业数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm flex-shrink-0">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即申请</span>
                                     </button>
@@ -717,18 +719,16 @@
                             <div class="model-card bg-white rounded-xl p-6 shadow-md border border-gray-100 cursor-pointer"
                                  onclick="window.location.href='data-detail.html?id=xin-nengyuan'"
                                  data-data-type="主题数据" data-industry="制造业" data-scenario="产业分析">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h4 class="text-lg font-bold text-secondary">新能源产业数据</h4>
+                                <div class="flex items-start justify-between mb-3">
+                                    <h4 class="text-lg font-bold text-secondary leading-tight">新能源产业数据</h4>
+                                    <div class="flex flex-wrap gap-1.5 justify-end flex-shrink-0 ml-3">
+                                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs whitespace-nowrap">产业分析</span>
+                                    </div>
                                 </div>
-                                <p class="text-gray-500 text-sm mb-3">涵盖光伏、风电、储能、氢能等新能源领域，提供产业规划、技术趋势与市场分析数据</p>
-                                <div class="flex flex-wrap gap-2 mb-3">
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">光伏风电</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">储能氢能</span>
-                                    <span class="bg-primary/10 text-primary px-2 py-1 rounded text-sm">政策补贴</span>
-                                </div>
-                                <p class="text-gray-600 text-sm">行业：制造业 | 场景：产业分析</p>
-                                <div class="mt-4 flex justify-end">
-                                    <button onclick="event.stopPropagation(); withAuthChain({action: '新能源产业数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '新能源产业数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm">
+                                <p class="text-gray-500 text-sm mb-3 line-clamp-2">涵盖光伏、风电、储能、氢能等新能源领域，提供产业规划、技术趋势与市场分析数据</p>
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-50">
+                                    <span class="bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full text-xs">行业：制造业</span>
+                                    <button onclick="event.stopPropagation(); withAuthChain({action: '新能源产业数据申请', callbackName: 'openApplyModal', args: ['数据API服务', '新能源产业数据']});" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm flex-shrink-0">
                                         <i class="fas fa-paper-plane text-xs"></i>
                                         <span>立即申请</span>
                                     </button>
@@ -1019,55 +1019,30 @@
     </div>
 
     <!-- AI模型引导弹窗 -->
-    <div id="aiGuideModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-2xl p-8 max-w-lg w-full mx-4">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-secondary">开始使用AI模型</h3>
-                <button onclick="closeAiGuideModal()" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-xl"></i>
+    <div id="aiGuideModal" class="hidden fixed inset-0 z-50 items-center justify-center modal-overlay">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-8 modal-enter">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-rocket text-2xl text-primary"></i>
+                </div>
+                <h3 class="text-xl font-bold text-secondary mb-2">开始使用</h3>
+                <p class="text-gray-600">按照以下步骤快速上手</p>
+            </div>
+
+            <div class="bg-primary/5 rounded-xl p-6 mb-6">
+                <p class="text-gray-700 leading-relaxed text-center">
+                    前往个人中心获取 API Key 和使用文档，<br>或在调试台测试模型效果。
+                </p>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                <button onclick="closeAiGuideModal()" class="text-gray-500 hover:text-gray-700 transition px-4 py-2">
+                    取消
                 </button>
-            </div>
-            <div class="space-y-6">
-                <div class="flex items-start space-x-4">
-                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-key text-primary"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-secondary mb-1">获取API Key</h4>
-                        <p class="text-gray-600 text-sm">前往个人中心获取您的专属API Key，用于调用所有AI模型</p>
-                    </div>
-                </div>
-                <div class="flex items-start space-x-4">
-                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-flask text-primary"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-secondary mb-1">在线调试</h4>
-                        <p class="text-gray-600 text-sm">在个人中心的调试台中测试不同模型，调整参数，查看响应效果</p>
-                    </div>
-                </div>
-                <div class="flex items-start space-x-4">
-                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-code text-primary"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-secondary mb-1">接入开发</h4>
-                        <p class="text-gray-600 text-sm">查看帮助文档与示例代码，快速将AI能力集成到您的应用中</p>
-                    </div>
-                </div>
-                <div class="flex items-start space-x-4">
-                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-wallet text-primary"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-secondary mb-1">按量计费</h4>
-                        <p class="text-gray-600 text-sm">按Token消耗计费，无最低消费，余额不足时请及时充值</p>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-8 flex space-x-4">
-                <a href="profile.html#ai-workbench" onclick="withAuthChain({action: 'AI工作台', targetUrl: 'profile.html#ai-workbench'}); return false;" class="flex-1 bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition text-center">立即前往</a>
-                <button onclick="closeAiGuideModal()" class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition">稍后再说</button>
+                <a href="profile.html#ai-workbench" class="inline-flex items-center space-x-2 bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-lg transition">
+                    <span>立即前往</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -1145,6 +1120,10 @@
             document.getElementById('aiGuideModal').classList.add('hidden');
             document.getElementById('aiGuideModal').classList.remove('flex');
         }
+
+        document.getElementById('aiGuideModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAiGuideModal();
+        });
 
         // 模型详情数据
         const modelDetails = {
