@@ -70,8 +70,25 @@
                         </div>
                     </div>
                     <div class="nav-dropdown relative group">
+                        <a href="events.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>创客空间</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="events.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-calendar-alt w-5 text-primary"></i>
+                                <span>社区活动</span>
+                            </a>
+                            <a href="maker-space.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-rocket w-5 text-primary"></i>
+                                <span>创客空间入驻</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="marketplace.html" class="text-gray-600 hover:text-primary font-medium transition">应用集市</a>
+                    <div class="nav-dropdown relative group">
                         <a href="news.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
-                            <span>前沿资讯</span>
+                            <span>新闻资讯</span>
                             <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
                         </a>
                         <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
@@ -82,26 +99,6 @@
                             <a href="news.html?category=science" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
                                 <i class="fas fa-flask w-5 text-primary"></i>
                                 <span>科普好文</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="nav-dropdown relative group">
-                        <a href="events.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
-                            <span>创客空间</span>
-                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
-                        </a>
-                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
-                            <a href="events.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
-                                <i class="fas fa-calendar-alt w-5 text-primary"></i>
-                                <span>社区活动</span>
-                            </a>
-                            <a href="marketplace.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
-                                <i class="fas fa-store w-5 text-primary"></i>
-                                <span>应用集市</span>
-                            </a>
-                            <a href="maker-space.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
-                                <i class="fas fa-rocket w-5 text-primary"></i>
-                                <span>创客空间入驻</span>
                             </a>
                         </div>
                     </div>
@@ -162,6 +159,48 @@
         </button>
     </section>
 
+    <!-- 公告栏 -->
+    <div class="bg-primary/5 border-b border-primary/10 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center">
+            <span class="flex-shrink-0 bg-primary text-white text-xs px-3 py-1 rounded-full font-medium mr-4">公告</span>
+            <div class="overflow-hidden flex-1 relative h-6">
+                <div class="announcement-track whitespace-nowrap text-sm text-gray-600" id="announcementTrack">
+                    <span class="mr-16">🚀 云上OPC社区全新升级，应用广场正式上线，23项优质应用等你来探索！</span>
+                    <span class="mr-16">📢 创客空间入驻通道全面开放，欢迎更多创业者加入OPC生态！</span>
+                    <span class="mr-16">🤖 AI模型服务上新：新增扣子平台、火山机器学习平台等重磅AI开发工具！</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        var track = document.getElementById('announcementTrack');
+        if (!track) return;
+        var speed = 0.8;
+        var animId = null;
+        var isHover = false;
+
+        // 克隆一份内容实现无缝循环
+        track.innerHTML += track.innerHTML;
+
+        var container = track.parentElement;
+        container.addEventListener('mouseenter', function() { isHover = true; });
+        container.addEventListener('mouseleave', function() { isHover = false; });
+
+        function scroll() {
+            if (!isHover) {
+                track.scrollLeft += speed;
+                if (track.scrollLeft >= track.scrollWidth / 2) {
+                    track.scrollLeft = 0;
+                }
+            }
+            animId = requestAnimationFrame(scroll);
+        }
+        scroll();
+    })();
+    </script>
+
     <!-- 核心服务快速入口 -->
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -208,7 +247,7 @@
                         <div class="transform transition-transform duration-500 group-hover:-translate-y-2">
                             <span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white mb-4 backdrop-blur-sm">算力</span>
                             <h3 class="text-2xl font-bold text-white mb-2">云资源服务</h3>
-                            <p class="text-white/80 text-sm leading-relaxed">弹性云服务器、对象存储、云数据库——灵活扩展，按需付费</p>
+                            <p class="text-white/80 text-sm leading-relaxed">弹性云服务器、云存储、云数据库——灵活扩展，按需付费</p>
                         </div>
                     </div>
                     <div class="absolute top-6 right-6 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -336,7 +375,7 @@
     <footer class="bg-[#1a1a4e] text-white relative">
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
                 <div class="footer-brand">
                     <div class="flex items-center space-x-3 mb-5">
                         <img src="logo.png" alt="云上OPC" class="w-9 h-9 rounded-xl">
@@ -393,6 +432,12 @@
                             <span>创客空间入驻</span>
                             <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
                         </a>
+                    </div>
+                </div>
+                <div class="footer-qrcode flex flex-col items-center">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">扫码关注公众号</h3>
+                    <div class="bg-white rounded-xl p-3 inline-block">
+                        <img src="二维码.jpg" alt="公众号二维码" class="w-32 h-32 object-contain">
                     </div>
                 </div>
             </div>

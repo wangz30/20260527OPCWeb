@@ -77,8 +77,25 @@
                         </div>
                     </div>
                     <div class="nav-dropdown relative group">
+                        <a href="events.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>创客空间</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="events.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-calendar-alt w-5 text-primary"></i>
+                                <span>社区活动</span>
+                            </a>
+                            <a href="maker-space.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-rocket w-5 text-primary"></i>
+                                <span>创客空间入驻</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="marketplace.html" class="text-gray-600 hover:text-primary font-medium transition">应用集市</a>
+                    <div class="nav-dropdown relative group">
                         <a href="news.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
-                            <span>前沿资讯</span>
+                            <span>新闻资讯</span>
                             <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
                         </a>
                         <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
@@ -89,26 +106,6 @@
                             <a href="news.html?category=science" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
                                 <i class="fas fa-flask w-5 text-primary"></i>
                                 <span>科普好文</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="nav-dropdown relative group">
-                        <a href="events.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
-                            <span>创客空间</span>
-                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
-                        </a>
-                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
-                            <a href="events.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
-                                <i class="fas fa-calendar-alt w-5 text-primary"></i>
-                                <span>社区活动</span>
-                            </a>
-                            <a href="marketplace.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
-                                <i class="fas fa-store w-5 text-primary"></i>
-                                <span>应用集市</span>
-                            </a>
-                            <a href="maker-space.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
-                                <i class="fas fa-rocket w-5 text-primary"></i>
-                                <span>创客空间入驻</span>
                             </a>
                         </div>
                     </div>
@@ -163,53 +160,84 @@
                 
                 <!-- 基本信息卡片 -->
                 <div class="bg-white rounded-xl p-6 shadow-md">
-                    <h3 class="text-lg font-semibold text-secondary mb-4">基本信息</h3>
-                    <div class="space-y-6">
-                        <div class="flex items-center space-x-6">
-                            <div class="flex items-center space-x-4">
-                                <div id="profile-avatar" class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">Z</div>
-                                <button class="text-primary hover:text-primary-dark text-sm">更换头像</button>
-                            </div>
-                            <div id="realname-status-container" class="flex items-center space-x-2">
-                                <!-- 动态渲染 -->
-                            </div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-secondary">基本信息</h3>
+                        <button id="basic-info-edit-btn" onclick="toggleBasicInfoEdit()" class="text-primary hover:text-primary-dark text-sm flex items-center space-x-1">
+                            <i class="fas fa-pen"></i>
+                            <span>编辑</span>
+                        </button>
+                    </div>
+                    <!-- 头像和认证状态（始终可见） -->
+                    <div class="flex items-center space-x-6 mb-6">
+                        <div class="flex items-center space-x-4">
+                            <div id="profile-avatar" class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">Z</div>
+                            <button class="text-primary hover:text-primary-dark text-sm">更换头像</button>
                         </div>
-                        <div class="grid grid-cols-3 gap-6">
+                        <div id="realname-status-container" class="flex items-center space-x-2">
+                            <!-- 动态渲染 -->
+                        </div>
+                    </div>
+                    <!-- 查看模式 -->
+                    <div id="basic-info-view" class="grid grid-cols-4 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">用户名</label>
+                            <input type="text" id="profile-username-display" value="zhangsan" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">邮箱</label>
+                            <input type="email" id="profile-email-display" value="zhangsan@example.com" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+                            <input type="text" id="profile-name-display" value="张三" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">手机号</label>
+                            <input type="text" id="profile-phone-display" value="138****8888" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                    </div>
+                    <!-- 编辑模式 -->
+                    <div id="basic-info-edit" class="hidden">
+                        <div class="grid grid-cols-4 gap-6 mb-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">用户名</label>
-                                <input type="text" id="profile-username" value="zhangsan" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                                <input type="text" id="profile-username-edit" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">邮箱</label>
+                                <input type="email" id="profile-email-edit" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
-                                <input type="text" id="profile-name" value="张三" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <input type="text" id="profile-name-edit" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">手机号</label>
-                                <input type="text" id="profile-phone" value="138****8888" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                                <input type="text" id="profile-phone-edit" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
                             </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <button onclick="saveBasicInfo()" class="bg-primary text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-primary-dark transition">保存</button>
+                            <button onclick="cancelBasicInfoEdit()" class="border border-gray-300 text-gray-700 px-6 py-2.5 rounded-lg hover:bg-gray-50 transition">取消</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- 实名认证表单（仅未认证用户可见） -->
+                <!-- 实名认证选择面板（仅未认证用户可见） -->
                 <div id="realname-form-card" class="bg-white rounded-xl p-6 shadow-md hidden">
-                    <h3 class="text-lg font-semibold text-secondary mb-4">实名认证</h3>
-                    <p class="text-gray-500 text-sm mb-6">完成实名认证后，即可使用充值、消费等服务。</p>
-                    <form id="realname-form" onsubmit="handleRealNameSubmit(event)" class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">真实姓名 <span class="text-red-500">*</span></label>
-                                <input type="text" id="realname-input" required placeholder="请输入真实姓名" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">身份证号 <span class="text-red-500">*</span></label>
-                                <input type="text" id="idcard-input" required placeholder="请输入18位身份证号" maxlength="18" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
-                            </div>
-                        </div>
-                        <button type="submit" id="realname-submit-btn" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition">
-                            提交认证
+                    <h3 class="text-lg font-semibold text-secondary mb-4">身份认证</h3>
+                    <p class="text-gray-500 text-sm mb-4">完成身份认证后，即可使用充值、消费等服务。</p>
+                    <p class="text-gray-400 text-xs mb-6">个人用户请选择个人认证，企业用户请选择企业认证。</p>
+                    <div class="flex gap-4">
+                        <button onclick="openPersonalAuthModal()" class="flex-1 bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition flex items-center justify-center space-x-2">
+                            <i class="fas fa-user"></i>
+                            <span>个人实名认证</span>
                         </button>
-                    </form>
+                        <button onclick="openEnterpriseAuthModal()" class="flex-1 border-2 border-primary text-primary py-3 rounded-lg font-semibold hover:bg-primary/5 transition flex items-center justify-center space-x-2">
+                            <i class="fas fa-building"></i>
+                            <span>企业认证</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- 审核中提示（仅审核中用户可见） -->
@@ -226,8 +254,8 @@
 
                 <!-- 已认证详情（仅已认证用户可见） -->
                 <div id="realname-verified-card" class="bg-white rounded-xl p-6 shadow-md hidden">
-                    <h3 class="text-lg font-semibold text-secondary mb-4">实名认证信息</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <h3 id="verified-card-title" class="text-lg font-semibold text-secondary mb-4">实名认证信息</h3>
+                    <div id="verified-personal-fields" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
                             <input type="text" id="realname-display" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
@@ -235,6 +263,108 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">身份证号</label>
                             <input type="text" id="idcard-display" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                    </div>
+                    <div id="verified-enterprise-fields" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">企业名称</label>
+                            <input type="text" id="enterprise-name-display" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">统一社会信用代码</label>
+                            <input type="text" id="enterprise-code-display" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">法人姓名</label>
+                            <input type="text" id="enterprise-legal-display" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OPC项目信息 -->
+                <div class="bg-white rounded-xl p-6 shadow-md">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-secondary">OPC项目信息</h3>
+                        <button id="opc-project-edit-btn" onclick="toggleOpcProjectEdit()" class="text-primary hover:text-primary-dark text-sm flex items-center space-x-1">
+                            <i class="fas fa-pen"></i>
+                            <span>编辑</span>
+                        </button>
+                    </div>
+                    <div id="opc-project-view" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">项目名称</label>
+                            <input type="text" id="opc-project-name-display" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">团队规模</label>
+                            <input type="text" id="opc-team-size-display" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">所属领域</label>
+                            <input type="text" id="opc-field-display" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">当前阶段</label>
+                            <input type="text" id="opc-stage-display" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">项目简介</label>
+                            <textarea id="opc-desc-display" readonly rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 resize-none"></textarea>
+                        </div>
+                    </div>
+                    <div id="opc-project-edit" class="hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">项目名称 <span class="text-red-500">*</span></label>
+                                <input type="text" id="opc-project-name-edit" placeholder="请输入项目名称" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">团队规模</label>
+                                <select id="opc-team-size-edit" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    <option value="">请选择团队规模</option>
+                                    <option value="1-5人">1-5人</option>
+                                    <option value="6-15人">6-15人</option>
+                                    <option value="16-50人">16-50人</option>
+                                    <option value="51-100人">51-100人</option>
+                                    <option value="100人以上">100人以上</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">所属领域</label>
+                                <select id="opc-field-edit" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    <option value="">请选择所属领域</option>
+                                    <option value="人工智能">人工智能</option>
+                                    <option value="大数据">大数据</option>
+                                    <option value="云计算">云计算</option>
+                                    <option value="物联网">物联网</option>
+                                    <option value="半导体">半导体</option>
+                                    <option value="新能源">新能源</option>
+                                    <option value="生物医药">生物医药</option>
+                                    <option value="金融科技">金融科技</option>
+                                    <option value="智能制造">智能制造</option>
+                                    <option value="其他">其他</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">当前阶段</label>
+                                <select id="opc-stage-edit" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    <option value="">请选择当前阶段</option>
+                                    <option value="概念验证">概念验证</option>
+                                    <option value="原型开发">原型开发</option>
+                                    <option value="产品研发">产品研发</option>
+                                    <option value="测试优化">测试优化</option>
+                                    <option value="市场推广">市场推广</option>
+                                    <option value="规模化运营">规模化运营</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">项目简介</label>
+                                <textarea id="opc-desc-edit" rows="3" placeholder="请简要描述您的项目" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none"></textarea>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <button onclick="saveOpcProject()" class="bg-primary text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-primary-dark transition">保存</button>
+                            <button onclick="cancelOpcProjectEdit()" class="border border-gray-300 text-gray-700 px-6 py-2.5 rounded-lg hover:bg-gray-50 transition">取消</button>
                         </div>
                     </div>
                 </div>
@@ -270,8 +400,8 @@
                     <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-lock text-3xl text-gray-400"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-secondary mb-2">请先完成实名认证</h3>
-                    <p class="text-gray-500 mb-6">完成实名认证后，即可查看余额和充值。</p>
+                    <h3 class="text-xl font-bold text-secondary mb-2">请先完成身份认证</h3>
+                    <p class="text-gray-500 mb-6">完成身份认证后，即可查看余额和充值。</p>
                     <button onclick="switchSection('account')" class="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition">
                         去认证
                     </button>
@@ -515,7 +645,7 @@
                                         <i class="fas fa-database text-xl text-green-600"></i>
                                     </div>
                                     <div>
-                                        <h4 class="font-semibold text-secondary">要素数据API</h4>
+                                        <h4 class="font-semibold text-secondary">数据API - 企业工商信息查询</h4>
                                         <p class="text-sm text-gray-500">申请时间：2026-05-10</p>
                                     </div>
                                 </div>
@@ -577,6 +707,94 @@
                 <div id="application-detail-content"></div>
             </section>
         </main>
+    </div>
+
+    <!-- 个人实名认证弹窗 -->
+    <div id="personalAuthModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl max-w-md w-full mx-4 p-8 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-secondary">个人实名认证</h3>
+                <button onclick="closePersonalAuthModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="personal-auth-form" onsubmit="submitPersonalAuth(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">姓名 <span class="text-red-500">*</span></label>
+                    <input type="text" id="personal-name-input" required placeholder="请输入真实姓名" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">身份证号 <span class="text-red-500">*</span></label>
+                    <input type="text" id="personal-idcard-input" required placeholder="请输入18位身份证号" maxlength="18" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <p id="personal-idcard-error" class="text-red-500 text-xs mt-1 hidden">请输入正确的18位身份证号</p>
+                </div>
+                <div class="flex items-center space-x-4 pt-4 border-t border-gray-100">
+                    <button type="button" onclick="closePersonalAuthModal()" class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition">取消</button>
+                    <button type="submit" id="personal-auth-submit-btn" class="flex-1 bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition">提交认证</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 企业认证弹窗 -->
+    <div id="enterpriseAuthModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-lg w-full mx-4 p-8 shadow-2xl my-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-secondary">企业认证</h3>
+                <button onclick="closeEnterpriseAuthModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="enterprise-auth-form" onsubmit="submitEnterpriseAuth(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">统一社会信用代码 <span class="text-red-500">*</span></label>
+                    <input type="text" id="enterprise-code-input" required placeholder="请输入18位统一社会信用代码" maxlength="18" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <p id="enterprise-code-error" class="text-red-500 text-xs mt-1 hidden">请输入正确的18位统一社会信用代码</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">企业名称 <span class="text-red-500">*</span></label>
+                    <input type="text" id="enterprise-name-input" required placeholder="请输入企业全称" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">法人姓名 <span class="text-red-500">*</span></label>
+                    <input type="text" id="enterprise-legal-input" required placeholder="请输入法人姓名" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">企业营业执照复印件 <span class="text-red-500">*</span></label>
+                    <div id="biz-license-upload" class="upload-area rounded-xl p-6 text-center cursor-pointer" onclick="document.getElementById('biz-license-input').click()">
+                        <i class="fas fa-file-image text-2xl text-gray-400 mb-2"></i>
+                        <p class="text-gray-500 text-sm">点击上传营业执照（jpg/png/pdf）</p>
+                        <p id="biz-license-filename" class="text-green-600 text-sm mt-2 hidden"></p>
+                        <input type="file" id="biz-license-input" accept=".jpg,.png,.pdf" class="hidden" onchange="handleFileSelect(this, 'biz-license-filename', 'biz-license-upload')">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">法人身份证复印件 <span class="text-red-500">*</span></label>
+                    <div id="legal-idcard-upload" class="upload-area rounded-xl p-6 text-center cursor-pointer" onclick="document.getElementById('legal-idcard-input').click()">
+                        <i class="fas fa-id-card text-2xl text-gray-400 mb-2"></i>
+                        <p class="text-gray-500 text-sm">点击上传法人身份证复印件（jpg/png/pdf）</p>
+                        <p id="legal-idcard-filename" class="text-green-600 text-sm mt-2 hidden"></p>
+                        <input type="file" id="legal-idcard-input" accept=".jpg,.png,.pdf" class="hidden" onchange="handleFileSelect(this, 'legal-idcard-filename', 'legal-idcard-upload')">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        委托书
+                        <span class="text-gray-400 font-normal text-xs ml-1">（若非法人本人办理，则必填）</span>
+                    </label>
+                    <div id="auth-letter-upload" class="upload-area rounded-xl p-6 text-center cursor-pointer" onclick="document.getElementById('auth-letter-input').click()">
+                        <i class="fas fa-file-alt text-2xl text-gray-400 mb-2"></i>
+                        <p class="text-gray-500 text-sm">点击上传委托书（jpg/png/pdf）</p>
+                        <p id="auth-letter-filename" class="text-green-600 text-sm mt-2 hidden"></p>
+                        <input type="file" id="auth-letter-input" accept=".jpg,.png,.pdf" class="hidden" onchange="handleFileSelect(this, 'auth-letter-filename', 'auth-letter-upload')">
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4 pt-4 border-t border-gray-100">
+                    <button type="button" onclick="closeEnterpriseAuthModal()" class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition">取消</button>
+                    <button type="submit" id="enterprise-auth-submit-btn" class="flex-1 bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition">提交认证</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- 修改密码弹窗 -->
@@ -672,7 +890,7 @@
     <script src="js/common.js"></script>
     <script>
         // ==================== 页面级UI管理 ====================
-        let realNameData = { name: '', idCard: '' };
+        let realNameData = { name: '', idCard: '', enterpriseName: '', enterpriseCode: '', legalName: '' };
         let auditTimer = null;
 
         function updateProfileUI() {
@@ -692,7 +910,14 @@
                     `;
                 }
                 if (avatar) avatar.textContent = initial;
+                const usernameDisplay = document.getElementById('profile-username-display');
+                const emailDisplay = document.getElementById('profile-email-display');
+                if (usernameDisplay) usernameDisplay.value = AppState.user.username || '';
+                if (emailDisplay) emailDisplay.value = AppState.user.email || '';
             }
+
+            // OPC项目信息
+            renderOpcProjectDisplay();
 
             // 实名认证状态
             const statusContainer = document.getElementById('realname-status-container');
@@ -726,6 +951,9 @@
                 }
                 if (verifiedCard) {
                     verifiedCard.classList.remove('hidden');
+                    document.getElementById('verified-card-title').textContent = '实名认证信息';
+                    document.getElementById('verified-personal-fields').classList.remove('hidden');
+                    document.getElementById('verified-enterprise-fields').classList.add('hidden');
                     const nameDisplay = document.getElementById('realname-display');
                     const idcardDisplay = document.getElementById('idcard-display');
                     if (nameDisplay) nameDisplay.value = realNameData.name || '张三';
@@ -737,10 +965,15 @@
                 }
                 if (verifiedCard) {
                     verifiedCard.classList.remove('hidden');
-                    const nameDisplay = document.getElementById('realname-display');
-                    const idcardDisplay = document.getElementById('idcard-display');
-                    if (nameDisplay) nameDisplay.value = realNameData.name || '某企业';
-                    if (idcardDisplay) idcardDisplay.value = realNameData.idCard ? maskString(realNameData.idCard, 3, 4) : '911***********1234';
+                    document.getElementById('verified-card-title').textContent = '企业认证信息';
+                    document.getElementById('verified-personal-fields').classList.add('hidden');
+                    document.getElementById('verified-enterprise-fields').classList.remove('hidden');
+                    const entName = document.getElementById('enterprise-name-display');
+                    const entCode = document.getElementById('enterprise-code-display');
+                    const entLegal = document.getElementById('enterprise-legal-display');
+                    if (entName) entName.value = realNameData.enterpriseName || '某科技有限公司';
+                    if (entCode) entCode.value = realNameData.enterpriseCode ? maskString(realNameData.enterpriseCode, 3, 4) : '911***********1234';
+                    if (entLegal) entLegal.value = realNameData.legalName || '张三';
                 }
             }
 
@@ -766,36 +999,177 @@
             }
         }
 
-        // ==================== 实名认证表单 ====================
-        function handleRealNameSubmit(event) {
+        // ==================== 基本信息编辑 ====================
+        function toggleBasicInfoEdit() {
+            const view = document.getElementById('basic-info-view');
+            const edit = document.getElementById('basic-info-edit');
+            const btn = document.getElementById('basic-info-edit-btn');
+            const isEditing = !edit.classList.contains('hidden');
+
+            if (isEditing) {
+                cancelBasicInfoEdit();
+                return;
+            }
+
+            document.getElementById('profile-username-edit').value = document.getElementById('profile-username-display').value;
+            document.getElementById('profile-email-edit').value = document.getElementById('profile-email-display').value;
+            document.getElementById('profile-name-edit').value = document.getElementById('profile-name-display').value;
+            document.getElementById('profile-phone-edit').value = document.getElementById('profile-phone-display').value;
+
+            view.classList.add('hidden');
+            edit.classList.remove('hidden');
+            btn.innerHTML = '<i class="fas fa-times"></i><span>取消编辑</span>';
+        }
+
+        function cancelBasicInfoEdit() {
+            document.getElementById('basic-info-view').classList.remove('hidden');
+            document.getElementById('basic-info-edit').classList.add('hidden');
+            document.getElementById('basic-info-edit-btn').innerHTML = '<i class="fas fa-pen"></i><span>编辑</span>';
+        }
+
+        function saveBasicInfo() {
+            const username = document.getElementById('profile-username-edit').value.trim();
+            const email = document.getElementById('profile-email-edit').value.trim();
+
+            if (!username) {
+                showToast('请输入用户名', 'error');
+                return;
+            }
+            if (!email) {
+                showToast('请输入邮箱', 'error');
+                return;
+            }
+
+            document.getElementById('profile-username-display').value = username;
+            document.getElementById('profile-email-display').value = email;
+
+            if (AppState.user) {
+                AppState.user.username = username;
+                AppState.user.email = email;
+            }
+
+            cancelBasicInfoEdit();
+            showToast('基本信息保存成功');
+        }
+
+        // ==================== 个人实名认证弹窗 ====================
+        function openPersonalAuthModal() {
+            document.getElementById('personalAuthModal').classList.remove('hidden');
+            document.getElementById('personalAuthModal').classList.add('flex');
+            document.getElementById('personal-name-input').value = '';
+            document.getElementById('personal-idcard-input').value = '';
+            document.getElementById('personal-idcard-error').classList.add('hidden');
+            document.getElementById('personal-auth-submit-btn').disabled = false;
+            document.getElementById('personal-auth-submit-btn').textContent = '提交认证';
+        }
+
+        function closePersonalAuthModal() {
+            document.getElementById('personalAuthModal').classList.add('hidden');
+            document.getElementById('personalAuthModal').classList.remove('flex');
+        }
+
+        function submitPersonalAuth(event) {
             event.preventDefault();
-            const name = document.getElementById('realname-input').value.trim();
-            const idCard = document.getElementById('idcard-input').value.trim();
-            
+            const name = document.getElementById('personal-name-input').value.trim();
+            const idCard = document.getElementById('personal-idcard-input').value.trim();
+            const idcardError = document.getElementById('personal-idcard-error');
+
             if (!name) {
                 showToast('请输入真实姓名', 'error');
                 return;
             }
-            if (!idCard || idCard.length !== 18) {
-                showToast('请输入正确的18位身份证号', 'error');
+            if (!/^\d{17}[\dXx]$/.test(idCard)) {
+                idcardError.classList.remove('hidden');
                 return;
             }
-            
+            idcardError.classList.add('hidden');
+
             realNameData.name = name;
             realNameData.idCard = idCard;
-            
-            // 提交认证
-            submitRealName({ name, idCard });
-            
-            // 禁用表单
-            document.getElementById('realname-submit-btn').disabled = true;
-            document.getElementById('realname-submit-btn').textContent = '提交中...';
-            document.getElementById('realname-submit-btn').classList.add('opacity-50');
-            
-            // 更新UI到审核中
+
+            document.getElementById('personal-auth-submit-btn').disabled = true;
+            document.getElementById('personal-auth-submit-btn').textContent = '提交中...';
+
+            closePersonalAuthModal();
+            submitRealName({ name, idCard, type: 'personal' });
+
             setTimeout(() => {
                 updateProfileUI();
-                // 启动审核倒计时
+                startAuditTimer();
+            }, 500);
+        }
+
+        // ==================== 企业认证弹窗 ====================
+        function openEnterpriseAuthModal() {
+            document.getElementById('enterpriseAuthModal').classList.remove('hidden');
+            document.getElementById('enterpriseAuthModal').classList.add('flex');
+            document.getElementById('enterprise-code-input').value = '';
+            document.getElementById('enterprise-name-input').value = '';
+            document.getElementById('enterprise-legal-input').value = '';
+            document.getElementById('enterprise-code-error').classList.add('hidden');
+            document.getElementById('enterprise-auth-submit-btn').disabled = false;
+            document.getElementById('enterprise-auth-submit-btn').textContent = '提交认证';
+            // 重置文件上传区域
+            document.getElementById('biz-license-input').value = '';
+            document.getElementById('legal-idcard-input').value = '';
+            document.getElementById('auth-letter-input').value = '';
+            document.getElementById('biz-license-filename').classList.add('hidden');
+            document.getElementById('legal-idcard-filename').classList.add('hidden');
+            document.getElementById('auth-letter-filename').classList.add('hidden');
+            document.getElementById('biz-license-upload').classList.remove('has-file');
+            document.getElementById('legal-idcard-upload').classList.remove('has-file');
+            document.getElementById('auth-letter-upload').classList.remove('has-file');
+        }
+
+        function closeEnterpriseAuthModal() {
+            document.getElementById('enterpriseAuthModal').classList.add('hidden');
+            document.getElementById('enterpriseAuthModal').classList.remove('flex');
+        }
+
+        function submitEnterpriseAuth(event) {
+            event.preventDefault();
+            const code = document.getElementById('enterprise-code-input').value.trim();
+            const name = document.getElementById('enterprise-name-input').value.trim();
+            const legal = document.getElementById('enterprise-legal-input').value.trim();
+            const codeError = document.getElementById('enterprise-code-error');
+            const bizFile = document.getElementById('biz-license-input').files;
+            const legalFile = document.getElementById('legal-idcard-input').files;
+
+            if (!code || !/^[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}$/.test(code)) {
+                codeError.classList.remove('hidden');
+                return;
+            }
+            codeError.classList.add('hidden');
+
+            if (!name) {
+                showToast('请输入企业名称', 'error');
+                return;
+            }
+            if (!legal) {
+                showToast('请输入法人姓名', 'error');
+                return;
+            }
+            if (!bizFile || bizFile.length === 0) {
+                showToast('请上传企业营业执照', 'error');
+                return;
+            }
+            if (!legalFile || legalFile.length === 0) {
+                showToast('请上传法人身份证复印件', 'error');
+                return;
+            }
+
+            realNameData.enterpriseName = name;
+            realNameData.enterpriseCode = code;
+            realNameData.legalName = legal;
+
+            document.getElementById('enterprise-auth-submit-btn').disabled = true;
+            document.getElementById('enterprise-auth-submit-btn').textContent = '提交中...';
+
+            closeEnterpriseAuthModal();
+            submitEnterpriseRealName({ enterpriseName: name, enterpriseCode: code, legalName: legal });
+
+            setTimeout(() => {
+                updateProfileUI();
                 startAuditTimer();
             }, 500);
         }
@@ -826,6 +1200,87 @@
                 }
                 if (uploadEl) uploadEl.classList.add('has-file');
             }
+        }
+
+        // ==================== OPC项目信息 ====================
+        let opcProjectData = {
+            projectName: '',
+            description: '',
+            teamSize: '',
+            field: '',
+            stage: ''
+        };
+
+        function loadOpcProject() {
+            try {
+                const raw = localStorage.getItem('opc_project_data');
+                if (raw) {
+                    opcProjectData = JSON.parse(raw);
+                }
+            } catch (e) {
+                console.warn('加载OPC项目数据失败', e);
+            }
+        }
+
+        function saveOpcProjectToStorage() {
+            localStorage.setItem('opc_project_data', JSON.stringify(opcProjectData));
+        }
+
+        function renderOpcProjectDisplay() {
+            document.getElementById('opc-project-name-display').value = opcProjectData.projectName || '—';
+            document.getElementById('opc-team-size-display').value = opcProjectData.teamSize || '—';
+            document.getElementById('opc-field-display').value = opcProjectData.field || '—';
+            document.getElementById('opc-stage-display').value = opcProjectData.stage || '—';
+            document.getElementById('opc-desc-display').value = opcProjectData.description || '—';
+        }
+
+        function toggleOpcProjectEdit() {
+            const view = document.getElementById('opc-project-view');
+            const edit = document.getElementById('opc-project-edit');
+            const btn = document.getElementById('opc-project-edit-btn');
+            const isEditing = !edit.classList.contains('hidden');
+
+            if (isEditing) {
+                cancelOpcProjectEdit();
+                return;
+            }
+
+            document.getElementById('opc-project-name-edit').value = opcProjectData.projectName || '';
+            document.getElementById('opc-team-size-edit').value = opcProjectData.teamSize || '';
+            document.getElementById('opc-field-edit').value = opcProjectData.field || '';
+            document.getElementById('opc-stage-edit').value = opcProjectData.stage || '';
+            document.getElementById('opc-desc-edit').value = opcProjectData.description || '';
+
+            view.classList.add('hidden');
+            edit.classList.remove('hidden');
+            btn.innerHTML = '<i class="fas fa-times"></i><span>取消编辑</span>';
+        }
+
+        function cancelOpcProjectEdit() {
+            const view = document.getElementById('opc-project-view');
+            const edit = document.getElementById('opc-project-edit');
+            const btn = document.getElementById('opc-project-edit-btn');
+            view.classList.remove('hidden');
+            edit.classList.add('hidden');
+            btn.innerHTML = '<i class="fas fa-pen"></i><span>编辑</span>';
+        }
+
+        function saveOpcProject() {
+            const name = document.getElementById('opc-project-name-edit').value.trim();
+            if (!name) {
+                showToast('请输入项目名称', 'error');
+                return;
+            }
+            opcProjectData.projectName = name;
+            opcProjectData.teamSize = document.getElementById('opc-team-size-edit').value;
+            opcProjectData.field = document.getElementById('opc-field-edit').value;
+            opcProjectData.stage = document.getElementById('opc-stage-edit').value;
+            opcProjectData.description = document.getElementById('opc-desc-edit').value.trim();
+
+            saveOpcProjectToStorage();
+            renderOpcProjectDisplay();
+            cancelOpcProjectEdit();
+            showToast('项目信息保存成功');
         }
 
         // ==================== 侧边栏切换 ====================
@@ -1151,7 +1606,7 @@ func main() {
                 `
             },
             'data-api': {
-                title: '要素数据API',
+                title: '数据API - 企业工商信息查询',
                 icon: 'fa-database',
                 iconColor: 'text-green-600',
                 iconBg: 'bg-green-100',
@@ -1166,6 +1621,14 @@ func main() {
                             <div class="flex justify-between">
                                 <span class="text-gray-600">服务类型</span>
                                 <span class="text-secondary">数据API服务</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">数据名称</span>
+                                <span class="text-secondary">企业工商信息查询</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">数据类型</span>
+                                <span class="text-secondary">要素数据</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">申请时间</span>
@@ -1315,9 +1778,17 @@ func main() {
 
         // ==================== 初始化 ====================
         document.addEventListener('DOMContentLoaded', function() {
+            loadOpcProject();
             setTimeout(() => {
                 updateProfileUI();
             }, 100);
+
+            document.getElementById('personalAuthModal').addEventListener('click', function(e) {
+                if (e.target === this) closePersonalAuthModal();
+            });
+            document.getElementById('enterpriseAuthModal').addEventListener('click', function(e) {
+                if (e.target === this) closeEnterpriseAuthModal();
+            });
         });
     </script>
 
@@ -1325,7 +1796,7 @@ func main() {
     <footer class="bg-[#1a1a4e] text-white relative ml-64">
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
                 <div class="footer-brand">
                     <div class="flex items-center space-x-3 mb-5">
                         <img src="logo.png" alt="云上OPC" class="w-9 h-9 rounded-xl">
@@ -1382,6 +1853,12 @@ func main() {
                             <span>创客空间入驻</span>
                             <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
                         </a>
+                    </div>
+                </div>
+                <div class="footer-qrcode flex flex-col items-center">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">扫码关注公众号</h3>
+                    <div class="bg-white rounded-xl p-3 inline-block">
+                        <img src="二维码.jpg" alt="公众号二维码" class="w-32 h-32 object-contain">
                     </div>
                 </div>
             </div>

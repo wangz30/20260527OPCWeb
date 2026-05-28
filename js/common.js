@@ -189,7 +189,7 @@ function withAuthChain(options = {}) {
     if (AppState.realNameStatus === 'unverified') {
         showAuthModal({
             title: '需要实名认证',
-            message: '请先完成实名认证，即可使用该服务。',
+            message: '请先完成身份认证，即可使用该服务。',
             icon: 'fa-id-card',
             btnText: '去认证',
             next: 'verify'
@@ -358,6 +358,26 @@ function submitRealName(formData) {
         AppState.realNameStatus = 'verified';
         saveAppState();
         showToast('实名认证已通过！');
+        // 检查是否有待办动作
+        executePendingAction();
+        // 刷新页面UI
+        if (typeof updateProfileUI === 'function') {
+            updateProfileUI();
+        }
+    }, 5000);
+}
+
+function submitEnterpriseRealName(formData) {
+    // 模拟提交企业认证
+    AppState.realNameStatus = 'pending';
+    saveAppState();
+    showToast('企业认证已提交，正在审核中...');
+    
+    // 模拟5秒审核通过
+    setTimeout(() => {
+        AppState.realNameStatus = 'enterprise_verified';
+        saveAppState();
+        showToast('企业认证已通过！');
         // 检查是否有待办动作
         executePendingAction();
         // 刷新页面UI

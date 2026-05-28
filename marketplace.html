@@ -65,8 +65,25 @@
                         </div>
                     </div>
                     <div class="nav-dropdown relative group">
+                        <a href="events.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>创客空间</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="events.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-calendar-alt w-5 text-primary"></i>
+                                <span>社区活动</span>
+                            </a>
+                            <a href="maker-space.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-rocket w-5 text-primary"></i>
+                                <span>创客空间入驻</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="marketplace.html" class="text-primary font-medium border-b-2 border-primary">应用集市</a>
+                    <div class="nav-dropdown relative group">
                         <a href="news.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
-                            <span>前沿资讯</span>
+                            <span>新闻资讯</span>
                             <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
                         </a>
                         <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
@@ -77,26 +94,6 @@
                             <a href="news.html?category=science" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
                                 <i class="fas fa-flask w-5 text-primary"></i>
                                 <span>科普好文</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="nav-dropdown relative group">
-                        <a href="events.html" class="text-primary font-medium border-b-2 border-primary flex items-center space-x-1 py-5">
-                            <span>创客空间</span>
-                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
-                        </a>
-                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
-                            <a href="events.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
-                                <i class="fas fa-calendar-alt w-5 text-primary"></i>
-                                <span>社区活动</span>
-                            </a>
-                            <a href="marketplace.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
-                                <i class="fas fa-store w-5 text-primary"></i>
-                                <span>应用集市</span>
-                            </a>
-                            <a href="maker-space.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
-                                <i class="fas fa-rocket w-5 text-primary"></i>
-                                <span>创客空间入驻</span>
                             </a>
                         </div>
                     </div>
@@ -123,389 +120,531 @@
     </section>
 
 
-
-    <!-- 生态合作伙伴 · 服务广场 -->
+    <!-- 应用广场分类 -->
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-secondary mb-3">生态合作伙伴 · 服务广场</h2>
-                <p class="text-gray-600 max-w-3xl mx-auto">汇聚AI开发、数据服务、工业互联网等优质平台工具，助力OPC创业者快速创新</p>
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-secondary mb-3">应用广场</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">汇聚AI开发、智能助手、数据工业互联网等优质应用，助力OPC创业者快速创新</p>
             </div>
-        </div>
-        <div class="relative" id="serviceSquareContainer">
-            <div class="service-square-track flex gap-4 overflow-x-hidden cursor-grab px-4 sm:px-6 lg:px-8" id="serviceSquareTrack"
-                 onmouseenter="pauseScroll()" onmouseleave="resumeScroll()">
-                <!-- 阿里云 PAI-DSW -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+
+            <!-- 分类标签 -->
+            <div class="flex flex-wrap justify-center gap-3 mb-10" id="marketplace-tabs">
+                <button class="market-tab active px-6 py-2.5 rounded-full text-sm font-semibold bg-primary text-white transition" data-tab="ai-dev">AI开发与部署平台</button>
+                <button class="market-tab px-6 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-tab="ai-assistant">AI助手与智能体</button>
+                <button class="market-tab px-6 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-tab="data-industry">数据与工业互联网</button>
+                <button class="market-tab px-6 py-2.5 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200 transition" data-tab="opc-apps">优质OPC应用</button>
+            </div>
+
+            <!-- AI开发与部署平台 -->
+            <div class="market-category active grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch" id="cat-ai-dev">
+                <!-- 1 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-medium">阿里云</span>
                         <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">有免费版</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">PAI-DSW（交互式建模）</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">AI模型开发、数据科学实验、Notebook开发环境</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">AI模型开发、数据科学实验、Notebook开发环境</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-cloud mr-1"></i>云端</span>
                         <span>按GPU/CPU时长计费</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 阿里云 PAI-DLC -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 2 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-medium">阿里云</span>
                         <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">按量付费</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">PAI-DLC（分布式训练）</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">大规模模型训练、深度学习任务调度</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">大规模模型训练、深度学习任务调度</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-cloud mr-1"></i>云端</span>
                         <span>按资源时长计费</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 阿里云 PAI-EAS -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 3 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-medium">阿里云</span>
                         <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">按量付费</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">PAI-EAS（模型在线服务）</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">模型一键部署、AI推理服务、API服务发布</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">模型一键部署、AI推理服务、API服务发布</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-cloud mr-1"></i>云端</span>
                         <span>按量付费+资源包</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 阿里云 PAI-iTAG -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 4 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-medium">阿里云</span>
                         <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">按量付费</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">PAI-iTAG（智能数据标注）</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">图像/文本/视频/音频数据标注、标注质量管理</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">图像/文本/视频/音频数据标注、标注质量管理</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-cloud mr-1"></i>云端</span>
                         <span>按标注条数计费</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 阿里云 PAI-灵骏 -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 5 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-medium">阿里云</span>
                         <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">联系销售</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">PAI-灵骏（智算服务）</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">大规模深度学习、融合智算场景、万卡集群</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">大规模深度学习、融合智算场景、万卡集群</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-cloud mr-1"></i>云端</span>
                         <span>按需租用算力集群</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 字节跳动 扣子 -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 6 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-medium">字节跳动</span>
                         <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">有免费版</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">扣子（Coze）平台</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">低代码AI Bot智能体开发平台，支持Prompt工程、知识库、工作流</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">低代码AI Bot智能体开发平台，支持Prompt工程、知识库、工作流</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-sync-alt mr-1"></i>混合</span>
                         <span>订阅制（积分）</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 字节跳动 火山机器学习平台 -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 7 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-medium">字节跳动</span>
                         <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">按量付费</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">火山机器学习平台</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">模型训练、模型部署、模型管理，支持分布式深度学习任务</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">模型训练、模型部署、模型管理，支持分布式深度学习任务</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-cloud mr-1"></i>云端</span>
                         <span>按资源使用量计费</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 腾讯云 TI平台 -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 8 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-teal-100 text-teal-700 px-2 py-0.5 rounded font-medium">腾讯云</span>
                         <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">按量付费</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">腾讯云TI平台</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">机器学习平台，提供模型训练、模型部署、模型管理</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">机器学习平台，提供模型训练、模型部署、模型管理</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-sync-alt mr-1"></i>混合</span>
                         <span>按资源使用量计费</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 百度 DuMate -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+            </div>
+
+            <!-- AI助手与智能体 -->
+            <div class="market-category hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch" id="cat-ai-assistant">
+                <!-- 9 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded font-medium">百度智能云</span>
                         <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">有免费版</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">DuMate（百度搭子）</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">桌面级AI办公智能体，文件管理、数据分析、PPT生成</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">桌面级AI办公智能体，文件管理、数据分析、PPT生成</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-desktop mr-1"></i>本地/桌面</span>
                         <span>订阅制（积分）</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 百度 秒哒 -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 10 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded font-medium">百度智能云</span>
                         <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">有免费版</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">百度秒哒</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">无代码/低代码AI应用开发平台，自然语言生成网页/小程序</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">无代码/低代码AI应用开发平台，自然语言生成网页/小程序</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-cloud mr-1"></i>云端</span>
                         <span>免费+按量付费</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 百度 千帆AppBuilder -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 11 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded font-medium">百度智能云</span>
                         <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">有免费版</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">千帆·AppBuilder</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">AI应用构建平台，Agent编排、RAG、工作流、多模态组件</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">AI应用构建平台，Agent编排、RAG、工作流、多模态组件</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-cloud mr-1"></i>云端</span>
                         <span>免费开通+按量付费</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 百度 Sugar BI -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 12 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded font-medium">百度智能云</span>
                         <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">有免费版</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">Sugar BI（数据可视化）</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">0代码BI报表分析和可视化大屏，支持多数据源接入</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">0代码BI报表分析和可视化大屏，支持多数据源接入</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-cloud mr-1"></i>云端</span>
                         <span>订阅制</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 腾讯 WorkBuddy -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 13 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-teal-100 text-teal-700 px-2 py-0.5 rounded font-medium">腾讯云</span>
                         <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">有免费版</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">WorkBuddy</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">全场景职场AI智能体，办公自动化、文档处理、会议纪要</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">全场景职场AI智能体，办公自动化、文档处理、会议纪要</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-desktop mr-1"></i>本地/桌面</span>
                         <span>订阅制（Credits）</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 腾讯 CodeBuddy -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 14 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-teal-100 text-teal-700 px-2 py-0.5 rounded font-medium">腾讯云</span>
                         <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">有免费版</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">CodeBuddy</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">AI编程助手，提供代码生成、补全、解释、优化</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">AI编程助手，提供代码生成、补全、解释、优化</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-desktop mr-1"></i>本地/桌面</span>
                         <span>订阅制（Credits）</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 腾讯 乐享知识库 -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 15 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-teal-100 text-teal-700 px-2 py-0.5 rounded font-medium">腾讯云</span>
                         <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">有免费版</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">乐享知识库</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">企业知识管理与协作平台，知识沉淀、智能搜索、问答</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">企业知识管理与协作平台，知识沉淀、智能搜索、问答</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-sync-alt mr-1"></i>混合</span>
                         <span>按用户数计费</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 腾讯 ADP -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 16 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-teal-100 text-teal-700 px-2 py-0.5 rounded font-medium">腾讯云</span>
                         <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">有免费版</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">ADP智能体开发平台</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">智能体开发，LLM+RAG、Workflow、Multi-agent框架</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">智能体开发，LLM+RAG、Workflow、Multi-agent框架</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-sync-alt mr-1"></i>混合</span>
                         <span>平台订阅制</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 自营 数据治理平台 -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+            </div>
+
+            <!-- 数据与工业互联网 -->
+            <div class="market-category hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch" id="cat-data-industry">
+                <!-- 17 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded font-medium">自营</span>
                         <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">有免费版</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">数据治理平台</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">一站式大数据开发治理，数据集成、开发、调度、质量、安全</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">一站式大数据开发治理，数据集成、开发、调度、质量、安全</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-cloud mr-1"></i>云端</span>
                         <span>订阅制</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 自营 隐私计算平台 -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 18 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded font-medium">自营</span>
                         <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">联系销售</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">高中低三级隐私计算平台</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">多方安全计算、联邦学习、可信执行环境，跨机构数据协作</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">多方安全计算、联邦学习、可信执行环境，跨机构数据协作</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-cloud mr-1"></i>云端</span>
                         <span>按算力/数据量计费</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 自营 数据资产管理 -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 19 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded font-medium">自营</span>
                         <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">联系销售</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">数据资产管理</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">数据资产评估、入表、目录、运营</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">数据资产评估、入表、目录、运营</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-sync-alt mr-1"></i>混合</span>
                         <span>订阅制</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 自营 数据资产融资服务 -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 20 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded font-medium">自营</span>
                         <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">联系销售</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">数据资产融资服务</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">数据资产确权、评估、入表咨询，对接金融机构质押融资</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">数据资产确权、评估、入表咨询，对接金融机构质押融资</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-cloud mr-1"></i>云端</span>
                         <span>咨询+服务</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 自营 工业模型数据库 -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 21 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded font-medium">自营</span>
                         <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">有免费版</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">千万级工业模型数据库</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">千万级工业模型资源库，机电装备、金属切削、模具行业模型</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">千万级工业模型资源库，机电装备、金属切削、模具行业模型</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-cloud mr-1"></i>云端</span>
                         <span>订阅制+按调用量</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 自营 中试生产平台 -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 22 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded font-medium">自营</span>
                         <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">联系销售</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">中试生产平台</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">小批量试生产、工艺验证、产线仿真，实验室到量产全流程</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">小批量试生产、工艺验证、产线仿真，实验室到量产全流程</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-desktop mr-1"></i>本地</span>
                         <span>按项目/资源计费</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
-                <!-- 自营 工业互联网平台 -->
-                <div class="market-card bg-gray-50 rounded-xl p-5 flex-shrink-0" style="width:280px">
+                <!-- 23 -->
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded font-medium">自营</span>
                         <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">有免费版</span>
                     </div>
                     <h4 class="text-base font-bold text-gray-900 mb-2">工业互联网平台</h4>
-                    <p class="text-gray-500 text-sm mb-3 leading-relaxed">工业设备接入、数据采集、边缘计算，生产监控与预测性维护</p>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">工业设备接入、数据采集、边缘计算，生产监控与预测性维护</p>
                     <div class="flex items-center justify-between text-xs text-gray-400">
                         <span><i class="fas fa-sync-alt mr-1"></i>混合</span>
                         <span>按设备接入量计费</span>
                     </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                </div>
+            </div>
+
+            <!-- 优质OPC应用 -->
+            <div class="market-category hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch" id="cat-opc-apps">
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded font-medium">OPC自研</span>
+                        <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">即将上线</span>
+                    </div>
+                    <h4 class="text-base font-bold text-gray-900 mb-2">AI创业助手</h4>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">基于大模型的创业顾问，提供商业计划书生成、市场分析、竞品调研等智能服务</p>
+                    <div class="flex items-center justify-between text-xs text-gray-400">
+                        <span><i class="fas fa-cloud mr-1"></i>云端</span>
+                        <span>订阅制</span>
+                    </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                </div>
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded font-medium">OPC自研</span>
+                        <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">即将上线</span>
+                    </div>
+                    <h4 class="text-base font-bold text-gray-900 mb-2">智能政策匹配</h4>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">AI驱动的政策精准匹配引擎，自动识别企业画像并推荐可申报的扶持政策</p>
+                    <div class="flex items-center justify-between text-xs text-gray-400">
+                        <span><i class="fas fa-cloud mr-1"></i>云端</span>
+                        <span>按次计费</span>
+                    </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                </div>
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded font-medium">OPC自研</span>
+                        <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">即将上线</span>
+                    </div>
+                    <h4 class="text-base font-bold text-gray-900 mb-2">融资对接平台</h4>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">连接创业企业与投资机构，智能匹配融资需求，提供估值分析、BP优化等服务</p>
+                    <div class="flex items-center justify-between text-xs text-gray-400">
+                        <span><i class="fas fa-cloud mr-1"></i>云端</span>
+                        <span>服务费</span>
+                    </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                </div>
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded font-medium">OPC自研</span>
+                        <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">即将上线</span>
+                    </div>
+                    <h4 class="text-base font-bold text-gray-900 mb-2">OPC人才猎聘</h4>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">专注科技创业赛道的人才撮合平台，AI简历解析、智能匹配、面试辅助一体化</p>
+                    <div class="flex items-center justify-between text-xs text-gray-400">
+                        <span><i class="fas fa-sync-alt mr-1"></i>混合</span>
+                        <span>订阅制</span>
+                    </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                </div>
+                <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded font-medium">OPC自研</span>
+                        <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">即将上线</span>
+                    </div>
+                    <h4 class="text-base font-bold text-gray-900 mb-2">跨境商机通</h4>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2">大湾区跨境商机洞察平台，整合报关、物流、合规数据，AI推荐海外市场机会</p>
+                    <div class="flex items-center justify-between text-xs text-gray-400">
+                        <span><i class="fas fa-cloud mr-1"></i>云端</span>
+                        <span>订阅制</span>
+                    </div>
+                    </div>
+                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- 应用配置中弹窗 -->
+    <div id="appPendingModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl max-w-sm w-full mx-4 p-8 shadow-2xl text-center">
+            <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-tools text-2xl text-primary"></i>
+            </div>
+            <h3 class="text-lg font-bold text-secondary mb-2">应用配置中</h3>
+            <p class="text-gray-500 text-sm mb-6">敬请期待，如有需要可联系gbanexus@hiic.com.cn</p>
+            <button onclick="closeAppPendingModal()" class="bg-primary text-white px-8 py-2.5 rounded-lg font-semibold hover:bg-primary-dark transition">知道了</button>
+        </div>
+    </div>
+
     <script>
-    (function() {
-        var track = document.getElementById('serviceSquareTrack');
-        if (!track) return;
-        
-        var speed = 0.5;
-        var animationId = null;
-        var isPaused = false;
-        var isDragging = false;
-        var startX = 0;
-        var scrollLeft = 0;
-        
-        function scroll() {
-            if (!isPaused && !isDragging) {
-                track.scrollLeft += speed;
-                if (track.scrollLeft >= track.scrollWidth / 2) {
-                    track.scrollLeft = 0;
-                }
+        // 分类切换
+        document.getElementById('marketplace-tabs').addEventListener('click', function(e) {
+            if (e.target.classList.contains('market-tab')) {
+                document.querySelectorAll('.market-tab').forEach(function(t) {
+                    t.classList.remove('active', 'bg-primary', 'text-white');
+                    t.classList.add('bg-gray-100', 'text-gray-600');
+                });
+                e.target.classList.add('active', 'bg-primary', 'text-white');
+                e.target.classList.remove('bg-gray-100', 'text-gray-600');
+
+                var tab = e.target.getAttribute('data-tab');
+                document.querySelectorAll('.market-category').forEach(function(c) {
+                    c.classList.add('hidden');
+                    c.classList.remove('active', 'grid');
+                });
+                var cat = document.getElementById('cat-' + tab);
+                cat.classList.remove('hidden');
+                cat.classList.add('active', 'grid');
             }
-            animationId = requestAnimationFrame(scroll);
+        });
+
+        // 申请弹窗
+        function showAppPendingModal() {
+            document.getElementById('appPendingModal').classList.remove('hidden');
+            document.getElementById('appPendingModal').classList.add('flex');
         }
-        
-        window.pauseScroll = function() { isPaused = true; track.style.cursor = 'default'; };
-        window.resumeScroll = function() { isPaused = false; track.style.cursor = 'grab'; };
-        
-        track.addEventListener('mousedown', function(e) {
-            isDragging = true;
-            startX = e.pageX - track.offsetLeft;
-            scrollLeft = track.scrollLeft;
-            track.style.cursor = 'grabbing';
+        function closeAppPendingModal() {
+            document.getElementById('appPendingModal').classList.add('hidden');
+            document.getElementById('appPendingModal').classList.remove('flex');
+        }
+        document.getElementById('appPendingModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAppPendingModal();
         });
-        
-        track.addEventListener('mouseleave', function() {
-            isDragging = false;
-            track.style.cursor = 'grab';
-        });
-        
-        track.addEventListener('mouseup', function() {
-            isDragging = false;
-            track.style.cursor = 'grab';
-        });
-        
-        track.addEventListener('mousemove', function(e) {
-            if (!isDragging) return;
-            e.preventDefault();
-            var x = e.pageX - track.offsetLeft;
-            var walk = (x - startX) * 1.5;
-            track.scrollLeft = scrollLeft - walk;
-        });
-        
-        track.addEventListener('touchstart', function(e) {
-            isDragging = true;
-            startX = e.touches[0].pageX - track.offsetLeft;
-            scrollLeft = track.scrollLeft;
-        });
-        
-        track.addEventListener('touchend', function() { isDragging = false; });
-        
-        track.addEventListener('touchmove', function(e) {
-            if (!isDragging) return;
-            var x = e.touches[0].pageX - track.offsetLeft;
-            var walk = (x - startX) * 1.5;
-            track.scrollLeft = scrollLeft - walk;
-        });
-        
-        scroll();
-    })();
     </script>
+
 
     <!-- 开源工具推荐 -->
     <section class="py-16 bg-white">
@@ -640,7 +779,7 @@
     <footer class="bg-[#1a1a4e] text-white relative">
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
                 <div class="footer-brand">
                     <div class="flex items-center space-x-3 mb-5">
                         <img src="logo.png" alt="云上OPC" class="w-9 h-9 rounded-xl">
@@ -697,6 +836,12 @@
                             <span>创客空间入驻</span>
                             <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
                         </a>
+                    </div>
+                </div>
+                <div class="footer-qrcode flex flex-col items-center">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">扫码关注公众号</h3>
+                    <div class="bg-white rounded-xl p-3 inline-block">
+                        <img src="二维码.jpg" alt="公众号二维码" class="w-32 h-32 object-contain">
                     </div>
                 </div>
             </div>
