@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云上OPC社区 · 管理后台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6C5CE7',
+                        'primary-dark': '#5A4BD1',
+                        'primary-light': '#A29BFE',
+                        secondary: '#2D3436',
+                        accent: '#00CEC9',
+                        danger: '#E17055',
+                        warning: '#FDCB6E',
+                        success: '#00B894',
+                        info: '#74B9FF'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #F3F4F6; }
+        .sidebar-link { transition: all 0.2s ease; }
+        .sidebar-link:hover { background: rgba(108, 92, 231, 0.1); color: #6C5CE7; }
+        .sidebar-link.active { background: rgba(108, 92, 231, 0.15); color: #6C5CE7; font-weight: 600; border-left: 3px solid #6C5CE7; }
+        .stat-card { transition: all 0.3s ease; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(108, 92, 231, 0.15); }
+        .admin-section { display: none; }
+        .admin-section.active { display: block; }
+        .badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 9999px; font-size: 12px; font-weight: 500; }
+        .badge-online { background: #D1FAE5; color: #065F46; }
+        .badge-offline { background: #FEE2E2; color: #991B1B; }
+        .badge-pending { background: #FEF3C7; color: #92400E; }
+        .badge-approved { background: #D1FAE5; color: #065F46; }
+        .badge-rejected { background: #FEE2E2; color: #991B1B; }
+        .badge-draft { background: #F3F4F6; color: #6B7280; }
+        .modal-overlay { display: none; }
+        .modal-overlay.show { display: flex; }
+        table { border-collapse: collapse; }
+        th { font-weight: 600; font-size: 13px; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em; }
+        td { font-size: 14px; }
+        .toast-container { position: fixed; top: 16px; right: 16px; z-index: 9999; }
+        .toast { animation: slideInRight 0.3s ease; }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- 顶部栏 -->
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+        <div class="flex items-center justify-between px-6 py-3">
+            <div class="flex items-center space-x-4">
+                <button id="sidebarToggle" class="text-gray-500 hover:text-primary transition p-1">
+                    <i class="fas fa-bars text-lg"></i>
+                </button>
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-layer-group text-white text-sm"></i>
+                    </div>
+                    <span class="text-lg font-bold text-secondary">云上OPC社区 · 管理后台</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
+                    <span class="w-1.5 h-1.5 bg-green-400 rounded-full inline-block mr-1.5"></span>系统运行中
+                </span>
+                <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 px-2 py-1 rounded-lg transition">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face" alt="管理员" class="w-8 h-8 rounded-full object-cover border-2 border-primary/30">
+                    <span class="text-sm font-medium text-gray-700">管理员</span>
+                    <i class="fas fa-chevron-down text-xs text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- 左侧导航 -->
+        <aside id="sidebar" class="w-56 bg-white border-r border-gray-200 min-h-[calc(100vh-57px)] flex-shrink-0 transition-all duration-300">
+            <nav class="py-4">
+                <div class="px-4 mb-3">
+                    <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">主菜单</span>
+                </div>
+                <a href="#" onclick="switchAdminSection('dashboard')" class="sidebar-link active flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-600 border-l-3 border-transparent" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt w-5 text-center"></i><span>仪表盘</span>
+                </a>
+                <a href="#" onclick="switchAdminSection('models')" class="sidebar-link flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-600 border-l-3 border-transparent" data-section="models">
+                    <i class="fas fa-brain w-5 text-center"></i><span>AI模型管理</span>
+                </a>
+                <a href="#" onclick="switchAdminSection('data-api')" class="sidebar-link flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-600 border-l-3 border-transparent" data-section="data-api">
+                    <i class="fas fa-database w-5 text-center"></i><span>数据API管理</span>
+                </a>
+                <a href="#" onclick="switchAdminSection('cloud')" class="sidebar-link flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-600 border-l-3 border-transparent" data-section="cloud">
+                    <i class="fas fa-cloud w-5 text-center"></i><span>云资源管理</span>
+                </a>
+                <a href="#" onclick="switchAdminSection('marketplace')" class="sidebar-link flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-600 border-l-3 border-transparent" data-section="marketplace">
+                    <i class="fas fa-store w-5 text-center"></i><span>应用集市管理</span>
+                </a>
+                <div class="px-4 mt-5 mb-3">
+                    <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">审批与用户</span>
+                </div>
+                <a href="#" onclick="switchAdminSection('approvals')" class="sidebar-link flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-600 border-l-3 border-transparent" data-section="approvals">
+                    <i class="fas fa-clipboard-check w-5 text-center"></i><span>申请审批</span>
+                </a>
+                <a href="#" onclick="switchAdminSection('users')" class="sidebar-link flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-600 border-l-3 border-transparent" data-section="users">
+                    <i class="fas fa-users w-5 text-center"></i><span>用户管理</span>
+                </a>
+                <a href="#" onclick="switchAdminSection('verify')" class="sidebar-link flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-600 border-l-3 border-transparent" data-section="verify">
+                    <i class="fas fa-id-card w-5 text-center"></i><span>实名认证审核</span>
+                    <span class="ml-auto bg-danger text-white text-xs px-1.5 py-0.5 rounded-full">3</span>
+                </a>
+                <div class="px-4 mt-5 mb-3">
+                    <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">内容管理</span>
+                </div>
+                <a href="#" onclick="switchAdminSection('events-admin')" class="sidebar-link flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-600 border-l-3 border-transparent" data-section="events-admin">
+                    <i class="fas fa-calendar-alt w-5 text-center"></i><span>活动管理</span>
+                </a>
+                <a href="#" onclick="switchAdminSection('news-admin')" class="sidebar-link flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-600 border-l-3 border-transparent" data-section="news-admin">
+                    <i class="fas fa-newspaper w-5 text-center"></i><span>新闻资讯管理</span>
+                </a>
+                <a href="#" onclick="switchAdminSection('announcement')" class="sidebar-link flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-600 border-l-3 border-transparent" data-section="announcement">
+                    <i class="fas fa-bullhorn w-5 text-center"></i><span>公告管理</span>
+                </a>
+                <div class="px-4 mt-5 mb-3">
+                    <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">系统</span>
+                </div>
+                <a href="#" onclick="switchAdminSection('settings')" class="sidebar-link flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-600 border-l-3 border-transparent" data-section="settings">
+                    <i class="fas fa-cog w-5 text-center"></i><span>系统设置</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- 右侧内容区 -->
+        <main class="flex-1 p-6 overflow-auto">
+
+            <!-- ==================== 仪表盘 ==================== -->
+            <section id="sec-dashboard" class="admin-section active">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-secondary">仪表盘</h2>
+                    <span class="text-sm text-gray-400">最后更新：<span id="lastUpdateTime">刚刚</span></span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+                    <div class="stat-card bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center"><i class="fas fa-users text-primary"></i></div>
+                            <span class="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">+12%</span>
+                        </div>
+                        <p class="text-2xl font-bold text-secondary">1,248</p>
+                        <p class="text-sm text-gray-500">注册用户</p>
+                    </div>
+                    <div class="stat-card bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center"><i class="fas fa-brain text-accent"></i></div>
+                            <span class="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">8个在线</span>
+                        </div>
+                        <p class="text-2xl font-bold text-secondary">12</p>
+                        <p class="text-sm text-gray-500">AI模型总数</p>
+                    </div>
+                    <div class="stat-card bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-warning/20 rounded-lg flex items-center justify-center"><i class="fas fa-clock text-yellow-600"></i></div>
+                            <span class="text-xs text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">待处理</span>
+                        </div>
+                        <p class="text-2xl font-bold text-secondary">23</p>
+                        <p class="text-sm text-gray-500">待审批申请</p>
+                    </div>
+                    <div class="stat-card bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-10 h-10 bg-success/10 rounded-lg flex items-center justify-center"><i class="fas fa-calendar-check text-success"></i></div>
+                            <span class="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">进行中</span>
+                        </div>
+                        <p class="text-2xl font-bold text-secondary">6</p>
+                        <p class="text-sm text-gray-500">进行中活动</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                        <h3 class="text-base font-semibold text-secondary mb-4">近期审核待办</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                                <div class="flex items-center space-x-3"><div class="w-8 h-8 bg-orange-200 rounded-full flex items-center justify-center"><i class="fas fa-user-check text-orange-700 text-sm"></i></div><div><p class="text-sm font-medium text-gray-800">实名认证审核</p><p class="text-xs text-gray-500">张伟 · 个人实名认证</p></div></div>
+                                <span class="text-xs text-orange-600">15分钟前</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                                <div class="flex items-center space-x-3"><div class="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center"><i class="fas fa-cloud-upload-alt text-blue-700 text-sm"></i></div><div><p class="text-sm font-medium text-gray-800">云资源申请</p><p class="text-xs text-gray-500">李明 · ECS云服务器申请</p></div></div>
+                                <span class="text-xs text-blue-600">1小时前</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                                <div class="flex items-center space-x-3"><div class="w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center"><i class="fas fa-building text-purple-700 text-sm"></i></div><div><p class="text-sm font-medium text-gray-800">创客空间入驻</p><p class="text-xs text-gray-500">深圳星辰科技 · 入驻申请</p></div></div>
+                                <span class="text-xs text-purple-600">3小时前</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                        <h3 class="text-base font-semibold text-secondary mb-4">模型调用概览</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Qwen-Max</span>
+                                <div class="flex items-center space-x-3"><div class="w-32 bg-gray-100 rounded-full h-2"><div class="bg-primary h-2 rounded-full" style="width:85%"></div></div><span class="text-xs text-gray-500">8,520次</span></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">DeepSeek-V3</span>
+                                <div class="flex items-center space-x-3"><div class="w-32 bg-gray-100 rounded-full h-2"><div class="bg-accent h-2 rounded-full" style="width:72%"></div></div><span class="text-xs text-gray-500">6,340次</span></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">GPT-4o</span>
+                                <div class="flex items-center space-x-3"><div class="w-32 bg-gray-100 rounded-full h-2"><div class="bg-warning h-2 rounded-full" style="width:60%"></div></div><span class="text-xs text-gray-500">5,120次</span></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Claude-3.5-Sonnet</span>
+                                <div class="flex items-center space-x-3"><div class="w-32 bg-gray-100 rounded-full h-2"><div class="bg-info h-2 rounded-full" style="width:45%"></div></div><span class="text-xs text-gray-500">3,890次</span></div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">DeepSeek-R1</span>
+                                <div class="flex items-center space-x-3"><div class="w-32 bg-gray-100 rounded-full h-2"><div class="bg-danger h-2 rounded-full" style="width:38%"></div></div><span class="text-xs text-gray-500">2,980次</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== AI模型管理 ==================== -->
+            <section id="sec-models" class="admin-section">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h2 class="text-2xl font-bold text-secondary">AI模型管理</h2>
+                        <p class="text-sm text-gray-500 mt-1">管理AI模型上下架、配置信息与调用看板</p>
+                    </div>
+                    <button onclick="openModelModal()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition">
+                        <i class="fas fa-plus mr-1.5"></i>新增模型
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="text-left px-5 py-3">模型名称</th>
+                                <th class="text-left px-5 py-3">厂商</th>
+                                <th class="text-left px-5 py-3">类型/模态</th>
+                                <th class="text-left px-5 py-3">上下文</th>
+                                <th class="text-left px-5 py-3">价格</th>
+                                <th class="text-left px-5 py-3">状态</th>
+                                <th class="text-right px-5 py-3">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modelTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== 数据API管理 ==================== -->
+            <section id="sec-data-api" class="admin-section">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h2 class="text-2xl font-bold text-secondary">数据API管理</h2>
+                        <p class="text-sm text-gray-500 mt-1">管理数据API服务的分类、条目与应用场景</p>
+                    </div>
+                    <button onclick="openDataApiModal()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition">
+                        <i class="fas fa-plus mr-1.5"></i>新增数据API
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="text-left px-5 py-3">数据名称</th>
+                                <th class="text-left px-5 py-3">数据类型</th>
+                                <th class="text-left px-5 py-3">适用行业</th>
+                                <th class="text-left px-5 py-3">应用场景</th>
+                                <th class="text-left px-5 py-3">状态</th>
+                                <th class="text-right px-5 py-3">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataApiTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== 云资源管理 ==================== -->
+            <section id="sec-cloud" class="admin-section">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h2 class="text-2xl font-bold text-secondary">云资源管理</h2>
+                        <p class="text-sm text-gray-500 mt-1">管理云资源服务的配置、规格与定价</p>
+                    </div>
+                    <button onclick="openCloudModal()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition">
+                        <i class="fas fa-plus mr-1.5"></i>新增云资源
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="text-left px-5 py-3">服务名称</th>
+                                <th class="text-left px-5 py-3">服务类型</th>
+                                <th class="text-left px-5 py-3">规格</th>
+                                <th class="text-left px-5 py-3">适用场景</th>
+                                <th class="text-left px-5 py-3">状态</th>
+                                <th class="text-right px-5 py-3">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cloudTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== 应用集市管理 ==================== -->
+            <section id="sec-marketplace" class="admin-section">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h2 class="text-2xl font-bold text-secondary">应用集市管理</h2>
+                        <p class="text-sm text-gray-500 mt-1">管理应用集市中的服务卡片与分类归属</p>
+                    </div>
+                    <button onclick="openMarketplaceModal()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition">
+                        <i class="fas fa-plus mr-1.5"></i>新增应用
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="text-left px-5 py-3">应用名称</th>
+                                <th class="text-left px-5 py-3">厂商</th>
+                                <th class="text-left px-5 py-3">分类</th>
+                                <th class="text-left px-5 py-3">部署形态</th>
+                                <th class="text-left px-5 py-3">计费方式</th>
+                                <th class="text-left px-5 py-3">状态</th>
+                                <th class="text-right px-5 py-3">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="marketplaceTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== 申请审批 ==================== -->
+            <section id="sec-approvals" class="admin-section">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h2 class="text-2xl font-bold text-secondary">申请审批</h2>
+                        <p class="text-sm text-gray-500 mt-1">统一管理数据API、云资源、创客空间入驻申请</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <select id="approvalTypeFilter" onchange="renderApprovals()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/30">
+                            <option value="all">全部类型</option>
+                            <option value="data-api">数据API申请</option>
+                            <option value="cloud">云资源申请</option>
+                            <option value="maker">创客空间入驻</option>
+                        </select>
+                        <select id="approvalStatusFilter" onchange="renderApprovals()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/30">
+                            <option value="all">全部状态</option>
+                            <option value="pending">待审批</option>
+                            <option value="approved">已通过</option>
+                            <option value="rejected">已驳回</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="text-left px-5 py-3">申请编号</th>
+                                <th class="text-left px-5 py-3">申请人</th>
+                                <th class="text-left px-5 py-3">申请类型</th>
+                                <th class="text-left px-5 py-3">申请内容</th>
+                                <th class="text-left px-5 py-3">申请时间</th>
+                                <th class="text-left px-5 py-3">状态</th>
+                                <th class="text-right px-5 py-3">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="approvalTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== 用户管理 ==================== -->
+            <section id="sec-users" class="admin-section">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h2 class="text-2xl font-bold text-secondary">用户管理</h2>
+                        <p class="text-sm text-gray-500 mt-1">查看和管理所有注册用户信息</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="text" id="userSearch" oninput="renderUsers()" placeholder="搜索用户名/手机号..." class="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 w-48 focus:outline-none focus:ring-2 focus:ring-primary/30">
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="text-left px-5 py-3">用户</th>
+                                <th class="text-left px-5 py-3">手机号</th>
+                                <th class="text-left px-5 py-3">邮箱</th>
+                                <th class="text-left px-5 py-3">认证状态</th>
+                                <th class="text-left px-5 py-3">注册时间</th>
+                                <th class="text-right px-5 py-3">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== 实名认证审核 ==================== -->
+            <section id="sec-verify" class="admin-section">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h2 class="text-2xl font-bold text-secondary">实名认证审核</h2>
+                        <p class="text-sm text-gray-500 mt-1">审核个人实名认证与企业认证申请</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="text-left px-5 py-3">申请人</th>
+                                <th class="text-left px-5 py-3">认证类型</th>
+                                <th class="text-left px-5 py-3">姓名/企业名</th>
+                                <th class="text-left px-5 py-3">证件号</th>
+                                <th class="text-left px-5 py-3">提交时间</th>
+                                <th class="text-left px-5 py-3">状态</th>
+                                <th class="text-right px-5 py-3">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="verifyTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== 活动管理 ==================== -->
+            <section id="sec-events-admin" class="admin-section">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h2 class="text-2xl font-bold text-secondary">活动管理</h2>
+                        <p class="text-sm text-gray-500 mt-1">管理社区活动与查看报名记录</p>
+                    </div>
+                    <button onclick="openEventModal()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition">
+                        <i class="fas fa-plus mr-1.5"></i>新增活动
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="text-left px-5 py-3">活动名称</th>
+                                <th class="text-left px-5 py-3">时间</th>
+                                <th class="text-left px-5 py-3">地点</th>
+                                <th class="text-left px-5 py-3">报名人数</th>
+                                <th class="text-left px-5 py-3">状态</th>
+                                <th class="text-right px-5 py-3">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eventAdminTableBody"></tbody>
+                    </table>
+                </div>
+                <h3 class="text-lg font-bold text-secondary mb-3">报名记录</h3>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="text-left px-5 py-3">用户</th>
+                                <th class="text-left px-5 py-3">活动</th>
+                                <th class="text-left px-5 py-3">报名时间</th>
+                                <th class="text-left px-5 py-3">状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eventRegTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== 新闻资讯管理 ==================== -->
+            <section id="sec-news-admin" class="admin-section">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h2 class="text-2xl font-bold text-secondary">新闻资讯管理</h2>
+                        <p class="text-sm text-gray-500 mt-1">管理政策速递与科普好文内容</p>
+                    </div>
+                    <button onclick="openNewsModal()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition">
+                        <i class="fas fa-plus mr-1.5"></i>新增文章
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="text-left px-5 py-3">标题</th>
+                                <th class="text-left px-5 py-3">分类</th>
+                                <th class="text-left px-5 py-3">来源</th>
+                                <th class="text-left px-5 py-3">发布时间</th>
+                                <th class="text-left px-5 py-3">状态</th>
+                                <th class="text-right px-5 py-3">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="newsTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== 公告管理 ==================== -->
+            <section id="sec-announcement" class="admin-section">
+                <div class="mb-5">
+                    <h2 class="text-2xl font-bold text-secondary mb-1">公告管理</h2>
+                    <p class="text-sm text-gray-500">管理首页Banner下方的滚动公告栏内容</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-6">
+                    <h3 class="text-base font-semibold text-secondary mb-3">当前公告列表</h3>
+                    <div id="announcementList" class="space-y-2 mb-4"></div>
+                    <div class="flex items-center space-x-3">
+                        <input type="text" id="newAnnouncement" placeholder="输入新公告内容..." class="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30">
+                        <button onclick="addAnnouncement()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition">添加</button>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-3">首页公告栏将以横向滚动方式展示，建议控制在3-5条</p>
+                </div>
+            </section>
+
+            <!-- ==================== 系统设置 ==================== -->
+            <section id="sec-settings" class="admin-section">
+                <div class="mb-5">
+                    <h2 class="text-2xl font-bold text-secondary">系统设置</h2>
+                    <p class="text-sm text-gray-500 mt-1">配置系统基本参数</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                        <h3 class="text-base font-semibold text-secondary mb-4">基础配置</h3>
+                        <div class="space-y-4">
+                            <div><label class="text-sm font-medium text-gray-600 block mb-1">站点名称</label><input type="text" value="云上OPC社区" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                            <div><label class="text-sm font-medium text-gray-600 block mb-1">联系邮箱</label><input type="text" value="gbanexus@hiic.com.cn" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                            <div><label class="text-sm font-medium text-gray-600 block mb-1">客服电话</label><input type="text" value="400-888-9999" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                            <div><label class="text-sm font-medium text-gray-600 block mb-1">服务时间</label><input type="text" value="周一至周五 9:00 - 18:00" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                        </div>
+                        <button onclick="showToast('系统配置保存成功')" class="mt-4 bg-primary text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition">保存配置</button>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                        <h3 class="text-base font-semibold text-secondary mb-4">管理员账号</h3>
+                        <div class="space-y-4">
+                            <div><label class="text-sm font-medium text-gray-600 block mb-1">管理员用户名</label><input type="text" value="admin" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                            <div><label class="text-sm font-medium text-gray-600 block mb-1">新密码</label><input type="password" placeholder="留空不修改" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                            <div><label class="text-sm font-medium text-gray-600 block mb-1">确认新密码</label><input type="password" placeholder="留空不修改" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                        </div>
+                        <button onclick="showToast('管理员密码修改成功')" class="mt-4 bg-primary text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition">修改密码</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ==================== 通用模态弹窗 ==================== -->
+    <!-- 模型表单弹窗 -->
+    <div id="modelModalOverlay" class="modal-overlay fixed inset-0 bg-black/50 items-center justify-center z-50">
+        <div class="bg-white rounded-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100">
+                <h3 class="text-lg font-bold text-secondary" id="modelModalTitle">新增AI模型</h3>
+                <button onclick="closeModelModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition"><i class="fas fa-times text-gray-400"></i></button>
+            </div>
+            <form id="modelForm" class="p-5 space-y-4" onsubmit="saveModel(event)">
+                <input type="hidden" id="modelEditId">
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-sm font-medium text-gray-600 block mb-1">模型名称 *</label><input type="text" id="modelName" required class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                    <div><label class="text-sm font-medium text-gray-600 block mb-1">厂商 *</label><select id="modelVendor" required class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="">请选择</option><option>通义千问</option><option>DeepSeek</option><option>OpenAI</option><option>Anthropic</option><option>腾讯云</option><option>百度智能云</option><option>字节跳动</option></select></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-sm font-medium text-gray-600 block mb-1">模型类型</label><select id="modelType" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option>文本生成</option><option>图像理解</option><option>文生图</option><option>视频理解</option><option>视频生成</option><option>语音生成</option><option>文本向量</option><option>结果重排</option></select></div>
+                    <div><label class="text-sm font-medium text-gray-600 block mb-1">模态</label><select id="modelModality" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option>纯文本</option><option>文本+图像</option><option>文本+语音</option><option>文本+视频</option><option>全模态</option></select></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-sm font-medium text-gray-600 block mb-1">上下文长度</label><input type="text" id="modelContext" placeholder="如 32K" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                    <div><label class="text-sm font-medium text-gray-600 block mb-1">价格</label><input type="text" id="modelPrice" placeholder="如 ¥0.02/1K tokens" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                </div>
+                <div><label class="text-sm font-medium text-gray-600 block mb-1">应用场景标签（逗号分隔）</label><input type="text" id="modelScenarios" placeholder="如 通用助手, 文案创作, 代码生成" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                <div><label class="text-sm font-medium text-gray-600 block mb-1">发布日期</label><input type="date" id="modelRelease" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                <div><label class="text-sm font-medium text-gray-600 block mb-1">简短描述</label><input type="text" id="modelDesc" placeholder="模型简短介绍" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                <div><label class="text-sm font-medium text-gray-600 block mb-1">详细特性描述</label><textarea id="modelDetail" rows="2" placeholder="详细特性介绍" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></textarea></div>
+                <div class="flex items-center space-x-3">
+                    <label class="text-sm font-medium text-gray-600">上架状态</label>
+                    <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" id="modelOnline" checked class="w-4 h-4 text-primary rounded"><span class="text-sm text-gray-600">上架（用户可见可调用）</span></label>
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeModelModal()" class="px-5 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition">取消</button>
+                    <button type="submit" class="px-5 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-dark transition">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 数据API表单弹窗 -->
+    <div id="dataApiModalOverlay" class="modal-overlay fixed inset-0 bg-black/50 items-center justify-center z-50">
+        <div class="bg-white rounded-2xl max-w-xl w-full mx-4 shadow-2xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100">
+                <h3 class="text-lg font-bold text-secondary" id="dataApiModalTitle">新增数据API</h3>
+                <button onclick="closeDataApiModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition"><i class="fas fa-times text-gray-400"></i></button>
+            </div>
+            <form id="dataApiForm" class="p-5 space-y-4" onsubmit="saveDataApi(event)">
+                <input type="hidden" id="dataApiEditId">
+                <div><label class="text-sm font-medium text-gray-600 block mb-1">数据名称 *</label><input type="text" id="dataApiName" required class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-sm font-medium text-gray-600 block mb-1">数据类型</label><select id="dataApiType" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option>要素数据</option><option>场景数据</option><option>主题数据</option></select></div>
+                    <div><label class="text-sm font-medium text-gray-600 block mb-1">适用行业</label><select id="dataApiIndustry" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option>通用</option><option>金融</option><option>制造业</option><option>互联网</option><option>半导体</option><option>新能源</option><option>人工智能</option></select></div>
+                </div>
+                <div><label class="text-sm font-medium text-gray-600 block mb-1">应用场景标签（逗号分隔）</label><input type="text" id="dataApiScenarios" placeholder="如 企业画像, 风险评估, 精准营销" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                <div><label class="text-sm font-medium text-gray-600 block mb-1">简短描述</label><input type="text" id="dataApiDesc" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+                <div class="flex items-center space-x-3">
+                    <label class="text-sm font-medium text-gray-600">上架状态</label>
+                    <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" id="dataApiOnline" checked class="w-4 h-4 text-primary rounded"><span class="text-sm text-gray-600">已上架</span></label>
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeDataApiModal()" class="px-5 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition">取消</button>
+                    <button type="submit" class="px-5 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-dark transition">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 审批详情弹窗 -->
+    <div id="approvalDetailOverlay" class="modal-overlay fixed inset-0 bg-black/50 items-center justify-center z-50">
+        <div class="bg-white rounded-2xl max-w-2xl w-full mx-4 shadow-2xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100">
+                <h3 class="text-lg font-bold text-secondary">审批详情</h3>
+                <button onclick="closeApprovalDetail()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition"><i class="fas fa-times text-gray-400"></i></button>
+            </div>
+            <div id="approvalDetailBody" class="p-5"></div>
+            <div id="approvalDetailActions" class="flex justify-end space-x-3 p-5 pt-0"></div>
+        </div>
+    </div>
+
+    <!-- 认证审核详情弹窗 -->
+    <div id="verifyDetailOverlay" class="modal-overlay fixed inset-0 bg-black/50 items-center justify-center z-50">
+        <div class="bg-white rounded-2xl max-w-xl w-full mx-4 shadow-2xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100">
+                <h3 class="text-lg font-bold text-secondary">认证审核详情</h3>
+                <button onclick="closeVerifyDetail()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition"><i class="fas fa-times text-gray-400"></i></button>
+            </div>
+            <div id="verifyDetailBody" class="p-5"></div>
+            <div class="flex justify-end space-x-3 p-5 pt-0">
+                <button onclick="rejectVerify()" class="px-5 py-2 border border-danger text-danger rounded-lg text-sm font-semibold hover:bg-danger/5 transition">驳回</button>
+                <button onclick="approveVerify()" class="px-5 py-2 bg-success text-white rounded-lg text-sm font-semibold hover:bg-green-600 transition">通过</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast容器 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ===== 样例数据集 =====
+        const sampleModels = [
+            { id:1, name:'Qwen-Max', vendor:'通义千问', type:'文本生成', modality:'文本+图像', context:'32K', price:'¥0.02/1K tokens', scenarios:'通用助手,文案创作,多模态理解,代码生成', release:'2024-09-15', desc:'通义千问旗舰模型，支持复杂推理与多模态理解', detail:'上下文长度：32K | 支持多模态理解 | 复杂推理', online:true },
+            { id:2, name:'Qwen-Plus', vendor:'通义千问', type:'文本生成', modality:'纯文本', context:'128K', price:'¥0.008/1K tokens', scenarios:'通用助手,长文本处理,RAG', release:'2024-08-20', desc:'高性价比推理模型，速度提升60%', detail:'上下文长度：128K | 快速响应 | 高性价比', online:true },
+            { id:3, name:'Qwen-Coder', vendor:'通义千问', type:'文本生成', modality:'纯文本', context:'64K', price:'¥0.01/1K tokens', scenarios:'代码生成,数学推理', release:'2024-10-08', desc:'专为代码场景优化，支持多语言编程', detail:'上下文长度：64K | 代码生成 | 数学推理', online:true },
+            { id:4, name:'DeepSeek-V3', vendor:'DeepSeek', type:'文本生成', modality:'纯文本', context:'64K', price:'¥0.001/1K tokens', scenarios:'通用助手,长文本处理,数学推理', release:'2024-12-26', desc:'MoE架构旗舰模型，推理能力强，性价比极高', detail:'上下文长度：64K | MoE架构 | 极高性价比', online:true },
+            { id:5, name:'DeepSeek-R1', vendor:'DeepSeek', type:'文本生成', modality:'纯文本', context:'128K', price:'¥0.004/1K tokens', scenarios:'数学推理,代码生成,长文本处理', release:'2025-01-20', desc:'深度推理模型，支持思维链推理', detail:'上下文长度：128K | 深度推理 | 思维链', online:true },
+            { id:6, name:'GPT-4o', vendor:'OpenAI', type:'文本生成', modality:'文本+图像', context:'128K', price:'¥0.15/1K tokens', scenarios:'通用助手,多模态理解,代码生成', release:'2024-05-13', desc:'OpenAI旗舰多模态模型，原生支持视觉理解', detail:'上下文长度：128K | 多模态 | 智能推理', online:true },
+            { id:7, name:'GPT-4o-mini', vendor:'OpenAI', type:'文本生成', modality:'文本+图像', context:'128K', price:'¥0.008/1K tokens', scenarios:'通用助手,快速响应', release:'2024-07-18', desc:'轻量版GPT-4o，适合高频简单任务', detail:'上下文长度：128K | 快速响应 | 轻量化', online:true },
+            { id:8, name:'Claude-3.5-Sonnet', vendor:'Anthropic', type:'文本生成', modality:'文本+图像', context:'200K', price:'¥0.08/1K tokens', scenarios:'通用助手,长文本处理,代码生成', release:'2024-06-20', desc:'超长上下文，擅长复杂推理与创意写作', detail:'上下文长度：200K | 超长上下文 | 创意写作', online:true },
+        ];
+
+        const sampleDataApis = [
+            { id:1, name:'企业工商信息查询', type:'要素数据', industry:'通用', scenarios:'企业画像,风险评估', desc:'覆盖全国企业的工商注册、股东、变更等全量信息', online:true },
+            { id:2, name:'知识产权数据', type:'要素数据', industry:'通用', scenarios:'企业画像,风险评估', desc:'专利、商标、软著等知识产权数据查询', online:true },
+            { id:3, name:'企业关系图谱', type:'要素数据', industry:'金融', scenarios:'企业画像,风险评估', desc:'股权穿透、关联方识别、实际控制人分析', online:true },
+            { id:4, name:'招商引资数据', type:'场景数据', industry:'通用', scenarios:'招商引资,产业分析', desc:'全国招商引资项目库，含产业类型、投资规模、落地条件', online:true },
+            { id:5, name:'企业服务数据', type:'场景数据', industry:'通用', scenarios:'精准营销', desc:'企业征信评分、经营异常监控、潜在客户挖掘', online:true },
+            { id:6, name:'精准营销数据', type:'场景数据', industry:'互联网', scenarios:'精准营销', desc:'基于行业标签的企业精准营销数据服务', online:true },
+            { id:7, name:'半导体产业链数据', type:'主题数据', industry:'半导体', scenarios:'产业分析', desc:'半导体设计、制造、封测全产业链企业数据库', online:true },
+            { id:8, name:'人工智能产业数据', type:'主题数据', industry:'人工智能', scenarios:'产业分析', desc:'AI企业投融资、人才流动、技术路线全景数据', online:true },
+            { id:9, name:'新能源产业数据', type:'主题数据', industry:'新能源', scenarios:'产业分析', desc:'光伏、风电、储能、氢能全产业链数据', online:true },
+        ];
+
+        const sampleCloudServices = [
+            { id:1, name:'弹性云服务器 ECS', type:'计算', spec:'2核4G / 4核8G / 8核16G', scenarios:'Web应用,数据分析', desc:'高性能弹性计算服务，按需付费', online:true },
+            { id:2, name:'云存储服务 OBS', type:'存储', spec:'标准/低频/归档', scenarios:'内容分发,备份归档', desc:'海量数据存储，高可靠低延迟', online:true },
+            { id:3, name:'弹性文件服务 SFS', type:'存储', spec:'按量计费', scenarios:'数据分析', desc:'高性能共享文件存储', online:true },
+            { id:4, name:'云数据库 RDS', type:'数据库', spec:'8核32GB / MySQL/PostgreSQL', scenarios:'Web应用', desc:'全托管关系型数据库服务', online:true },
+        ];
+
+        const sampleMarketApps = [
+            { id:1, name:'PAI-DSW（交互式建模）', vendor:'阿里云', category:'AI开发与模型服务', deploy:'云端', billing:'按GPU/CPU时长计费', online:true },
+            { id:2, name:'PAI-DLC（分布式训练）', vendor:'阿里云', category:'AI开发与模型服务', deploy:'云端', billing:'按资源时长计费', online:true },
+            { id:3, name:'PAI-EAS（模型在线服务）', vendor:'阿里云', category:'AI开发与模型服务', deploy:'云端', billing:'按量付费+资源包', online:true },
+            { id:4, name:'扣子（Coze）平台', vendor:'字节跳动', category:'AI开发与模型服务', deploy:'混合', billing:'订阅制（积分）', online:true },
+            { id:5, name:'火山机器学习平台', vendor:'字节跳动', category:'AI开发与模型服务', deploy:'云端', billing:'按资源使用量计费', online:true },
+            { id:6, name:'腾讯云TI平台', vendor:'腾讯云', category:'AI开发与模型服务', deploy:'混合', billing:'按资源使用量计费', online:true },
+            { id:7, name:'CodeBuddy', vendor:'腾讯云', category:'AI开发与模型服务', deploy:'本地/桌面', billing:'订阅制（Credits）', online:true },
+            { id:8, name:'DuMate（百度搭子）', vendor:'百度智能云', category:'办公与创作智能体', deploy:'本地/桌面', billing:'订阅制（积分）', online:true },
+            { id:9, name:'千帆·AppBuilder', vendor:'百度智能云', category:'办公与创作智能体', deploy:'云端', billing:'免费开通+按量付费', online:true },
+            { id:10, name:'Sugar BI', vendor:'百度智能云', category:'办公与创作智能体', deploy:'云端', billing:'订阅制', online:true },
+            { id:11, name:'WorkBuddy', vendor:'腾讯云', category:'办公与创作智能体', deploy:'本地/桌面', billing:'订阅制（Credits）', online:true },
+            { id:12, name:'数据治理平台', vendor:'自营', category:'数据智能与工业互联', deploy:'云端', billing:'订阅制', online:true },
+            { id:13, name:'工业互联网平台', vendor:'自营', category:'数据智能与工业互联', deploy:'混合', billing:'按设备接入量计费', online:true },
+            { id:14, name:'乐享知识库', vendor:'腾讯云', category:'知识管理与智能体开发', deploy:'混合', billing:'按用户数计费', online:true },
+            { id:15, name:'ADP智能体开发平台', vendor:'腾讯云', category:'知识管理与智能体开发', deploy:'混合', billing:'平台订阅制', online:true },
+        ];
+
+        const sampleApprovals = [
+            { id:'AP20260501', user:'李明', userPhone:'138****5678', type:'data-api', typeLabel:'数据API申请', content:'企业工商信息查询 · 调用频率：100次/天', time:'2026-05-15 14:30', status:'approved' },
+            { id:'AP20260502', user:'王芳', userPhone:'139****2345', type:'cloud', typeLabel:'云资源申请', content:'弹性云服务器 ECS · 配置：4核8G', time:'2026-05-16 09:15', status:'pending' },
+            { id:'AP20260503', user:'深圳星辰科技', userPhone:'137****8901', type:'maker', typeLabel:'创客空间入驻', content:'创业方向：AI大模型应用 · 团队：5-10人', time:'2026-05-16 16:45', status:'pending' },
+            { id:'AP20260504', user:'张伟', userPhone:'136****7890', type:'data-api', typeLabel:'数据API申请', content:'半导体产业链数据 · 调用频率：500次/天', time:'2026-05-17 10:20', status:'pending' },
+            { id:'AP20260505', user:'刘洋', userPhone:'135****4567', type:'cloud', typeLabel:'云资源申请', content:'云数据库 RDS · 配置：8核32GB', time:'2026-05-18 11:00', status:'approved' },
+            { id:'AP20260506', user:'赵敏', userPhone:'134****1234', type:'maker', typeLabel:'创客空间入驻', content:'创业方向：智慧医疗 · 团队：10-20人', time:'2026-05-20 08:30', status:'pending' },
+            { id:'AP20260507', user:'陈刚', userPhone:'133****8765', type:'data-api', typeLabel:'数据API申请', content:'人工智能产业数据 · 调用频率：200次/天', time:'2026-05-22 15:10', status:'rejected' },
+        ];
+
+        const sampleUsers = [
+            { id:1, name:'张伟', username:'zhangwei', phone:'136****7890', email:'zhangwei@example.com', avatar:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face', verified:'unverified', createdAt:'2026-03-15' },
+            { id:2, name:'李明', username:'liming', phone:'138****5678', email:'liming@example.com', avatar:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face', verified:'verified', createdAt:'2026-02-20' },
+            { id:3, name:'王芳', username:'wangfang', phone:'139****2345', email:'wangfang@example.com', avatar:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop&crop=face', verified:'enterprise_verified', createdAt:'2026-01-10' },
+            { id:4, name:'刘洋', username:'liuyang', phone:'135****4567', email:'liuyang@example.com', avatar:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face', verified:'pending', createdAt:'2026-04-05' },
+            { id:5, name:'赵敏', username:'zhaomin', phone:'134****1234', email:'zhaomin@example.com', avatar:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face', verified:'verified', createdAt:'2026-03-28' },
+        ];
+
+        const sampleVerifications = [
+            { id:1, userId:1, userName:'张伟', type:'personal', typeLabel:'个人实名认证', name:'张伟', idNumber:'3201**********1234', submitTime:'2026-05-25 10:30', status:'pending' },
+            { id:2, userId:4, userName:'刘洋', type:'enterprise', typeLabel:'企业认证', name:'深圳星辰科技有限公司', idNumber:'91440300********XX', legalPerson:'刘洋', submitTime:'2026-05-24 15:20', status:'pending' },
+            { id:3, userId:6, userName:'陈刚', type:'personal', typeLabel:'个人实名认证', name:'陈刚', idNumber:'4403**********5678', submitTime:'2026-05-23 09:00', status:'pending' },
+        ];
+
+        const sampleEvents = [
+            { id:1, name:'2026 AI创业大赛', date:'2026年6月15日 - 6月20日', location:'线上 + 北京线下', status:'火热报名中', registrations:1234 },
+            { id:2, name:'大模型技术沙龙第12期', date:'2026年6月28日 14:00', location:'线上直播', status:'即将开始', registrations:856 },
+            { id:3, name:'48小时创客马拉松', date:'2026年7月5日 - 7月7日', location:'上海·张江', status:'火热报名中', registrations:567 },
+            { id:4, name:'AI产品路演夜', date:'2026年7月12日 19:00', location:'深圳·南山', status:'名额有限', registrations:12 },
+            { id:5, name:'AI创业者训练营', date:'2026年7月20日 - 7月25日', location:'杭州·未来科技城', status:'即将开始', registrations:234 },
+            { id:6, name:'开源AI贡献者大会', date:'2026年8月8日 - 8月10日', location:'线上 + 成都线下', status:'火热报名中', registrations:1567 },
+        ];
+
+        const sampleEventRegs = [
+            { user:'李明', event:'2026 AI创业大赛', time:'2026-05-20 14:30', status:'已报名' },
+            { user:'王芳', event:'大模型技术沙龙第12期', time:'2026-05-22 10:15', status:'已报名' },
+            { user:'张伟', event:'48小时创客马拉松', time:'2026-05-24 09:00', status:'已取消' },
+            { user:'赵敏', event:'AI创业者训练营', time:'2026-05-26 16:45', status:'已报名' },
+            { user:'李明', event:'开源AI贡献者大会', time:'2026-05-27 11:30', status:'已报名' },
+        ];
+
+        const sampleNews = [
+            { id:1, title:'国务院发布《新一代人工智能发展规划》2026版', category:'政策速递', source:'国务院', time:'2026-05-25', status:'已发布' },
+            { id:2, title:'深圳市出台AI产业扶持新政，最高补贴500万元', category:'政策速递', source:'深圳市工信局', time:'2026-05-22', status:'已发布' },
+            { id:3, title:'大模型在企业级RAG应用中的最佳实践指南', category:'科普好文', source:'云上OPC原创', time:'2026-05-20', status:'已发布' },
+            { id:4, title:'2026年AI Agent发展趋势与技术演进', category:'科普好文', source:'云上OPC原创', time:'2026-05-18', status:'草稿' },
+            { id:5, title:'粤港澳大湾区半导体产业白皮书发布', category:'政策速递', source:'广东省发改委', time:'2026-05-15', status:'已发布' },
+        ];
+
+        const sampleAnnouncements = [
+            '🚀 云上OPC社区全新升级，应用广场正式上线，23项优质应用等你来探索！',
+            '🎉 创客空间入驻通道全面开放，欢迎更多创业者加入OPC生态！',
+            '🤖 AI模型服务上新：新增扣子平台、火山机器学习平台等重磅AI开发工具！',
+        ];
+
+        let currentVerifyId = null;
+
+        // ===== 初始化 =====
+        function init() {
+            renderModelTable();
+            renderDataApiTable();
+            renderCloudTable();
+            renderMarketplaceTable();
+            renderApprovals();
+            renderUsers();
+            renderVerifyTable();
+            renderEventAdminTable();
+            renderEventRegTable();
+            renderNewsTable();
+            renderAnnouncements();
+            setInterval(() => { document.getElementById('lastUpdateTime').textContent = new Date().toLocaleTimeString(); }, 30000);
+        }
+
+        // ===== 模块切换 =====
+        function switchAdminSection(section) {
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            const sec = document.getElementById('sec-' + section);
+            if (sec) sec.classList.add('active');
+            const link = document.querySelector('[data-section="' + section + '"]');
+            if (link) link.classList.add('active');
+        }
+
+        // ===== Toast =====
+        function showToast(msg, type) {
+            type = type || 'success';
+            const colors = { success:'bg-green-500', error:'bg-red-500', info:'bg-blue-500' };
+            const icons = { success:'fa-check-circle', error:'fa-exclamation-circle', info:'fa-info-circle' };
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + (colors[type]||colors.success) + ' text-white px-5 py-3 rounded-lg shadow-lg mb-2 flex items-center space-x-2';
+            toast.innerHTML = '<i class="fas ' + (icons[type]||icons.success) + '"></i><span class="text-sm">' + msg + '</span>';
+            document.getElementById('toastContainer').appendChild(toast);
+            setTimeout(() => { toast.style.opacity='0'; toast.style.transition='opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 2500);
+        }
+
+        // ===== AI模型管理 =====
+        function renderModelTable() {
+            const tbody = document.getElementById('modelTableBody');
+            tbody.innerHTML = sampleModels.map(m => `
+                <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                    <td class="px-5 py-3"><span class="font-medium text-gray-800">${m.name}</span><p class="text-xs text-gray-400 mt-0.5">${m.desc}</p></td>
+                    <td class="px-5 py-3"><span class="badge bg-indigo-50 text-indigo-700">${m.vendor}</span></td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${m.type}<br><span class="text-xs text-gray-400">${m.modality}</span></td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${m.context}</td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${m.price}</td>
+                    <td class="px-5 py-3">${m.online ? '<span class="badge badge-online">已上架</span>' : '<span class="badge badge-offline">已下架</span>'}</td>
+                    <td class="px-5 py-3 text-right">
+                        <button onclick="toggleModelOnline(${m.id})" class="text-xs ${m.online?'text-orange-500 hover:text-orange-700':'text-green-500 hover:text-green-700'} mr-2" title="${m.online?'下架':'上架'}"><i class="fas ${m.online?'fa-eye-slash':'fa-eye'}"></i></button>
+                        <button onclick="editModel(${m.id})" class="text-xs text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteModel(${m.id})" class="text-xs text-red-500 hover:text-red-700"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`).join('');
+        }
+
+        function openModelModal() {
+            document.getElementById('modelModalTitle').textContent = '新增AI模型';
+            document.getElementById('modelEditId').value = '';
+            document.getElementById('modelForm').reset();
+            document.getElementById('modelOnline').checked = true;
+            document.getElementById('modelModalOverlay').classList.add('show');
+        }
+
+        function editModel(id) {
+            const m = sampleModels.find(x => x.id === id);
+            if (!m) return;
+            document.getElementById('modelModalTitle').textContent = '编辑AI模型';
+            document.getElementById('modelEditId').value = m.id;
+            document.getElementById('modelName').value = m.name;
+            document.getElementById('modelVendor').value = m.vendor;
+            document.getElementById('modelType').value = m.type;
+            document.getElementById('modelModality').value = m.modality;
+            document.getElementById('modelContext').value = m.context;
+            document.getElementById('modelPrice').value = m.price;
+            document.getElementById('modelScenarios').value = m.scenarios;
+            document.getElementById('modelRelease').value = m.release;
+            document.getElementById('modelDesc').value = m.desc;
+            document.getElementById('modelDetail').value = m.detail;
+            document.getElementById('modelOnline').checked = m.online;
+            document.getElementById('modelModalOverlay').classList.add('show');
+        }
+
+        function closeModelModal() {
+            document.getElementById('modelModalOverlay').classList.remove('show');
+        }
+
+        function saveModel(e) {
+            e.preventDefault();
+            const editId = document.getElementById('modelEditId').value;
+            const data = {
+                id: editId ? parseInt(editId) : Math.max(...sampleModels.map(x=>x.id)) + 1,
+                name: document.getElementById('modelName').value,
+                vendor: document.getElementById('modelVendor').value,
+                type: document.getElementById('modelType').value,
+                modality: document.getElementById('modelModality').value,
+                context: document.getElementById('modelContext').value,
+                price: document.getElementById('modelPrice').value,
+                scenarios: document.getElementById('modelScenarios').value,
+                release: document.getElementById('modelRelease').value,
+                desc: document.getElementById('modelDesc').value,
+                detail: document.getElementById('modelDetail').value,
+                online: document.getElementById('modelOnline').checked
+            };
+            if (editId) {
+                const idx = sampleModels.findIndex(x => x.id === data.id);
+                if (idx >= 0) sampleModels[idx] = data;
+            } else {
+                sampleModels.push(data);
+            }
+            renderModelTable();
+            closeModelModal();
+            showToast(editId ? '模型更新成功' : '模型添加成功');
+        }
+
+        function toggleModelOnline(id) {
+            const m = sampleModels.find(x => x.id === id);
+            if (m) {
+                m.online = !m.online;
+                renderModelTable();
+                showToast(m.online ? '模型已上架，用户可调用' : '模型已下架', m.online ? 'success' : 'info');
+            }
+        }
+
+        function deleteModel(id) {
+            if (!confirm('确定要删除该模型吗？此操作不可恢复。')) return;
+            const idx = sampleModels.findIndex(x => x.id === id);
+            if (idx >= 0) sampleModels.splice(idx, 1);
+            renderModelTable();
+            showToast('模型已删除', 'error');
+        }
+
+        // ===== 数据API管理 =====
+        function renderDataApiTable() {
+            document.getElementById('dataApiTableBody').innerHTML = sampleDataApis.map(d => `
+                <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                    <td class="px-5 py-3"><span class="font-medium text-gray-800">${d.name}</span></td>
+                    <td class="px-5 py-3"><span class="badge bg-blue-50 text-blue-700">${d.type}</span></td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${d.industry}</td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${d.scenarios}</td>
+                    <td class="px-5 py-3">${d.online ? '<span class="badge badge-online">已上架</span>' : '<span class="badge badge-offline">已下架</span>'}</td>
+                    <td class="px-5 py-3 text-right">
+                        <button onclick="toggleDataApiOnline(${d.id})" class="text-xs ${d.online?'text-orange-500':'text-green-500'} mr-2"><i class="fas ${d.online?'fa-eye-slash':'fa-eye'}"></i></button>
+                        <button onclick="editDataApi(${d.id})" class="text-xs text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteDataApi(${d.id})" class="text-xs text-red-500 hover:text-red-700"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`).join('');
+        }
+
+        function openDataApiModal() {
+            document.getElementById('dataApiModalTitle').textContent = '新增数据API';
+            document.getElementById('dataApiEditId').value = '';
+            document.getElementById('dataApiForm').reset();
+            document.getElementById('dataApiOnline').checked = true;
+            document.getElementById('dataApiModalOverlay').classList.add('show');
+        }
+
+        function editDataApi(id) {
+            const d = sampleDataApis.find(x => x.id === id);
+            if (!d) return;
+            document.getElementById('dataApiModalTitle').textContent = '编辑数据API';
+            document.getElementById('dataApiEditId').value = d.id;
+            document.getElementById('dataApiName').value = d.name;
+            document.getElementById('dataApiType').value = d.type;
+            document.getElementById('dataApiIndustry').value = d.industry;
+            document.getElementById('dataApiScenarios').value = d.scenarios;
+            document.getElementById('dataApiDesc').value = d.desc;
+            document.getElementById('dataApiOnline').checked = d.online;
+            document.getElementById('dataApiModalOverlay').classList.add('show');
+        }
+
+        function closeDataApiModal() { document.getElementById('dataApiModalOverlay').classList.remove('show'); }
+
+        function saveDataApi(e) {
+            e.preventDefault();
+            const editId = document.getElementById('dataApiEditId').value;
+            const data = {
+                id: editId ? parseInt(editId) : Math.max(...sampleDataApis.map(x=>x.id)) + 1,
+                name: document.getElementById('dataApiName').value,
+                type: document.getElementById('dataApiType').value,
+                industry: document.getElementById('dataApiIndustry').value,
+                scenarios: document.getElementById('dataApiScenarios').value,
+                desc: document.getElementById('dataApiDesc').value,
+                online: document.getElementById('dataApiOnline').checked
+            };
+            if (editId) {
+                const idx = sampleDataApis.findIndex(x => x.id === data.id);
+                if (idx >= 0) sampleDataApis[idx] = data;
+            } else {
+                sampleDataApis.push(data);
+            }
+            renderDataApiTable();
+            closeDataApiModal();
+            showToast(editId ? '数据API更新成功' : '数据API添加成功');
+        }
+
+        function toggleDataApiOnline(id) {
+            const d = sampleDataApis.find(x => x.id === id);
+            if (d) { d.online = !d.online; renderDataApiTable(); showToast(d.online?'已上架':'已下架', 'info'); }
+        }
+
+        function deleteDataApi(id) {
+            if (!confirm('确定删除？')) return;
+            const idx = sampleDataApis.findIndex(x => x.id === id);
+            if (idx >= 0) sampleDataApis.splice(idx, 1);
+            renderDataApiTable();
+            showToast('已删除', 'error');
+        }
+
+        // ===== 云资源管理 =====
+        function renderCloudTable() {
+            document.getElementById('cloudTableBody').innerHTML = sampleCloudServices.map(c => `
+                <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                    <td class="px-5 py-3"><span class="font-medium text-gray-800">${c.name}</span></td>
+                    <td class="px-5 py-3"><span class="badge bg-cyan-50 text-cyan-700">${c.type}</span></td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${c.spec}</td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${c.scenarios}</td>
+                    <td class="px-5 py-3">${c.online ? '<span class="badge badge-online">已上架</span>' : '<span class="badge badge-offline">已下架</span>'}</td>
+                    <td class="px-5 py-3 text-right">
+                        <button onclick="toggleCloudOnline(${c.id})" class="text-xs ${c.online?'text-orange-500':'text-green-500'} mr-2"><i class="fas ${c.online?'fa-eye-slash':'fa-eye'}"></i></button>
+                        <button class="text-xs text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button>
+                        <button class="text-xs text-red-500 hover:text-red-700"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`).join('');
+        }
+
+        function openCloudModal() { showToast('云资源管理表单功能已就绪', 'info'); }
+        function toggleCloudOnline(id) {
+            const c = sampleCloudServices.find(x => x.id === id);
+            if (c) { c.online = !c.online; renderCloudTable(); showToast(c.online?'已上架':'已下架', 'info'); }
+        }
+
+        // ===== 应用集市管理 =====
+        function renderMarketplaceTable() {
+            document.getElementById('marketplaceTableBody').innerHTML = sampleMarketApps.map(a => `
+                <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                    <td class="px-5 py-3"><span class="font-medium text-gray-800">${a.name}</span></td>
+                    <td class="px-5 py-3"><span class="badge bg-purple-50 text-purple-700">${a.vendor}</span></td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${a.category}</td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${a.deploy}</td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${a.billing}</td>
+                    <td class="px-5 py-3">${a.online ? '<span class="badge badge-online">上架</span>' : '<span class="badge badge-offline">下架</span>'}</td>
+                    <td class="px-5 py-3 text-right">
+                        <button onclick="toggleMarketAppOnline(${a.id})" class="text-xs ${a.online?'text-orange-500':'text-green-500'} mr-2"><i class="fas ${a.online?'fa-eye-slash':'fa-eye'}"></i></button>
+                        <button class="text-xs text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button>
+                        <button class="text-xs text-red-500 hover:text-red-700"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`).join('');
+        }
+
+        function openMarketplaceModal() { showToast('应用集市管理表单功能已就绪', 'info'); }
+        function toggleMarketAppOnline(id) {
+            const a = sampleMarketApps.find(x => x.id === id);
+            if (a) { a.online = !a.online; renderMarketplaceTable(); showToast(a.online?'已上架':'已下架', 'info'); }
+        }
+
+        // ===== 申请审批 =====
+        function renderApprovals() {
+            const typeFilter = document.getElementById('approvalTypeFilter').value;
+            const statusFilter = document.getElementById('approvalStatusFilter').value;
+            let items = sampleApprovals;
+            if (typeFilter !== 'all') items = items.filter(x => x.type === typeFilter);
+            if (statusFilter !== 'all') items = items.filter(x => x.status === statusFilter);
+            const statusBadge = {
+                pending: '<span class="badge badge-pending">待审批</span>',
+                approved: '<span class="badge badge-approved">已通过</span>',
+                rejected: '<span class="badge badge-rejected">已驳回</span>'
+            };
+            document.getElementById('approvalTableBody').innerHTML = items.map(a => `
+                <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                    <td class="px-5 py-3 font-mono text-xs text-gray-500">${a.id}</td>
+                    <td class="px-5 py-3 text-sm text-gray-800">${a.user}</td>
+                    <td class="px-5 py-3"><span class="badge bg-gray-100 text-gray-700">${a.typeLabel}</span></td>
+                    <td class="px-5 py-3 text-sm text-gray-600 max-w-xs truncate">${a.content}</td>
+                    <td class="px-5 py-3 text-sm text-gray-500">${a.time}</td>
+                    <td class="px-5 py-3">${statusBadge[a.status]||''}</td>
+                    <td class="px-5 py-3 text-right">
+                        ${a.status === 'pending' ? `
+                        <button onclick="approveApplication('${a.id}')" class="text-xs text-green-600 hover:text-green-800 mr-2 font-medium">通过</button>
+                        <button onclick="rejectApplication('${a.id}')" class="text-xs text-red-500 hover:text-red-700 font-medium">驳回</button>` : `
+                        <button onclick="openApprovalDetail('${a.id}')" class="text-xs text-blue-500 hover:text-blue-700">查看详情</button>`}
+                    </td>
+                </tr>`).join('');
+        }
+
+        function approveApplication(id) {
+            const a = sampleApprovals.find(x => x.id === id);
+            if (a) { a.status = 'approved'; renderApprovals(); showToast('申请已通过'); }
+        }
+        function rejectApplication(id) {
+            const a = sampleApprovals.find(x => x.id === id);
+            if (a) { a.status = 'rejected'; renderApprovals(); showToast('申请已驳回', 'error'); }
+        }
+        function openApprovalDetail(id) {
+            const a = sampleApprovals.find(x => x.id === id);
+            if (!a) return;
+            document.getElementById('approvalDetailBody').innerHTML = `
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between"><span class="text-gray-500">申请编号</span><span class="font-medium">${a.id}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">申请人</span><span class="font-medium">${a.user} (${a.userPhone})</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">申请类型</span><span class="font-medium">${a.typeLabel}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">申请内容</span><span class="font-medium">${a.content}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">申请时间</span><span class="font-medium">${a.time}</span></div>
+                </div>`;
+            document.getElementById('approvalDetailActions').innerHTML = a.status === 'pending'
+                ? '<button onclick="approveApplication(\''+a.id+'\');closeApprovalDetail();" class="px-5 py-2 bg-success text-white rounded-lg text-sm font-semibold">通过</button><button onclick="rejectApplication(\''+a.id+'\');closeApprovalDetail();" class="px-5 py-2 border border-danger text-danger rounded-lg text-sm font-semibold">驳回</button>'
+                : '';
+            document.getElementById('approvalDetailOverlay').classList.add('show');
+        }
+        function closeApprovalDetail() { document.getElementById('approvalDetailOverlay').classList.remove('show'); }
+
+        // ===== 用户管理 =====
+        function renderUsers() {
+            const search = (document.getElementById('userSearch').value || '').toLowerCase();
+            let items = sampleUsers;
+            if (search) items = items.filter(u => u.name.toLowerCase().includes(search) || u.phone.includes(search));
+            const vLabels = { unverified:'<span class="badge badge-offline">未认证</span>', pending:'<span class="badge badge-pending">审核中</span>', verified:'<span class="badge badge-online">个人认证</span>', enterprise_verified:'<span class="badge badge-online">企业认证</span>' };
+            document.getElementById('userTableBody').innerHTML = items.map(u => `
+                <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                    <td class="px-5 py-3"><div class="flex items-center space-x-3"><img src="${u.avatar}" alt="${u.name}" class="w-8 h-8 rounded-full object-cover"><div><span class="font-medium text-gray-800">${u.name}</span><p class="text-xs text-gray-400">${u.username}</p></div></div></td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${u.phone}</td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${u.email}</td>
+                    <td class="px-5 py-3">${vLabels[u.verified]||''}</td>
+                    <td class="px-5 py-3 text-sm text-gray-500">${u.createdAt}</td>
+                    <td class="px-5 py-3 text-right"><button onclick="viewUserDetail(${u.id})" class="text-xs text-blue-500 hover:text-blue-700">查看详情</button></td>
+                </tr>`).join('');
+        }
+
+        function viewUserDetail(id) {
+            const u = sampleUsers.find(x => x.id === id);
+            if (!u) return;
+            const vLabels = { unverified:'未认证', pending:'审核中', verified:'个人实名认证', enterprise_verified:'企业认证' };
+            showToast(`${u.name} · ${vLabels[u.verified]||'未认证'} · ${u.email}`, 'info');
+        }
+
+        // ===== 实名认证审核 =====
+        function renderVerifyTable() {
+            document.getElementById('verifyTableBody').innerHTML = sampleVerifications.map(v => `
+                <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                    <td class="px-5 py-3 text-sm font-medium text-gray-800">${v.userName}</td>
+                    <td class="px-5 py-3"><span class="badge ${v.type==='personal'?'bg-blue-50 text-blue-700':'bg-purple-50 text-purple-700'}">${v.typeLabel}</span></td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${v.name}</td>
+                    <td class="px-5 py-3 text-sm text-gray-400 font-mono">${v.idNumber}</td>
+                    <td class="px-5 py-3 text-sm text-gray-500">${v.submitTime}</td>
+                    <td class="px-5 py-3"><span class="badge badge-pending">待审核</span></td>
+                    <td class="px-5 py-3 text-right"><button onclick="openVerifyDetail(${v.id})" class="text-xs bg-primary text-white px-3 py-1 rounded-lg hover:bg-primary-dark transition">审核</button></td>
+                </tr>`).join('');
+        }
+
+        function openVerifyDetail(id) {
+            currentVerifyId = id;
+            const v = sampleVerifications.find(x => x.id === id);
+            if (!v) return;
+            document.getElementById('verifyDetailBody').innerHTML = `
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between"><span class="text-gray-500">认证类型</span><span class="badge ${v.type==='personal'?'bg-blue-50 text-blue-700':'bg-purple-50 text-purple-700'}">${v.typeLabel}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">申请人</span><span class="font-medium">${v.userName}</span></div>
+                    ${v.type==='personal' ? `
+                    <div class="flex justify-between"><span class="text-gray-500">姓名</span><span class="font-medium">${v.name}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">身份证号</span><span class="font-medium font-mono">${v.idNumber}</span></div>` : `
+                    <div class="flex justify-between"><span class="text-gray-500">企业名称</span><span class="font-medium">${v.name}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">统一社会信用代码</span><span class="font-medium font-mono">${v.idNumber}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">法人姓名</span><span class="font-medium">${v.legalPerson||'--'}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">营业执照</span><span class="text-blue-500 cursor-pointer"><i class="fas fa-file-image mr-1"></i>查看附件</span></div>`}
+                    <div class="flex justify-between"><span class="text-gray-500">提交时间</span><span class="font-medium">${v.submitTime}</span></div>
+                </div>`;
+            document.getElementById('verifyDetailOverlay').classList.add('show');
+        }
+
+        function closeVerifyDetail() { document.getElementById('verifyDetailOverlay').classList.remove('show'); currentVerifyId = null; }
+
+        function approveVerify() {
+            if (!currentVerifyId) return;
+            const v = sampleVerifications.find(x => x.id === currentVerifyId);
+            const idx = sampleVerifications.findIndex(x => x.id === currentVerifyId);
+            if (v && idx >= 0) {
+                v.status = 'approved';
+                const u = sampleUsers.find(x => x.id === v.userId);
+                if (u) u.verified = v.type === 'enterprise' ? 'enterprise_verified' : 'verified';
+                sampleVerifications.splice(idx, 1);
+                renderVerifyTable();
+                renderUsers();
+                closeVerifyDetail();
+                showToast('认证审核已通过');
+            }
+        }
+
+        function rejectVerify() {
+            if (!currentVerifyId) return;
+            const idx = sampleVerifications.findIndex(x => x.id === currentVerifyId);
+            if (idx >= 0) sampleVerifications.splice(idx, 1);
+            renderVerifyTable();
+            closeVerifyDetail();
+            showToast('认证申请已驳回', 'error');
+        }
+
+        // ===== 活动管理 =====
+        function renderEventAdminTable() {
+            document.getElementById('eventAdminTableBody').innerHTML = sampleEvents.map(e => `
+                <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                    <td class="px-5 py-3 font-medium text-gray-800">${e.name}</td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${e.date}</td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${e.location}</td>
+                    <td class="px-5 py-3 text-sm font-semibold text-primary">${e.registrations}</td>
+                    <td class="px-5 py-3"><span class="badge ${e.status==='火热报名中'?'badge-online':'bg-blue-50 text-blue-700'}">${e.status}</span></td>
+                    <td class="px-5 py-3 text-right">
+                        <button class="text-xs text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button>
+                        <button class="text-xs text-red-500 hover:text-red-700"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`).join('');
+        }
+
+        function renderEventRegTable() {
+            document.getElementById('eventRegTableBody').innerHTML = sampleEventRegs.map(r => `
+                <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                    <td class="px-5 py-3 text-sm text-gray-800">${r.user}</td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${r.event}</td>
+                    <td class="px-5 py-3 text-sm text-gray-500">${r.time}</td>
+                    <td class="px-5 py-3"><span class="badge ${r.status==='已报名'?'badge-online':'bg-gray-100 text-gray-600'}">${r.status}</span></td>
+                </tr>`).join('');
+        }
+
+        function openEventModal() { showToast('活动管理表单功能已就绪', 'info'); }
+
+        // ===== 新闻资讯管理 =====
+        function renderNewsTable() {
+            document.getElementById('newsTableBody').innerHTML = sampleNews.map(n => `
+                <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                    <td class="px-5 py-3 font-medium text-gray-800 max-w-xs truncate">${n.title}</td>
+                    <td class="px-5 py-3"><span class="badge ${n.category==='政策速递'?'bg-red-50 text-red-700':'bg-blue-50 text-blue-700'}">${n.category}</span></td>
+                    <td class="px-5 py-3 text-sm text-gray-600">${n.source}</td>
+                    <td class="px-5 py-3 text-sm text-gray-500">${n.time}</td>
+                    <td class="px-5 py-3"><span class="badge ${n.status==='已发布'?'badge-online':'badge-draft'}">${n.status}</span></td>
+                    <td class="px-5 py-3 text-right">
+                        <button class="text-xs text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button>
+                        <button class="text-xs ${n.status==='草稿'?'text-green-500 hover:text-green-700':'text-orange-500 hover:text-orange-700'} mr-2"><i class="fas ${n.status==='草稿'?'fa-paper-plane':'fa-pen'}"></i></button>
+                        <button class="text-xs text-red-500 hover:text-red-700"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`).join('');
+        }
+
+        function openNewsModal() { showToast('新闻资讯编辑功能已就绪', 'info'); }
+
+        // ===== 公告管理 =====
+        function renderAnnouncements() {
+            document.getElementById('announcementList').innerHTML = sampleAnnouncements.map((a, i) => `
+                <div class="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-2.5">
+                    <span class="text-sm text-gray-700">${a}</span>
+                    <button onclick="deleteAnnouncement(${i})" class="text-red-400 hover:text-red-600 text-sm"><i class="fas fa-trash-alt"></i></button>
+                </div>`).join('');
+        }
+
+        function addAnnouncement() {
+            const input = document.getElementById('newAnnouncement');
+            const val = input.value.trim();
+            if (!val) { showToast('请输入公告内容', 'error'); return; }
+            sampleAnnouncements.push(val);
+            input.value = '';
+            renderAnnouncements();
+            showToast('公告已添加');
+        }
+
+        function deleteAnnouncement(idx) {
+            sampleAnnouncements.splice(idx, 1);
+            renderAnnouncements();
+            showToast('公告已删除', 'error');
+        }
+
+        // ===== 弹窗关闭 =====
+        document.addEventListener('click', function(e) {
+            if (e.target.id === 'modelModalOverlay') closeModelModal();
+            if (e.target.id === 'dataApiModalOverlay') closeDataApiModal();
+            if (e.target.id === 'approvalDetailOverlay') closeApprovalDetail();
+            if (e.target.id === 'verifyDetailOverlay') closeVerifyDetail();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModelModal();
+                closeDataApiModal();
+                closeApprovalDetail();
+                closeVerifyDetail();
+            }
+        });
+
+        // ===== 侧边栏 =====
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.style.display === 'none') {
+                sidebar.style.display = 'block';
+            } else {
+                sidebar.style.display = 'none';
+            }
+        });
+
+        init();
+    </script>
+</body>
+</html>

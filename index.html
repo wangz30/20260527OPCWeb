@@ -34,6 +34,17 @@
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         .article-card { transition: all 0.3s ease; border: 1px solid #f3f4f6; }
+        @keyframes announcement-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .announcement-track {
+            animation: announcement-scroll 30s linear infinite;
+            display: inline-flex;
+        }
+        .announcement-track.paused {
+            animation-play-state: paused;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -163,7 +174,7 @@
     <div class="bg-primary/5 border-b border-primary/10 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center">
             <span class="flex-shrink-0 bg-primary text-white text-xs px-3 py-1 rounded-full font-medium mr-4">公告</span>
-            <div class="overflow-hidden flex-1 relative h-6">
+            <div class="overflow-hidden flex-1">
                 <div class="announcement-track whitespace-nowrap text-sm text-gray-600" id="announcementTrack">
                     <span class="mr-16">🚀 云上OPC社区全新升级，应用广场正式上线，23项优质应用等你来探索！</span>
                     <span class="mr-16">📢 创客空间入驻通道全面开放，欢迎更多创业者加入OPC生态！</span>
@@ -177,27 +188,11 @@
     (function() {
         var track = document.getElementById('announcementTrack');
         if (!track) return;
-        var speed = 0.8;
-        var animId = null;
-        var isHover = false;
-
         // 克隆一份内容实现无缝循环
         track.innerHTML += track.innerHTML;
-
         var container = track.parentElement;
-        container.addEventListener('mouseenter', function() { isHover = true; });
-        container.addEventListener('mouseleave', function() { isHover = false; });
-
-        function scroll() {
-            if (!isHover) {
-                track.scrollLeft += speed;
-                if (track.scrollLeft >= track.scrollWidth / 2) {
-                    track.scrollLeft = 0;
-                }
-            }
-            animId = requestAnimationFrame(scroll);
-        }
-        scroll();
+        container.addEventListener('mouseenter', function() { track.classList.add('paused'); });
+        container.addEventListener('mouseleave', function() { track.classList.remove('paused'); });
     })();
     </script>
 
@@ -258,11 +253,11 @@
         </div>
     </section>
 
-    <!-- 前沿资讯 -->
+    <!-- 新闻资讯 -->
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-secondary mb-4">前沿资讯</h2>
+                <h2 class="text-3xl font-bold text-secondary mb-4">新闻资讯</h2>
                 <p class="text-gray-600 text-lg mb-4">聚焦AI产业政策、技术科普与创业方法论</p>
                 <a href="news.html" class="inline-flex items-center space-x-2 text-primary hover:text-primary-dark font-medium transition group">
                     <span>查看更多</span>
@@ -514,7 +509,7 @@
         // 启动轮播
         startCarousel();
 
-        // 前沿资讯 - 瀑布流卡片
+        // 新闻资讯 - 瀑布流卡片
         (function renderNewsSection() {
             const articles = [
                 {

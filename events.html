@@ -162,7 +162,7 @@
                             </div>
                             <span class="text-primary font-medium">已报名 1,234 人</span>
                         </div>
-                        <button class="w-full mt-4 bg-primary text-white py-2 rounded-lg hover:bg-purple-700 transition" onclick="withAuthChain({action: '2026 AI创业大赛报名', callbackName: 'showRegisterModal', args: ['2026 AI创业大赛', '2026年6月15日 - 6月20日', '线上 + 北京线下']})">
+                        <button class="w-full mt-4 bg-primary text-white py-2 rounded-lg hover:bg-purple-700 transition" onclick="handleEventRegister('2026 AI创业大赛', '2026年6月15日 - 6月20日', '线上 + 北京线下')">
                             立即报名
                         </button>
                     </div>
@@ -190,7 +190,7 @@
                             </div>
                             <span class="text-primary font-medium">已报名 856 人</span>
                         </div>
-                        <button class="w-full mt-4 bg-primary text-white py-2 rounded-lg hover:bg-purple-700 transition" onclick="withAuthChain({action: '大模型技术沙龙报名', callbackName: 'showRegisterModal', args: ['大模型技术沙龙第12期', '2026年6月28日 14:00', '线上直播']})">
+                        <button class="w-full mt-4 bg-primary text-white py-2 rounded-lg hover:bg-purple-700 transition" onclick="handleEventRegister('大模型技术沙龙第12期', '2026年6月28日 14:00', '线上直播')">
                             立即报名
                         </button>
                     </div>
@@ -218,7 +218,7 @@
                             </div>
                             <span class="text-primary font-medium">已报名 567 人</span>
                         </div>
-                        <button class="w-full mt-4 bg-primary text-white py-2 rounded-lg hover:bg-purple-700 transition" onclick="withAuthChain({action: '48小时创客马拉松报名', callbackName: 'showRegisterModal', args: ['48小时创客马拉松', '2026年7月5日 - 7月7日', '上海·张江']})">
+                        <button class="w-full mt-4 bg-primary text-white py-2 rounded-lg hover:bg-purple-700 transition" onclick="handleEventRegister('48小时创客马拉松', '2026年7月5日 - 7月7日', '上海·张江')">
                             立即报名
                         </button>
                     </div>
@@ -246,7 +246,7 @@
                             </div>
                             <span class="text-primary font-medium">剩余 12 个名额</span>
                         </div>
-                        <button class="w-full mt-4 bg-primary text-white py-2 rounded-lg hover:bg-purple-700 transition" onclick="withAuthChain({action: 'AI产品路演夜报名', callbackName: 'showRegisterModal', args: ['AI产品路演夜', '2026年7月12日 19:00', '深圳·南山']})">
+                        <button class="w-full mt-4 bg-primary text-white py-2 rounded-lg hover:bg-purple-700 transition" onclick="handleEventRegister('AI产品路演夜', '2026年7月12日 19:00', '深圳·南山')">
                             立即报名
                         </button>
                     </div>
@@ -274,7 +274,7 @@
                             </div>
                             <span class="text-primary font-medium">已报名 234 人</span>
                         </div>
-                        <button class="w-full mt-4 bg-primary text-white py-2 rounded-lg hover:bg-purple-700 transition" onclick="withAuthChain({action: 'AI创业者训练营报名', callbackName: 'showRegisterModal', args: ['AI创业者训练营', '2026年7月20日 - 7月25日', '杭州·未来科技城']})">
+                        <button class="w-full mt-4 bg-primary text-white py-2 rounded-lg hover:bg-purple-700 transition" onclick="handleEventRegister('AI创业者训练营', '2026年7月20日 - 7月25日', '杭州·未来科技城')">
                             立即报名
                         </button>
                     </div>
@@ -302,7 +302,7 @@
                             </div>
                             <span class="text-primary font-medium">已报名 1,567 人</span>
                         </div>
-                        <button class="w-full mt-4 bg-primary text-white py-2 rounded-lg hover:bg-purple-700 transition" onclick="withAuthChain({action: '开源AI贡献者大会报名', callbackName: 'showRegisterModal', args: ['开源AI贡献者大会', '2026年8月8日 - 8月10日', '线上 + 成都线下']})">
+                        <button class="w-full mt-4 bg-primary text-white py-2 rounded-lg hover:bg-purple-700 transition" onclick="handleEventRegister('开源AI贡献者大会', '2026年8月8日 - 8月10日', '线上 + 成都线下')">
                             立即报名
                         </button>
                     </div>
@@ -517,6 +517,36 @@
             if (targetBtn) {
                 targetBtn.classList.add('active');
             }
+        }
+
+        function handleEventRegister(eventName, eventDate, eventLocation) {
+            if (!AppState.isLoggedIn) {
+                showAuthModal({
+                    title: '请先登录',
+                    message: '请先登录或注册账号后再进行报名。',
+                    icon: 'fa-lock',
+                    btnText: '去登录',
+                    next: 'login'
+                });
+                return false;
+            }
+            currentEventData = { eventName: eventName, eventDate: eventDate, eventLocation: eventLocation };
+            saveEventRegistration(currentEventData);
+            document.getElementById('registerModalTitle').textContent = '报名成功';
+            document.getElementById('registerModalBody').innerHTML =
+                '<div class="text-center py-4">' +
+                    '<div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">' +
+                        '<i class="fas fa-check-circle text-3xl text-green-500"></i>' +
+                    '</div>' +
+                    '<p class="text-gray-700 font-medium mb-2">报名成功！</p>' +
+                    '<p class="text-gray-500 text-sm mb-6">您可在个人中心的活动报名板块查看报名状态与活动详情。</p>' +
+                    '<div class="space-y-3">' +
+                        '<a href="profile.html#my-events" class="block w-full bg-primary text-white py-3 rounded-lg hover:bg-purple-700 transition font-medium">前往个人中心查看</a>' +
+                        '<button onclick="closeRegisterModal()" class="w-full border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition">关闭</button>' +
+                    '</div>' +
+                '</div>';
+            document.getElementById('registerModal').classList.remove('hidden');
+            document.getElementById('registerModal').classList.add('flex');
         }
 
         // 报名弹窗
