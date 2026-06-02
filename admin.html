@@ -74,6 +74,8 @@
 
             <a href="#" onclick="switchSection('approvals')" class="sidebar-link" data-section="approvals"><i class="fas fa-clipboard-check w-5 text-center"></i>审批管理<span class="ml-auto bg-danger text-white text-xs px-1.5 py-0.5 rounded-full">3</span></a>
 
+            <a href="#" onclick="switchSection('events')" class="sidebar-link" data-section="events"><i class="fas fa-calendar-alt w-5 text-center"></i>活动管理</a>
+
             <a href="#" onclick="switchSection('orders')" class="sidebar-link" data-section="orders"><i class="fas fa-receipt w-5 text-center"></i>订单管理</a>
 
             <div class="sidebar-group">
@@ -131,6 +133,12 @@
         <section id="sec-news" class="admin-section">
             <div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-bold text-secondary">新闻资讯管理</h2><p class="text-sm text-gray-500 mt-1">管理政策速递与科普好文</p></div><div class="flex items-center space-x-2"><button onclick="openNewsCategoryModal()" class="border border-gray-200 text-gray-600 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition"><i class="fas fa-tags mr-1.5"></i>分类管理</button><button onclick="openNewsModal()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition"><i class="fas fa-plus mr-1.5"></i>新建资讯</button></div></div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">标题</th><th class="text-left px-5 py-3">分类</th><th class="text-left px-5 py-3">发布主体</th><th class="text-left px-5 py-3">发布时间</th><th class="text-left px-5 py-3">状态</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="newsTableBody"></tbody></table></div>
+        </section>
+
+        <!-- ========== 内容管理 > 活动管理 ========== -->
+        <section id="sec-events" class="admin-section">
+            <div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-bold text-secondary">活动管理</h2><p class="text-sm text-gray-500 mt-1">管理主站「社区活动」板块的活动上下架与内容</p></div><div class="flex items-center space-x-2"><button onclick="openEventModal()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition"><i class="fas fa-plus mr-1.5"></i>新建活动</button></div></div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">活动名称</th><th class="text-left px-5 py-3">封面</th><th class="text-left px-5 py-3">活动时间</th><th class="text-left px-5 py-3">活动地点</th><th class="text-left px-5 py-3">状态标签</th><th class="text-left px-5 py-3">已报名</th><th class="text-left px-5 py-3">上下架</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="eventTableBody"></tbody></table></div>
         </section>
 
         <!-- ========== 服务管理 > AI模型服务 ========== -->
@@ -317,6 +325,24 @@
             <div><label class="text-sm font-medium text-gray-600 block mb-1">文字介绍</label><textarea id="newsIntro" rows="3" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></textarea></div>
             <div class="flex items-center space-x-3"><label class="text-sm font-medium text-gray-600">发布状态</label><label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" id="newsPublished" checked class="w-4 h-4 text-primary rounded"><span class="text-sm text-gray-600">立即发布</span></label></div>
             <div class="flex justify-end space-x-3 pt-2"><button type="button" onclick="closeModal('newsModalOverlay')" class="px-5 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">取消</button><button type="submit" class="px-5 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-dark">保存</button></div>
+        </form>
+    </div>
+</div>
+
+<!-- 活动表单弹窗 -->
+<div id="eventModalOverlay" class="modal-overlay fixed inset-0 bg-black/50 items-center justify-center z-50">
+    <div class="bg-white rounded-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div class="flex items-center justify-between p-5 border-b border-gray-100"><h3 class="text-lg font-bold text-secondary" id="eventModalTitle">新建活动</h3><button onclick="closeModal('eventModalOverlay')" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"><i class="fas fa-times text-gray-400"></i></button></div>
+        <form id="eventForm" class="p-5 space-y-4" onsubmit="saveEvent(event)">
+            <input type="hidden" id="eventEditId">
+            <div><label class="text-sm font-medium text-gray-600 block mb-1">活动名称 *</label><input type="text" id="eventName" required class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></div>
+            <div><label class="text-sm font-medium text-gray-600 block mb-1">封面图URL *</label><input type="text" id="eventCover" required class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="https://..."></div>
+            <div class="grid grid-cols-2 gap-4"><div><label class="text-sm font-medium text-gray-600 block mb-1">活动时间 *</label><input type="text" id="eventDate" required class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="如：2026年7月5日 - 7月7日"></div><div><label class="text-sm font-medium text-gray-600 block mb-1">活动地点 *</label><input type="text" id="eventLocation" required class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="如：线上 + 北京线下"></div></div>
+            <div class="grid grid-cols-3 gap-4"><div><label class="text-sm font-medium text-gray-600 block mb-1">状态标签</label><input type="text" id="eventTag" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="如：火热报名中"></div><div><label class="text-sm font-medium text-gray-600 block mb-1">标签颜色</label><select id="eventTagColor" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="red">红色</option><option value="green">绿色</option><option value="yellow">黄色</option><option value="blue">蓝色</option><option value="gray">灰色</option></select></div><div><label class="text-sm font-medium text-gray-600 block mb-1">已报名人数</label><input type="number" id="eventRegistrants" min="0" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="0"></div></div>
+            <div><label class="text-sm font-medium text-gray-600 block mb-1">活动介绍 *</label><textarea id="eventIntro" rows="3" required class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"></textarea></div>
+            <div><label class="text-sm font-medium text-gray-600 block mb-1">回顾文章链接（可选）</label><input type="url" id="eventLink" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="https://... 适用于往期回顾活动"></div>
+            <div class="flex items-center space-x-3"><label class="text-sm font-medium text-gray-600">上下架</label><label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" id="eventPublished" checked class="w-4 h-4 text-primary rounded"><span class="text-sm text-gray-600">上架展示</span></label></div>
+            <div class="flex justify-end space-x-3 pt-2"><button type="button" onclick="closeModal('eventModalOverlay')" class="px-5 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">取消</button><button type="submit" class="px-5 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-dark">保存</button></div>
         </form>
     </div>
 </div>
@@ -551,6 +577,17 @@ const sampleNews = [
     {id:5,title:'粤港澳大湾区半导体产业白皮书发布',category:'政策速递',source:'广东省发改委',time:'2026-05-15',image:'',intro:'大湾区半导体产业白皮书正式发布，全面梳理了区域半导体产业的发展现状。',link:'https://example.com/news/5',published:true},
 ];
 
+const sampleEvents = [
+    {id:1,name:'2026 AI创业大赛',cover:'https://images.unsplash.com/photo-1544531586-fde5298cdd40?w=600&h=300&fit=crop',date:'2026年6月15日 - 6月20日',location:'线上 + 北京线下',tag:'火热报名中',tagColor:'red',registrants:1234,intro:'面向全球AI创业者的顶级赛事，提供百万级启动资金和专业导师辅导，助力AI项目从0到1。',link:'',published:true},
+    {id:2,name:'大模型技术沙龙第12期',cover:'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&h=300&fit=crop',date:'2026年6月28日 14:00',location:'线上直播',tag:'即将开始',tagColor:'green',registrants:856,intro:'深入探讨LLM微调、RAG应用与Agent构建，邀请行业专家分享实战经验与技术洞察。',link:'',published:true},
+    {id:3,name:'48小时创客马拉松',cover:'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&h=300&fit=crop',date:'2026年7月5日 - 7月7日',location:'上海·张江',tag:'火热报名中',tagColor:'red',registrants:567,intro:'限时48小时，组队完成AI产品原型。提供算力支持、导师指导和展示舞台。',link:'',published:true},
+    {id:4,name:'AI产品路演夜',cover:'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&h=300&fit=crop',date:'2026年7月12日 19:00',location:'深圳·南山',tag:'名额有限',tagColor:'yellow',registrants:188,intro:'展示你的AI产品，获得投资人反馈。每期精选6个项目，限时10分钟路演。',link:'',published:true},
+    {id:5,name:'AI创业者训练营',cover:'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=300&fit=crop',date:'2026年7月20日 - 7月25日',location:'杭州·未来科技城',tag:'即将开始',tagColor:'green',registrants:234,intro:'为期一周的密集培训，涵盖产品、技术、商业、融资四大模块，助力创业者系统成长。',link:'',published:true},
+    {id:6,name:'开源AI贡献者大会',cover:'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&h=300&fit=crop',date:'2026年8月8日 - 8月10日',location:'线上 + 成都线下',tag:'火热报名中',tagColor:'red',registrants:1567,intro:'连接开源社区力量，分享贡献经验，共同推动开源AI生态发展。',link:'',published:true},
+    {id:7,name:'第二期：AI公司老板模拟器',cover:'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=300&fit=crop',date:'2026年4月15日',location:'线上活动',tag:'已结束',tagColor:'gray',registrants:1000,intro:'以《AI公司老板模拟器》为主题，吸引上千人在线参与。围绕AI工作流搭建、OPC自媒体创业案例拆解、一人公司法务合规等核心话题展开实战分享。',link:'https://mp.weixin.qq.com/s/taRUBCHaR77kzLaocG2zZQ',published:true},
+    {id:8,name:'首期：门槛消失——为什么现在人人都在开AI公司？',cover:'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&h=300&fit=crop',date:'2026年4月3日',location:'线上活动',tag:'已结束',tagColor:'gray',registrants:1000,intro:'以"门槛消失：为什么现在人人都在开AI公司？"为主题，五位实战嘉宾围绕AI工具赋能、大模型工程化落地、AI安全合规等话题深度分享，开启社区系列交流序章。',link:'https://mp.weixin.qq.com/s/9-sEWL85GmrXipj3bUQjJw',published:true},
+];
+
 let announcements = [
     {text:'🚀 云上OPC社区全新升级，应用广场正式上线，23项优质应用等你来探索！',published:true},
     {text:'🎉 创客空间入驻通道全面开放，欢迎更多创业者加入OPC生态！',published:true},
@@ -592,7 +629,7 @@ function init(){
     renderModelTable(); renderDataApiTable(); renderCloudTable(); renderApprovals();
     renderFormTable(); renderOrders();
     renderUserAccounts(); renderUserBalance(); renderTenantAccounts(); renderTenantBalance();
-    renderNewsTable(); renderAnnouncements(); renderHomepageBanners();
+    renderNewsTable(); renderAnnouncements(); renderHomepageBanners(); renderEventTable();
     switchSection('homepage');
 }
 
@@ -1178,6 +1215,26 @@ function saveNews(e){
 }
 function deleteNews(id){if(!confirm('确定删除？'))return;const i=sampleNews.findIndex(x=>x.id===id);if(i>=0)sampleNews.splice(i,1);renderNewsTable();showToast('已删除','error')}
 function toggleNewsPublish(id){const n=sampleNews.find(x=>x.id===id);if(n){n.published=!n.published;renderNewsTable();showToast(n.published?'资讯已上架':'资讯已下架','info')}}
+
+// ========== 活动管理 ==========
+function renderEventTable(){
+    const tagColorMap={'red':'bg-red-500','green':'bg-green-500','yellow':'bg-yellow-500','blue':'bg-blue-500','gray':'bg-gray-600'};
+    document.getElementById('eventTableBody').innerHTML=sampleEvents.map(e=>'<tr class="border-b border-gray-50 hover:bg-gray-50/50"><td class="px-5 py-3"><span class="font-medium text-gray-800">'+e.name+'</span><p class="text-xs text-gray-400 mt-0.5 max-w-xs truncate">'+e.intro+'</p></td><td class="px-5 py-3"><img src="'+e.cover+'" alt="'+e.name+'" class="w-20 h-12 object-cover rounded"></td><td class="px-5 py-3 text-sm text-gray-600">'+e.date+'</td><td class="px-5 py-3 text-sm text-gray-600">'+e.location+'</td><td class="px-5 py-3"><span class="badge '+(tagColorMap[e.tagColor]||'bg-gray-500')+' text-white">'+e.tag+'</span></td><td class="px-5 py-3 text-sm text-gray-600">'+e.registrants+' 人</td><td class="px-5 py-3">'+(e.published?'<span class="badge badge-success">已上架</span>':'<span class="badge badge-gray">已下架</span>')+'</td><td class="px-5 py-3 text-right"><button onclick="toggleEventPublish('+e.id+')" class="text-xs '+(e.published?'text-orange-500':'text-green-500')+' mr-2" title="'+(e.published?'下架':'上架')+'"><i class="fas '+(e.published?'fa-eye-slash':'fa-eye')+'"></i></button><button onclick="editEvent('+e.id+')" class="text-xs text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button><button onclick="deleteEvent('+e.id+')" class="text-xs text-red-500 hover:text-red-700"><i class="fas fa-trash-alt"></i></button></td></tr>').join('');
+}
+function openEventModal(){
+    document.getElementById('eventModalTitle').textContent='新建活动'; document.getElementById('eventEditId').value='';
+    document.getElementById('eventForm').reset(); document.getElementById('eventPublished').checked=true;
+    document.getElementById('eventModalOverlay').classList.add('show');
+}
+function editEvent(id){const e=sampleEvents.find(x=>x.id===id);if(!e)return;document.getElementById('eventModalTitle').textContent='编辑活动';document.getElementById('eventEditId').value=e.id;document.getElementById('eventName').value=e.name;document.getElementById('eventCover').value=e.cover;document.getElementById('eventDate').value=e.date;document.getElementById('eventLocation').value=e.location;document.getElementById('eventTag').value=e.tag;document.getElementById('eventTagColor').value=e.tagColor;document.getElementById('eventRegistrants').value=e.registrants;document.getElementById('eventIntro').value=e.intro;document.getElementById('eventLink').value=e.link||'';document.getElementById('eventPublished').checked=e.published;document.getElementById('eventModalOverlay').classList.add('show')}
+function saveEvent(e){
+    e.preventDefault(); const editId=document.getElementById('eventEditId').value;
+    const data={id:editId?parseInt(editId):Math.max(...sampleEvents.map(x=>x.id))+1,name:document.getElementById('eventName').value,cover:document.getElementById('eventCover').value,date:document.getElementById('eventDate').value,location:document.getElementById('eventLocation').value,tag:document.getElementById('eventTag').value,tagColor:document.getElementById('eventTagColor').value,registrants:parseInt(document.getElementById('eventRegistrants').value)||0,intro:document.getElementById('eventIntro').value,link:document.getElementById('eventLink').value,published:document.getElementById('eventPublished').checked};
+    if(editId){const i=sampleEvents.findIndex(x=>x.id===data.id);if(i>=0)sampleEvents[i]=data}else{sampleEvents.push(data)}
+    renderEventTable(); closeModal('eventModalOverlay'); showToast(editId?'活动已更新':'活动已创建');
+}
+function deleteEvent(id){if(!confirm('确定删除？'))return;const i=sampleEvents.findIndex(x=>x.id===id);if(i>=0)sampleEvents.splice(i,1);renderEventTable();showToast('已删除','error')}
+function toggleEventPublish(id){const e=sampleEvents.find(x=>x.id===id);if(e){e.published=!e.published;renderEventTable();showToast(e.published?'活动已上架':'活动已下架','info')}}
 function openNewsCategoryModal(){
     currentCategoryKey='newsCategories';
     document.getElementById('categoryModalTitle').textContent='新闻资讯分类管理';
@@ -1268,10 +1325,10 @@ function deleteCategoryItem(i){
 
 // ========== 弹窗关闭 ==========
 document.addEventListener('click',function(e){
-    const overlays=['userDetailOverlay','tenantDetailOverlay','approvalResultOverlay','bannerPreviewOverlay','homepageBannerOverlay','modelModalOverlay','dataApiModalOverlay','cloudModalOverlay','approvalDetailOverlay','createApplicationOverlay','newsModalOverlay','createUserOverlay','batchImportOverlay','createTenantOverlay','balanceAdjustOverlay','categoryModalOverlay'];
+    const overlays=['userDetailOverlay','tenantDetailOverlay','approvalResultOverlay','bannerPreviewOverlay','homepageBannerOverlay','modelModalOverlay','dataApiModalOverlay','cloudModalOverlay','approvalDetailOverlay','createApplicationOverlay','newsModalOverlay','eventModalOverlay','createUserOverlay','batchImportOverlay','createTenantOverlay','balanceAdjustOverlay','categoryModalOverlay'];
     overlays.forEach(id=>{if(e.target.id===id)closeModal(id)});
 });
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){['userDetailOverlay','tenantDetailOverlay','approvalResultOverlay','bannerPreviewOverlay','homepageBannerOverlay','modelModalOverlay','dataApiModalOverlay','cloudModalOverlay','approvalDetailOverlay','createApplicationOverlay','newsModalOverlay','createUserOverlay','batchImportOverlay','createTenantOverlay','balanceAdjustOverlay','categoryModalOverlay'].forEach(id=>closeModal(id))}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){['userDetailOverlay','tenantDetailOverlay','approvalResultOverlay','bannerPreviewOverlay','homepageBannerOverlay','modelModalOverlay','dataApiModalOverlay','cloudModalOverlay','approvalDetailOverlay','createApplicationOverlay','newsModalOverlay','eventModalOverlay','createUserOverlay','batchImportOverlay','createTenantOverlay','balanceAdjustOverlay','categoryModalOverlay'].forEach(id=>closeModal(id))}});
 
 document.getElementById('sidebarToggle').addEventListener('click',function(){
     const s=document.getElementById('sidebar'); s.style.display=s.style.display==='none'?'block':'none';
