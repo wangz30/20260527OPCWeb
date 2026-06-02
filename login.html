@@ -37,38 +37,39 @@
                 <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center overflow-hidden">
                     <img src="logo.png" alt="云上OPC" class="w-full h-full object-cover">
                 </div>
-                <span class="text-2xl font-bold text-white">云上OPC社区</span>
+                <div class="flex flex-col leading-tight items-start">
+                    <span class="text-base font-bold text-white">粤港澳大湾区大数据中心</span>
+                    <span class="text-sm font-semibold text-white/90">云上AI OPC社区</span>
+                </div>
             </a>
         </div>
 
         <!-- 登录/注册卡片 -->
         <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <!-- 标签页 -->
+            <!-- 一级标签页：个人登录 | 租户登录 | 注册 -->
             <div class="flex border-b border-gray-200">
-                <button id="loginTab" class="flex-1 py-4 text-center font-medium tab-active" onclick="switchTab('login')">登录</button>
-                <button id="registerTab" class="flex-1 py-4 text-center font-medium tab-inactive" onclick="switchTab('register')">注册</button>
+                <button id="indTab" class="flex-1 py-4 text-center font-medium tab-active" onclick="switchMainTab('individual')">个人登录</button>
+                <button id="tenantTab" class="flex-1 py-4 text-center font-medium tab-inactive" onclick="switchMainTab('tenant')">租户登录</button>
+                <button id="registerTab" class="flex-1 py-4 text-center font-medium tab-inactive" onclick="switchMainTab('register')">注册</button>
             </div>
 
             <div class="p-8">
-                <!-- 登录表单 -->
-                <div id="loginForm">
-                    <!-- 登录方式切换 -->
+                <!-- ========== 个人登录面板 ========== -->
+                <div id="individualLogin">
                     <div class="flex space-x-4 mb-6">
-                        <button id="passwordLoginBtn" class="flex-1 py-2 px-4 rounded-lg bg-primary text-white text-sm font-medium" onclick="switchLoginMethod('password')">密码登录</button>
-                        <button id="codeLoginBtn" class="flex-1 py-2 px-4 rounded-lg bg-gray-100 text-gray-600 text-sm font-medium" onclick="switchLoginMethod('code')">验证码登录</button>
+                        <button id="indPwdBtn" class="flex-1 py-2 px-4 rounded-lg bg-primary text-white text-sm font-medium" onclick="switchIndMethod('password')">密码登录</button>
+                        <button id="indCodeBtn" class="flex-1 py-2 px-4 rounded-lg bg-gray-100 text-gray-600 text-sm font-medium" onclick="switchIndMethod('code')">验证码登录</button>
                     </div>
-
-                    <!-- 密码登录 -->
-                    <div id="passwordLogin">
+                    <div id="indPasswordLogin">
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">用户名/手机号</label>
-                                <input type="text" id="loginUsername" placeholder="请输入用户名或手机号" 
+                                <input type="text" id="indPwdUsername" placeholder="请输入用户名或手机号"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">密码</label>
-                                <input type="password" id="loginPassword" placeholder="请输入密码" 
+                                <input type="password" id="indPwdPassword" placeholder="请输入密码"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                             </div>
                             <div class="flex items-center justify-between">
@@ -76,34 +77,78 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- 验证码登录 -->
-                    <div id="codeLogin" class="hidden">
+                    <div id="indCodeLogin" class="hidden">
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">手机号</label>
-                                <input type="tel" id="loginPhone" placeholder="请输入手机号" 
+                                <input type="tel" id="indCodePhone" placeholder="请输入手机号"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">验证码</label>
                                 <div class="flex space-x-3">
-                                    <input type="text" id="loginCode" placeholder="请输入验证码" 
+                                    <input type="text" id="indCodeCode" placeholder="请输入验证码"
                                         class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
-                                    <button id="sendCodeBtn" onclick="sendCode('login')" class="px-4 py-3 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition whitespace-nowrap">
+                                    <button id="indSendCodeBtn" onclick="sendCode('individual')" class="px-4 py-3 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition whitespace-nowrap">
                                         获取验证码
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <button onclick="handleLogin()" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition mt-6">
+                    <button onclick="handleLogin('individual')" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition mt-6">
                         登录
                     </button>
                 </div>
 
-                <!-- 注册表单 -->
+                <!-- ========== 租户登录面板 ========== -->
+                <div id="tenantLogin" class="hidden">
+                    <div class="flex space-x-4 mb-6">
+                        <button id="tenantPwdBtn" class="flex-1 py-2 px-4 rounded-lg bg-primary text-white text-sm font-medium" onclick="switchTenantMethod('password')">密码登录</button>
+                        <button id="tenantCodeBtn" class="flex-1 py-2 px-4 rounded-lg bg-gray-100 text-gray-600 text-sm font-medium" onclick="switchTenantMethod('code')">验证码登录</button>
+                    </div>
+                    <div id="tenantPasswordLogin">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">租户名称</label>
+                                <input type="text" id="tenantPwdName" placeholder="请输入租户名称"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">密码</label>
+                                <input type="password" id="tenantPwdPassword" placeholder="请输入密码"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <a href="#" class="text-sm text-primary hover:text-primary-dark">忘记密码？</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tenantCodeLogin" class="hidden">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">管理员手机号</label>
+                                <input type="tel" id="tenantCodePhone" placeholder="请输入管理员手机号"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">验证码</label>
+                                <div class="flex space-x-3">
+                                    <input type="text" id="tenantCodeCode" placeholder="请输入验证码"
+                                        class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    <button id="tenantSendCodeBtn" onclick="sendCode('tenant')" class="px-4 py-3 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition whitespace-nowrap">
+                                        获取验证码
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="handleLogin('tenant')" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition mt-6">
+                        登录
+                    </button>
+                </div>
+
+                <!-- ========== 注册面板 ========== -->
                 <div id="registerForm" class="hidden">
                     <div class="space-y-4">
                         <div>
@@ -149,7 +194,6 @@
                         </div>
                     </div>
 
-                    <!-- 用户协议 -->
                     <div class="mt-4">
                         <label class="flex items-start">
                             <input type="checkbox" id="agreeTerms" class="rounded border-gray-300 text-primary focus:ring-primary mt-1">
@@ -176,73 +220,90 @@
 
     <script src="js/common.js"></script>
     <script>
-        let currentTab = 'login';
-        let loginMethod = 'password';
+        let currentMainTab = 'individual';
+        let indLoginMethod = 'password';
+        let tenantLoginMethod = 'password';
         let countdown = 0;
 
-        // 切换标签页
-        function switchTab(tab) {
-            currentTab = tab;
-            if (tab === 'login') {
-                document.getElementById('loginTab').classList.add('tab-active');
-                document.getElementById('loginTab').classList.remove('tab-inactive');
-                document.getElementById('registerTab').classList.add('tab-inactive');
-                document.getElementById('registerTab').classList.remove('tab-active');
-                document.getElementById('loginForm').classList.remove('hidden');
-                document.getElementById('registerForm').classList.add('hidden');
-            } else {
-                document.getElementById('registerTab').classList.add('tab-active');
-                document.getElementById('registerTab').classList.remove('tab-inactive');
-                document.getElementById('loginTab').classList.add('tab-inactive');
-                document.getElementById('loginTab').classList.remove('tab-active');
-                document.getElementById('registerForm').classList.remove('hidden');
-                document.getElementById('loginForm').classList.add('hidden');
-            }
+        const MAIN_TABS = ['indTab','tenantTab','registerTab'];
+        const MAIN_PANELS = ['individualLogin','tenantLogin','registerForm'];
+
+        function switchMainTab(tab) {
+            currentMainTab = tab;
+            MAIN_TABS.forEach(id => {
+                const el = document.getElementById(id);
+                el.classList.remove('tab-active'); el.classList.add('tab-inactive');
+            });
+            const activeTabId = tab === 'individual' ? 'indTab' : tab === 'tenant' ? 'tenantTab' : 'registerTab';
+            const activeTabEl = document.getElementById(activeTabId);
+            activeTabEl.classList.remove('tab-inactive'); activeTabEl.classList.add('tab-active');
+
+            MAIN_PANELS.forEach(id => document.getElementById(id).classList.add('hidden'));
+            const panelId = tab === 'individual' ? 'individualLogin' : tab === 'tenant' ? 'tenantLogin' : 'registerForm';
+            document.getElementById(panelId).classList.remove('hidden');
         }
 
-        // 切换登录方式
-        function switchLoginMethod(method) {
-            loginMethod = method;
+        function switchIndMethod(method) {
+            indLoginMethod = method;
+            const pwdBtn = document.getElementById('indPwdBtn');
+            const codeBtn = document.getElementById('indCodeBtn');
             if (method === 'password') {
-                document.getElementById('passwordLoginBtn').classList.add('bg-primary', 'text-white');
-                document.getElementById('passwordLoginBtn').classList.remove('bg-gray-100', 'text-gray-600');
-                document.getElementById('codeLoginBtn').classList.add('bg-gray-100', 'text-gray-600');
-                document.getElementById('codeLoginBtn').classList.remove('bg-primary', 'text-white');
-                document.getElementById('passwordLogin').classList.remove('hidden');
-                document.getElementById('codeLogin').classList.add('hidden');
+                pwdBtn.className = 'flex-1 py-2 px-4 rounded-lg bg-primary text-white text-sm font-medium';
+                codeBtn.className = 'flex-1 py-2 px-4 rounded-lg bg-gray-100 text-gray-600 text-sm font-medium';
+                document.getElementById('indPasswordLogin').classList.remove('hidden');
+                document.getElementById('indCodeLogin').classList.add('hidden');
             } else {
-                document.getElementById('codeLoginBtn').classList.add('bg-primary', 'text-white');
-                document.getElementById('codeLoginBtn').classList.remove('bg-gray-100', 'text-gray-600');
-                document.getElementById('passwordLoginBtn').classList.add('bg-gray-100', 'text-gray-600');
-                document.getElementById('passwordLoginBtn').classList.remove('bg-primary', 'text-white');
-                document.getElementById('codeLogin').classList.remove('hidden');
-                document.getElementById('passwordLogin').classList.add('hidden');
+                codeBtn.className = 'flex-1 py-2 px-4 rounded-lg bg-primary text-white text-sm font-medium';
+                pwdBtn.className = 'flex-1 py-2 px-4 rounded-lg bg-gray-100 text-gray-600 text-sm font-medium';
+                document.getElementById('indCodeLogin').classList.remove('hidden');
+                document.getElementById('indPasswordLogin').classList.add('hidden');
             }
         }
 
+        function switchTenantMethod(method) {
+            tenantLoginMethod = method;
+            const pwdBtn = document.getElementById('tenantPwdBtn');
+            const codeBtn = document.getElementById('tenantCodeBtn');
+            if (method === 'password') {
+                pwdBtn.className = 'flex-1 py-2 px-4 rounded-lg bg-primary text-white text-sm font-medium';
+                codeBtn.className = 'flex-1 py-2 px-4 rounded-lg bg-gray-100 text-gray-600 text-sm font-medium';
+                document.getElementById('tenantPasswordLogin').classList.remove('hidden');
+                document.getElementById('tenantCodeLogin').classList.add('hidden');
+            } else {
+                codeBtn.className = 'flex-1 py-2 px-4 rounded-lg bg-primary text-white text-sm font-medium';
+                pwdBtn.className = 'flex-1 py-2 px-4 rounded-lg bg-gray-100 text-gray-600 text-sm font-medium';
+                document.getElementById('tenantCodeLogin').classList.remove('hidden');
+                document.getElementById('tenantPasswordLogin').classList.add('hidden');
+            }
+        }
 
+        function getSendCodeBtnId(type) {
+            if (type === 'individual') return 'indSendCodeBtn';
+            if (type === 'tenant') return 'tenantSendCodeBtn';
+            return 'sendRegisterCodeBtn';
+        }
 
-        // 发送验证码
+        function getPhoneInput(type) {
+            if (type === 'individual') return document.getElementById('indCodePhone');
+            if (type === 'tenant') return document.getElementById('tenantCodePhone');
+            return document.getElementById('registerPhone');
+        }
+
         function sendCode(type) {
             if (countdown > 0) return;
-
-            const phone = type === 'login' ? document.getElementById('loginPhone').value : document.getElementById('registerPhone').value;
-            if (!phone) {
+            const phoneEl = getPhoneInput(type);
+            if (!phoneEl || !phoneEl.value) {
                 showToast('请输入手机号', 'error');
                 return;
             }
-
-            // 模拟发送验证码
             showToast('验证码已发送');
             countdown = 60;
             updateCountdown(type);
         }
 
-        // 更新倒计时
         function updateCountdown(type) {
-            const btnId = type === 'login' ? 'sendCodeBtn' : 'sendRegisterCodeBtn';
+            const btnId = getSendCodeBtnId(type);
             const btn = document.getElementById(btnId);
-            
             if (countdown > 0) {
                 btn.textContent = `${countdown}秒后重发`;
                 btn.disabled = true;
@@ -254,62 +315,64 @@
             }
         }
 
-        // 处理登录
-        function handleLogin() {
-            const username = document.getElementById('loginUsername')?.value;
-            const phone = document.getElementById('loginPhone')?.value;
-            
-            if (loginMethod === 'password' && !username) {
-                showToast('请输入用户名或手机号', 'error');
-                return;
-            }
-            if (loginMethod === 'code' && !phone) {
-                showToast('请输入手机号', 'error');
-                return;
+        function handleLogin(loginType) {
+            if (loginType === 'individual') {
+                if (indLoginMethod === 'password') {
+                    const v = document.getElementById('indPwdUsername').value;
+                    if (!v) { showToast('请输入用户名或手机号', 'error'); return; }
+                } else {
+                    const v = document.getElementById('indCodePhone').value;
+                    if (!v) { showToast('请输入手机号', 'error'); return; }
+                }
+            } else {
+                if (tenantLoginMethod === 'password') {
+                    const v = document.getElementById('tenantPwdName').value;
+                    if (!v) { showToast('请输入租户名称', 'error'); return; }
+                } else {
+                    const v = document.getElementById('tenantCodePhone').value;
+                    if (!v) { showToast('请输入管理员手机号', 'error'); return; }
+                }
             }
 
-            // 登录成功，设置token
             localStorage.setItem('opc_token', 'mock_token_' + Date.now());
-            
-            showToast('登录成功');
-            
+            const state = { isLoggedIn: true, loginType: loginType };
+            try {
+                const raw = localStorage.getItem('opc_app_state');
+                if (raw) {
+                    const existing = JSON.parse(raw);
+                    Object.assign(existing, state);
+                    localStorage.setItem('opc_app_state', JSON.stringify(existing));
+                } else {
+                    localStorage.setItem('opc_app_state', JSON.stringify(state));
+                }
+            } catch (e) {
+                localStorage.setItem('opc_app_state', JSON.stringify(state));
+            }
+
+            showToast(loginType === 'tenant' ? '租户登录成功' : '登录成功');
+
             setTimeout(() => {
-                // 检查是否有待办动作（如认证后跳转或充值后继续）
                 try {
                     const raw = localStorage.getItem('opc_app_state');
                     if (raw) {
-                        const state = JSON.parse(raw);
-                        if (state.pendingAction && state.pendingAction.action) {
-                            const pendingAction = state.pendingAction;
-                            // 清除待办动作
-                            localStorage.setItem('opc_app_state', JSON.stringify({
-                                ...state,
-                                pendingAction: null
-                            }));
-                            
-                            // 如果有回调名称，尝试执行
-                            if (pendingAction.callbackName && typeof window[pendingAction.callbackName] === 'function') {
-                                window[pendingAction.callbackName](...pendingAction.args);
+                        const st = JSON.parse(raw);
+                        if (st.pendingAction && st.pendingAction.action) {
+                            const pa = st.pendingAction;
+                            localStorage.setItem('opc_app_state', JSON.stringify({ ...st, pendingAction: null }));
+                            if (pa.callbackName && typeof window[pa.callbackName] === 'function') {
+                                window[pa.callbackName](...pa.args);
                                 return;
                             }
-                            
-                            // 如果有 targetUrl 则跳转
-                            if (pendingAction.targetUrl) {
-                                window.location.href = pendingAction.targetUrl;
+                            if (pa.targetUrl) {
+                                window.location.href = pa.targetUrl;
                                 return;
                             }
-                            
-                            // 默认：显示成功提示并跳转到服务页
-                            showToast(`正在进入${pendingAction.action}`);
-                            setTimeout(() => {
-                                window.location.href = 'services.html';
-                            }, 800);
+                            showToast(`正在进入${pa.action}`);
+                            setTimeout(() => { window.location.href = 'services.html'; }, 800);
                             return;
                         }
                     }
                 } catch (e) {}
-                
-                // 无待办动作，返回来源页或首页
                 const referrer = document.referrer;
                 if (referrer && !referrer.includes('login.html')) {
                     window.location.href = referrer;
@@ -319,37 +382,21 @@
             }, 1200);
         }
 
-        // 处理注册
         function handleRegister() {
-            // 检查用户协议
             if (!document.getElementById('agreeTerms').checked) {
                 showToast('请阅读并同意用户协议和隐私政策', 'error');
                 return;
             }
-
-            // 密码强度校验
             const password = document.getElementById('registerPassword').value;
             const confirmPassword = document.getElementById('registerConfirmPassword').value;
-            
-            if (password.length < 8) {
-                showToast('密码至少8位', 'error');
-                return;
-            }
-            
+            if (password.length < 8) { showToast('密码至少8位', 'error'); return; }
             if (!/(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])/.test(password)) {
                 showToast('密码需包含字母、数字、特殊字符', 'error');
                 return;
             }
-            
-            if (password !== confirmPassword) {
-                showToast('两次输入的密码不一致', 'error');
-                return;
-            }
-
+            if (password !== confirmPassword) { showToast('两次输入的密码不一致', 'error'); return; }
             showToast('注册成功');
-            setTimeout(() => {
-                switchTab('login');
-            }, 1500);
+            setTimeout(() => { switchMainTab('individual'); }, 1500);
         }
     </script>
 </body>

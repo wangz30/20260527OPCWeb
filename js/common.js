@@ -2,8 +2,9 @@
 const AppState = {
     isLoggedIn: false,
     user: null,
+    loginType: 'individual',
     currentPage: 'home',
-    // 实名认证状态: 'unverified' | 'pending' | 'verified' | 'enterprise_verified'
+    // 实名认证状态: 'unverified' | 'verified' | 'enterprise_verified'
     realNameStatus: 'unverified',
     // 钱包余额
     balance: 0,
@@ -54,6 +55,7 @@ function checkLoginStatus() {
     if (token) {
         AppState.isLoggedIn = true;
         AppState.user = mockUser;
+        initSampleConsumption();
     }
     updateNavigation();
 }
@@ -197,19 +199,7 @@ function withAuthChain(options = {}) {
         return false;
     }
     
-    // 审核中拦截
-    if (AppState.realNameStatus === 'pending') {
-        showAuthModal({
-            title: '认证审核中',
-            message: '您的实名认证正在审核中，请稍后再试。',
-            icon: 'fa-clock',
-            btnText: '查看进度',
-            next: 'profile'
-        });
-        return false;
-    }
-    
-    // 第三级：余额不足拦截
+    // 第二级：余额不足拦截
     const minBalance = options.minBalance || 0;
     if (AppState.balance < minBalance) {
         showAuthModal({
@@ -348,56 +338,119 @@ function requireLogin(options = {}) {
 
 // ==================== 实名认证模块 ====================
 function submitRealName(formData) {
-    // 模拟提交实名认证
-    AppState.realNameStatus = 'pending';
+    AppState.realNameStatus = 'verified';
     saveAppState();
-    showToast('实名认证已提交，正在审核中...');
-    
-    // 模拟5秒审核通过
-    setTimeout(() => {
-        AppState.realNameStatus = 'verified';
-        saveAppState();
-        showToast('实名认证已通过！');
-        // 检查是否有待办动作
-        executePendingAction();
-        // 刷新页面UI
-        if (typeof updateProfileUI === 'function') {
-            updateProfileUI();
-        }
-    }, 5000);
-}
-
-function submitEnterpriseRealName(formData) {
-    // 模拟提交企业认证
-    AppState.realNameStatus = 'pending';
-    saveAppState();
-    showToast('企业认证已提交，正在审核中...');
-    
-    // 模拟5秒审核通过
-    setTimeout(() => {
-        AppState.realNameStatus = 'enterprise_verified';
-        saveAppState();
-        showToast('企业认证已通过！');
-        // 检查是否有待办动作
-        executePendingAction();
-        // 刷新页面UI
-        if (typeof updateProfileUI === 'function') {
-            updateProfileUI();
-        }
-    }, 5000);
-}
-
-// ==================== 钱包模块 ====================
-function addBalance(amount) {
-    AppState.balance += amount;
-    saveAppState();
-    showToast(`充值成功，当前余额 ¥${AppState.balance.toFixed(2)}`);
-    // 刷新页面UI
+    showToast('实名认证已通过！');
+    executePendingAction();
     if (typeof updateProfileUI === 'function') {
         updateProfileUI();
     }
-    // 检查是否有待办动作
+}
+
+function submitEnterpriseRealName(formData) {
+    AppState.realNameStatus = 'enterprise_verified';
+    saveAppState();
+    showToast('企业认证已通过！');
     executePendingAction();
+    if (typeof updateProfileUI === 'function') {
+        updateProfileUI();
+    }
+}
+
+// ==================== 钱包模块 ====================
+function addBalance(amount, paymentMethod) {
+    AppState.balance += amount;
+    saveAppState();
+    // 生成充值订单
+    var order = {
+        id: 'ORD' + new Date().toISOString().slice(0,10).replace(/-/g,'') + String(Math.floor(Math.random()*900+100)),
+        userId: AppState.user ? AppState.user.id : 0,
+        userName: AppState.user ? AppState.user.name : '未知用户',
+        type: 'recharge',
+        amount: amount,
+        paymentMethod: paymentMethod || '在线支付',
+        status: '已完成',
+        time: new Date().toLocaleString('zh-CN',{hour12:false}),
+        invoiceAvailable: false
+    };
+    var orders = getOrders();
+    orders.push(order);
+    saveOrders(orders);
+    showToast(`充值成功，当前余额 ¥${AppState.balance.toFixed(2)}`);
+    if (typeof updateProfileUI === 'function') {
+        updateProfileUI();
+    }
+    executePendingAction();
+}
+
+// ==================== 订单管理 ====================
+function getOrders(){
+    try{
+        var raw = localStorage.getItem('opc_orders');
+        return raw ? JSON.parse(raw) : [];
+    }catch(e){return[]}
+}
+function saveOrders(orders){
+    localStorage.setItem('opc_orders', JSON.stringify(orders));
+}
+function getUserOrders(userId){
+    var all = getOrders();
+    if(userId) return all.filter(function(o){return o.userId===userId});
+    return all;
+}
+
+// ==================== 消费记录管理 ====================
+function getConsumption(){
+    try{
+        var raw = localStorage.getItem('opc_consumption');
+        return raw ? JSON.parse(raw) : [];
+    }catch(e){return[]}
+}
+function saveConsumption(list){
+    localStorage.setItem('opc_consumption', JSON.stringify(list));
+}
+function getUserConsumption(userId){
+    var all = getConsumption();
+    if(userId) return all.filter(function(c){return c.userId===userId});
+    return all;
+}
+function recordConsumption(amount, tokens, service, model, type){
+    var record = {
+        id: 'C' + Date.now(),
+        userId: AppState.user ? AppState.user.id : 0,
+        userName: AppState.user ? AppState.user.name : '未知',
+        date: new Date().toISOString().slice(0,10),
+        time: new Date().toLocaleString('zh-CN',{hour12:false}),
+        service: service || '未知服务',
+        model: model || '--',
+        amount: amount || 0,
+        tokens: tokens || 0,
+        type: type || '消费'
+    };
+    var list = getConsumption();
+    list.push(record);
+    saveConsumption(list);
+    AppState.consumptionCount = (AppState.consumptionCount || 0) + 1;
+    saveAppState();
+}
+
+function initSampleConsumption(){
+    var existing = getConsumption();
+    if (existing.length > 0) return;
+    var uid = AppState.user ? AppState.user.id : 1;
+    var samples = [
+        {userId:uid,date:'2026-05-20',service:'Qwen-Max',model:'通义千问',amount:45,tokens:210000,type:'模型调用'},
+        {userId:uid,date:'2026-05-18',service:'DeepSeek-V3',model:'DeepSeek',amount:35,tokens:180000,type:'模型调用'},
+        {userId:uid,date:'2026-05-15',service:'企业工商信息查询',model:'数据API',amount:25,tokens:0,type:'数据API'},
+        {userId:uid,date:'2026-05-12',service:'GPT-4o',model:'OpenAI',amount:15,tokens:170000,type:'模型调用'},
+        {userId:uid,date:'2026-05-08',service:'弹性云服务器 ECS',model:'云资源',amount:120,tokens:0,type:'云资源'}
+    ];
+    samples.forEach(function(s){
+        s.id = 'C' + Date.now() + Math.random().toString(36).slice(2,6);
+        s.time = s.date + ' 10:30:00';
+        s.userName = AppState.user ? AppState.user.name : '测试用户';
+    });
+    saveConsumption(samples);
 }
 
 // ==================== 工具函数 ====================
