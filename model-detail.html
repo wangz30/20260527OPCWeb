@@ -254,6 +254,960 @@
                 tags: ['通用助手', '文案创作', '长文本处理', 'AIGC内容创作'],
                 intro: 'Claude-3.5-Sonnet是Anthropic推荐的模型，特别擅长长文本处理和深度分析，支持超长上下文窗口。',
                 guide: ['前往个人中心获取API Key，即可开始调用', '在调试台中测试模型效果，调整参数', '查看帮助文档与示例代码，快速接入开发', '按Token消耗计费，余额不足时请及时充值']
+            },
+            // ========== Claude 全系列 ==========
+            'claude-opus-4': {
+                title: 'Claude Opus 4', vendor: 'Anthropic', vendorIcon: 'A', vendorColor: 'bg-orange-500',
+                description: 'Anthropic新一代旗舰模型，复杂推理与软件工程能力领先',
+                releaseDate: '2025-05-22', price: '¥0.075/1K输入, ¥0.375/1K输出', context: '200K tokens',
+                modality: '文本、图像', capability: '深度推理、代码生成',
+                scenarios: ['软件工程', '深度分析', '智能体任务', '多步骤推理'],
+                tags: ['编程', '推理', '长文本', '企业级'],
+                intro: 'Claude Opus 4是Anthropic于2025年5月发布的旗舰模型，定位"最强思考型"AI。在SWE-bench Verified基准测试中达到72.5%准确率，支持200K上下文窗口，可处理连续数小时的复杂任务。具备混合推理能力（Extended Thinking），可显式控制思考深度。',
+                guide: ['通过Anthropic API、Amazon Bedrock或Google Cloud使用', '启用Extended Thinking以提升复杂推理表现', '企业用户可申请批量API享受成本优化', '利用Prompt Caching可降低最高90%成本']
+            },
+            'claude-opus-4.1': {
+                title: 'Claude Opus 4.1', vendor: 'Anthropic', vendorIcon: 'A', vendorColor: 'bg-orange-500',
+                description: 'Opus 4升级版，编码与多步骤推理能力进一步提升',
+                releaseDate: '2025-08-06', price: '¥0.075/1K输入, ¥0.375/1K输出', context: '200K tokens',
+                modality: '文本、图像', capability: '复杂代码生成、多步骤推理',
+                scenarios: ['软件工程', '代码重构', '智能体任务', '深度研究'],
+                tags: ['编程', '推理', '长文本', '企业级'],
+                intro: 'Claude Opus 4.1是Anthropic于2025年8月发布的旗舰升级版本，专注提升编码、Agent任务和深度研究能力。在SWE-bench Verified基准测试中达到74.5%准确率，对真实代码库的多文件重构能力有显著增强。',
+                guide: ['通过Anthropic API或Amazon Bedrock访问', '利用Prompt Caching节省90%成本', '设置适当的推理预算控制Token消耗', '企业用户可申请批量API折扣']
+            },
+            'claude-opus-4.5': {
+                title: 'Claude Opus 4.5', vendor: 'Anthropic', vendorIcon: 'A', vendorColor: 'bg-orange-500',
+                description: 'Opus 4.5版本，扩展思考与多模态能力再升级',
+                releaseDate: '2025-11-24', price: '¥0.075/1K输入, ¥0.375/1K输出', context: '200K tokens',
+                modality: '文本、图像、PDF', capability: '扩展思考、复杂规划',
+                scenarios: ['软件工程', '智能体任务', '复杂文档分析', '多步骤规划'],
+                tags: ['编程', '推理', '长上下文', '企业级'],
+                intro: 'Claude Opus 4.5是Anthropic于2025年11月发布的旗舰版本，引入更细粒度的"思考预算"控制，可按任务难度动态分配计算资源。在长程任务和工具调用稳定性上较4.1提升约30%，并新增PDF与图表深度解析能力。',
+                guide: ['使用thinking参数精细控制推理预算', '结合Tool Use实现复杂智能体工作流', '利用Context Editing压缩超长会话', '支持Claude Code IDE集成']
+            },
+            'claude-opus-4.6': {
+                title: 'Claude Opus 4.6', vendor: 'Anthropic', vendorIcon: 'A', vendorColor: 'bg-orange-500',
+                description: '最新旗舰，编程与计算机使用能力行业领先',
+                releaseDate: '2026-02-02', price: '¥0.075/1K输入, ¥0.375/1K输出', context: '1M tokens',
+                modality: '文本、图像、PDF、代码', capability: 'Computer Use、长上下文',
+                scenarios: ['软件工程', 'Computer Use', '智能体任务', '代码审查'],
+                tags: ['编程', '推理', '1M上下文', '企业级'],
+                intro: 'Claude Opus 4.6是Anthropic最新旗舰模型，上下文窗口扩展至1M tokens，在软件工程、Computer Use（操控桌面/浏览器）和长程任务上行业领先。在SWE-bench Verified上达到77.2%准确率，首次在多项企业级基准上超越人类专家基线。',
+                guide: ['启用1M上下文处理超大代码库', '结合Computer Use实现GUI自动化', '使用agent SDK快速构建生产级智能体', '启用数据驻留功能满足合规要求']
+            },
+            'claude-opus-4.7': {
+                title: 'Claude Opus 4.7', vendor: 'Anthropic', vendorIcon: 'A', vendorColor: 'bg-orange-500',
+                description: 'Anthropic 2026年旗舰升级，主打企业级智能体落地',
+                releaseDate: '2026-05-15', price: '¥0.085/1K输入, ¥0.425/1K输出', context: '1M tokens',
+                modality: '文本、图像、PDF、代码、视频帧', capability: '多模态智能体、长程任务',
+                scenarios: ['企业智能体', '视频理解', '代码工程', '深度研究'],
+                tags: ['编程', '推理', '1M上下文', '视频理解'],
+                intro: 'Claude Opus 4.7是Anthropic在2026年5月发布的最新旗舰模型，引入原生视频帧理解能力，在长程Agent任务和复杂工作流编排上达到新的SOTA。相比4.6在多步推理准确率提升约15%，并强化了与外部工具的协同效率。',
+                guide: ['支持上传视频片段进行逐帧分析', '结合Claude Agent SDK快速落地企业应用', '开启Adaptive Thinking自动分配推理资源', '通过Claude Code订阅获得最佳IDE体验']
+            },
+            'claude-opus-4.6-alt': {
+                title: 'Claude Opus 4.6', vendor: 'Anthropic', vendorIcon: 'A', vendorColor: 'bg-orange-500',
+                description: '与Opus 4.6同款，旗舰编程与Computer Use能力',
+                releaseDate: '2026-02-02', price: '¥0.075/1K输入, ¥0.375/1K输出', context: '1M tokens',
+                modality: '文本、图像、PDF、代码', capability: 'Computer Use、长上下文',
+                scenarios: ['软件工程', 'Computer Use', '智能体任务', '代码审查'],
+                tags: ['编程', '推理', '1M上下文', '企业级'],
+                intro: 'Claude Opus 4.6（2026-02发布）将上下文窗口扩展至1M tokens，在软件工程、Computer Use和长程任务上行业领先。在SWE-bench Verified上达到77.2%准确率。',
+                guide: ['启用1M上下文处理超大代码库', '结合Computer Use实现GUI自动化', '使用agent SDK快速构建生产级智能体', '启用数据驻留功能满足合规要求']
+            },
+            'claude-sonnet-3.5': {
+                title: 'Claude Sonnet 3.5', vendor: 'Anthropic', vendorIcon: 'A', vendorColor: 'bg-orange-500',
+                description: '上一代主力模型，性价比与性能兼备',
+                releaseDate: '2024-10-22', price: '¥0.015/1K输入, ¥0.075/1K输出', context: '200K tokens',
+                modality: '文本、图像', capability: '通用对话、代码生成',
+                scenarios: ['通用助手', '代码生成', '文案创作', '数据分析'],
+                tags: ['通用', '代码', '推理', '性价比'],
+                intro: 'Claude 3.5 Sonnet是Anthropic 2024年10月发布的主力模型，在多项基准上超越此前的Opus级别，但成本更低。它具备出色的代码生成、视觉理解和复杂推理能力，是企业与开发者的经典选择。',
+                guide: ['通过Anthropic API、Amazon Bedrock接入', '启用Prompt Caching降低重复上下文成本', '支持Artifacts生成可视化产物', '可在Claude.ai中直接体验']
+            },
+            'claude-sonnet-3.7': {
+                title: 'Claude Sonnet 3.7', vendor: 'Anthropic', vendorIcon: 'A', vendorColor: 'bg-orange-500',
+                description: '首款混合推理模型，可切换"标准"与"扩展思考"',
+                releaseDate: '2025-02-24', price: '¥0.015/1K输入, ¥0.075/1K输出', context: '200K tokens',
+                modality: '文本、图像', capability: '混合推理、代码生成',
+                scenarios: ['代码工程', '深度分析', '智能体任务', '研究分析'],
+                tags: ['推理', '代码', '混合推理', '工具调用'],
+                intro: 'Claude 3.7 Sonnet是Anthropic 2025年2月发布的首款"混合推理"模型，开发者可在标准回复与"扩展思考（Extended Thinking）"间灵活切换。是首个把推理能力深度集成到单一模型的产品，为编码与Agent任务带来显著提升。',
+                guide: ['通过thinking参数启用扩展思考模式', '结合Computer Use实现浏览器自动化', '使用Claude Code IDE插件', 'API支持OpenAI/Anthropic双协议']
+            },
+            'claude-sonnet-4': {
+                title: 'Claude Sonnet 4', vendor: 'Anthropic', vendorIcon: 'A', vendorColor: 'bg-orange-500',
+                description: 'Sonnet系列标准版，编码与推理能力大幅提升',
+                releaseDate: '2025-05-22', price: '¥0.015/1K输入, ¥0.075/1K输出', context: '200K tokens',
+                modality: '文本、图像', capability: '代码生成、复杂推理',
+                scenarios: ['软件工程', '代码审查', '智能体任务', '深度分析'],
+                tags: ['编程', '推理', '工具调用', '性价比'],
+                intro: 'Claude Sonnet 4是2025年5月与Opus 4同期发布的主力模型，定位"高性价比工作型"AI。在SWE-bench Verified上达到72.7%准确率，比Sonnet 3.7进一步提升；支持并行工具调用与精确指令遵循，是企业级应用与Agent开发的首选。',
+                guide: ['通过Anthropic API或Amazon Bedrock访问', '结合Claude Code实现编程辅助', '启用Extended Thinking提升复杂任务表现', '支持Prompt Caching节省90%成本']
+            },
+            'claude-sonnet-4.5': {
+                title: 'Claude Sonnet 4.5', vendor: 'Anthropic', vendorIcon: 'A', vendorColor: 'bg-orange-500',
+                description: 'Anthropic 2025-09旗舰升级，编码与Agent能力再跃升',
+                releaseDate: '2025-09-29', price: '¥0.015/1K输入, ¥0.075/1K输出', context: '200K tokens',
+                modality: '文本、图像、PDF', capability: '复杂代码生成、长程Agent',
+                scenarios: ['软件工程', '智能体任务', 'Computer Use', '代码审查'],
+                tags: ['编程', 'Agent', '工具调用', '企业级'],
+                intro: 'Claude Sonnet 4.5是2025年9月底发布的主力升级版，被Anthropic称为"世界上最好的编码模型"。在SWE-bench Verified上达到77.2%准确率，在Computer Use、工具调用稳定性、长程Agent任务上较4.0有显著提升。',
+                guide: ['通过Claude API、Amazon Bedrock、Google Cloud使用', '结合Claude Code IDE获得最佳开发体验', '启用Context Editing压缩超长对话', '企业用户可申请批量API折扣']
+            },
+            'claude-sonnet-4.6': {
+                title: 'Claude Sonnet 4.6', vendor: 'Anthropic', vendorIcon: 'A', vendorColor: 'bg-orange-500',
+                description: 'Sonnet系列再升级，1M上下文与更强Agent能力',
+                releaseDate: '2026-03-18', price: '¥0.018/1K输入, ¥0.090/1K输出', context: '1M tokens',
+                modality: '文本、图像、PDF、代码', capability: '1M上下文、Agent、代码',
+                scenarios: ['软件工程', '智能体任务', '长文档分析', '代码审查'],
+                tags: ['编程', 'Agent', '1M上下文', '企业级'],
+                intro: 'Claude Sonnet 4.6于2026年3月发布，将上下文窗口扩展至1M tokens，在长程任务和大规模代码库分析上达到旗舰级水平。相较4.5在多步Agent任务上稳定性提升约25%，性价比进一步优化。',
+                guide: ['启用1M上下文处理超大代码库', '结合Claude Agent SDK构建生产级应用', '使用thinking参数精细控制推理', '支持Claude Code IDE集成']
+            },
+            'claude-haiku-4.5': {
+                title: 'Claude Haiku 4.5', vendor: 'Anthropic', vendorIcon: 'A', vendorColor: 'bg-orange-500',
+                description: '轻量高速版，适合实时对话与大规模并发场景',
+                releaseDate: '2025-10-15', price: '¥0.005/1K输入, ¥0.025/1K输出', context: '200K tokens',
+                modality: '文本、图像', capability: '高速响应、低成本',
+                scenarios: ['实时对话', '内容审核', '批量处理', '客服场景'],
+                tags: ['高速', '低成本', '并发', '轻量'],
+                intro: 'Claude Haiku 4.5是Anthropic 2025年10月发布的轻量级模型，主打"速度与成本"。在保持接近Sonnet 4级别智能水平的同时，推理速度提升约2倍，单价约为Sonnet的1/3，是实时对话、客服、内容审核等高频场景的理想选择。',
+                guide: ['通过Anthropic API、Amazon Bedrock接入', '适合实时聊天机器人与即时响应场景', '结合Prompt Caching进一步降低批量处理成本', '支持多区域部署就近服务']
+            },
+            // ========== Gemini 全系列 ==========
+            'gemini-2.0-flash': {
+                title: 'Gemini 2.0 Flash', vendor: 'Google', vendorIcon: 'G', vendorColor: 'bg-blue-600',
+                description: 'Google第二代轻量模型，原生多模态高速推理',
+                releaseDate: '2024-12-11', price: '¥0.005/1K输入, ¥0.020/1K输出', context: '1M tokens',
+                modality: '文本、图像、音频、视频', capability: '原生多模态、工具调用',
+                scenarios: ['实时对话', '多模态应用', '代码生成', '智能体任务'],
+                tags: ['多模态', '高速', '工具调用', '原生多模态'],
+                intro: 'Gemini 2.0 Flash是Google于2024年12月发布的第二代轻量级模型，是首个原生支持多模态输出（图像+音频）的Gemini模型。具备1M tokens上下文窗口、工具调用能力，适合实时对话、多模态应用和Agent开发。',
+                guide: ['通过Google AI Studio或Vertex AI使用', '原生支持图像生成与文本转语音', '支持实时双向音视频流（Multimodal Live API）', '启用批处理模式可享50%折扣']
+            },
+            'gemini-2.5-flash': {
+                title: 'Gemini 2.5 Flash', vendor: 'Google', vendorIcon: 'G', vendorColor: 'bg-blue-600',
+                description: '2.5系列轻量版，引入可控"思考预算"',
+                releaseDate: '2025-04-17', price: '¥0.006/1K输入, ¥0.030/1K输出', context: '1M tokens',
+                modality: '文本、图像、音频、视频', capability: '可控思考、低成本',
+                scenarios: ['大规模处理', '实时应用', '多模态任务', '智能体任务'],
+                tags: ['多模态', '可控思考', '高速', '成本优化'],
+                intro: 'Gemini 2.5 Flash是Google 2025年4月发布的轻量级模型，引入"思考预算（thinking budget）"机制，允许开发者精细控制推理深度。在保持高速响应的同时提供比2.0 Flash更强的推理能力，适合大规模、低延迟场景。',
+                guide: ['通过Google AI Studio或Vertex AI使用', '通过thinking_budget参数控制推理深度', '支持函数调用与结构化输出', '支持Batch API与缓存功能降低成本']
+            },
+            'gemini-2.5-flash-image': {
+                title: 'Gemini 2.5 Flash Image', vendor: 'Google', vendorIcon: 'G', vendorColor: 'bg-blue-600',
+                description: '原生图像生成版Flash，支持对话式图像编辑',
+                releaseDate: '2025-08-26', price: '¥0.020/图像(1K输出)', context: '32K tokens',
+                modality: '文本、图像输出', capability: '原生图像生成、对话式编辑',
+                scenarios: ['图像创作', '产品图编辑', '营销素材', 'UI原型'],
+                tags: ['图像生成', '多模态输出', '对话编辑', '原生'],
+                intro: 'Gemini 2.5 Flash Image（代号nano-banana）是Google 2025年8月发布的原生图像生成模型，基于Gemini 2.5 Flash架构。支持多轮对话式图像编辑，可保持角色/场景一致性，并通过SynthID水印标识AI生成内容。',
+                guide: ['通过Google AI Studio（Gemini API）使用', '支持多轮对话式编辑同一图像', '通过自然语言指令进行局部修改', '所有生成图像自带SynthID水印']
+            },
+            'gemini-2.5-pro': {
+                title: 'Gemini 2.5 Pro', vendor: 'Google', vendorIcon: 'G', vendorColor: 'bg-blue-600',
+                description: 'Google多模态旗舰模型，1M上下文与深度思考',
+                releaseDate: '2025-03-25', price: '¥0.0625/1K输入(≤200K), ¥0.125/1K输出', context: '1M tokens',
+                modality: '文本、图像、音频、视频', capability: '深度思考、长上下文',
+                scenarios: ['代码工程', '深度分析', '多模态处理', '企业知识管理'],
+                tags: ['多模态', '长上下文', '深度思考', '旗舰'],
+                intro: 'Gemini 2.5 Pro是Google 2025年3月发布的多模态旗舰模型，具备1M tokens上下文窗口、原生多模态理解与"Deep Think"扩展推理模式。在Humanity\'s Last Exam、GPQA Diamond等基准上取得业界领先成绩，是企业复杂任务的首选。',
+                guide: ['通过Google AI Studio或Vertex AI使用', '启用Deep Think模式提升复杂推理', '支持Batch API、缓存与TPU加速', '可处理1小时视频内容']
+            },
+            'gemini-3-pro-preview': {
+                title: 'Gemini 3 Pro (Preview)', vendor: 'Google', vendorIcon: 'G', vendorColor: 'bg-blue-600',
+                description: 'Gemini 3预览版，多模态推理达到博士级水准',
+                releaseDate: '2025-11-18', price: '¥0.080/1K输入(≤200K), ¥0.160/1K输出', context: '1M tokens',
+                modality: '文本、图像、音频、视频', capability: '博士级推理、Agent',
+                scenarios: ['复杂研究', '代码工程', '智能体任务', '多模态创作'],
+                tags: ['多模态', '深度推理', 'Agent', '旗舰'],
+                intro: 'Gemini 3 Pro Preview是Google 2025年11月推出的最新旗舰预览版，在Humanity\'s Last Exam（无工具）取得37.5%、GPQA Diamond取得91.9%等多项基准达到博士级水准。引入"Thinking Level"机制，可按任务难度分配推理深度。',
+                guide: ['通过Google AI Studio或Vertex AI使用', '通过thinking_level控制低/高推理深度', '支持原生工具调用与Vibe Coding', '支持2M tokens输出']
+            },
+            'gemini-3.1-pro-preview': {
+                title: 'Gemini 3.1 Pro (Preview)', vendor: 'Google', vendorIcon: 'G', vendorColor: 'bg-blue-600',
+                description: 'Gemini 3.1升级预览，长上下文与Agent能力领先',
+                releaseDate: '2026-02-12', price: '¥0.085/1K输入(≤200K), ¥0.170/1K输出', context: '2M tokens',
+                modality: '文本、图像、音频、视频', capability: '2M上下文、Agent',
+                scenarios: ['复杂研究', '代码工程', '长文档分析', '多模态创作'],
+                tags: ['多模态', '2M上下文', 'Agent', '旗舰'],
+                intro: 'Gemini 3.1 Pro Preview于2026年2月发布，将上下文窗口扩展至2M tokens，是当前业界领先的超长上下文模型。在长程Agent任务、多文档深度分析、复杂代码工程上达到新的SOTA。',
+                guide: ['通过Google AI Studio或Vertex AI使用', '支持2M tokens超长上下文', '启用Deep Research模式自动规划研究', '支持Google Search实时联网']
+            },
+            'gemini-3-flash-preview': {
+                title: 'Gemini 3 Flash (Preview)', vendor: 'Google', vendorIcon: 'G', vendorColor: 'bg-blue-600',
+                description: 'Gemini 3轻量版，低延迟与高性价比',
+                releaseDate: '2026-01-28', price: '¥0.025/1K输入, ¥0.080/1K输出', context: '1M tokens',
+                modality: '文本、图像、音频、视频', capability: '低延迟、原生多模态',
+                scenarios: ['实时对话', '多模态应用', '大规模处理', '智能客服'],
+                tags: ['多模态', '高速', '性价比', '轻量'],
+                intro: 'Gemini 3 Flash Preview于2026年1月发布，是Gemini 3系列的轻量级版本。在保持旗舰级多模态能力的同时，主打低延迟与高性价比，适合实时对话、大规模批处理和高频调用场景。',
+                guide: ['通过Google AI Studio或Vertex AI使用', '原生支持实时音视频流（Live API）', '支持Batch API与缓存功能', '结合工具调用构建轻量Agent']
+            },
+            'gemini-3-1-flash-lite-preview': {
+                title: 'Gemini 3.1 Flash Lite (Preview)', vendor: 'Google', vendorIcon: 'G', vendorColor: 'bg-blue-600',
+                description: '极致轻量版，成本最低的Gemini模型',
+                releaseDate: '2026-04-08', price: '¥0.008/1K输入, ¥0.030/1K输出', context: '1M tokens',
+                modality: '文本、图像、音频、视频', capability: '超低成本、低延迟',
+                scenarios: ['大规模批处理', '内容审核', '实时对话', '边缘AI'],
+                tags: ['轻量', '低成本', '高速', '多模态'],
+                intro: 'Gemini 3.1 Flash Lite Preview是Gemini系列中体积最小、价格最低的模型，定位"成本优先"场景。保持Gemini 3家族的多模态能力，但单价仅为Flash的1/3，适合广告投放、内容审核、批量翻译等大规模场景。',
+                guide: ['通过Google AI Studio或Vertex AI使用', '适合高吞吐量批处理任务', '支持结构化输出与函数调用', '支持Batch API进一步降低成本']
+            },
+            'gemini-3.1-flash-image-preview': {
+                title: 'Gemini 3.1 Flash Image (Preview)', vendor: 'Google', vendorIcon: 'G', vendorColor: 'bg-blue-600',
+                description: '3.1代原生图像生成，多轮编辑与角色一致性',
+                releaseDate: '2026-04-22', price: '¥0.025/图像(1K输出)', context: '64K tokens',
+                modality: '文本、图像输出', capability: '原生图像生成、角色一致性',
+                scenarios: ['图像创作', '产品图编辑', 'IP形象设计', '营销素材'],
+                tags: ['图像生成', '多模态输出', '角色一致', '原生'],
+                intro: 'Gemini 3.1 Flash Image Preview是3.1代原生图像生成模型（内部代号nano-banana 2），在保持上一代对话式编辑能力的基础上，重点强化了多帧角色一致性与复杂场景构图能力。',
+                guide: ['通过Google AI Studio（Gemini API）使用', '支持最多5张参考图的角色一致性编辑', '通过自然语言指令进行局部修改', '所有生成图像自带SynthID水印']
+            },
+            'gemini-3-pro-image-preview': {
+                title: 'Gemini 3 Pro Image (Preview)', vendor: 'Google', vendorIcon: 'G', vendorColor: 'bg-blue-600',
+                description: 'Pro级原生图像生成（nano-banana-pro），业界最强',
+                releaseDate: '2026-05-20', price: '¥0.060/图像(1K-2K输出)', context: '128K tokens',
+                modality: '文本、图像输出', capability: '4K图像、复杂构图、角色一致',
+                scenarios: ['专业图像创作', '海报设计', 'IP角色制作', '产品视觉'],
+                tags: ['图像生成', '4K输出', 'Pro级', 'nano-banana-pro'],
+                intro: 'Gemini 3 Pro Image Preview（内部代号nano-banana-pro）是Google 2026年5月发布的Pro级原生图像生成模型，支持高达4K分辨率输出、复杂构图指令遵循、多角色一致性维护，是当前业界最强的统一图像生成模型之一。',
+                guide: ['通过Google AI Studio（Gemini API）使用', '支持4K分辨率输出', '上传多张参考图实现角色一致', '所有生成图像自带SynthID水印']
+            },
+            // ========== GPT 全系列 ==========
+            'gpt-5': {
+                title: 'GPT-5', vendor: 'OpenAI', vendorIcon: 'O', vendorColor: 'bg-green-600',
+                description: 'OpenAI 2025旗舰，统一推理系统与多模态',
+                releaseDate: '2025-08-07', price: '¥0.087/1K输入, ¥0.65/1K输出', context: '400K tokens',
+                modality: '文本、图像、音频、视频', capability: '统一推理、多模态',
+                scenarios: ['复杂推理', '代码工程', '多模态处理', '智能体任务'],
+                tags: ['旗舰', '多模态', '推理', 'Agent'],
+                intro: 'GPT-5是OpenAI于2025年8月发布的旗舰模型，引入"统一推理系统"，自动判断任务难度决定是否进入深度思考模式。在数学（AIME 2025）、编程（SWE-bench Verified）、多模态理解（MMMU）等基准上均达到业界SOTA，幻觉率显著降低。',
+                guide: ['通过OpenAI API或ChatGPT使用', '支持400K上下文与多模态输入', '启用verbosity参数控制输出长度', 'Pro订阅用户可使用GPT-5 Pro深度推理']
+            },
+            'gpt-5.2': {
+                title: 'GPT-5.2', vendor: 'OpenAI', vendorIcon: 'O', vendorColor: 'bg-green-600',
+                description: 'GPT-5升级版，Agent与长程任务更稳定',
+                releaseDate: '2025-12-11', price: '¥0.095/1K输入, ¥0.72/1K输出', context: '400K tokens',
+                modality: '文本、图像、音频、视频', capability: 'Agent、长程任务',
+                scenarios: ['智能体任务', '代码工程', '复杂研究', '多模态处理'],
+                tags: ['Agent', '多模态', '工具调用', '旗舰'],
+                intro: 'GPT-5.2是OpenAI在2025年12月发布的旗舰升级版本，重点强化了智能体任务（Agent）、长程任务和工具调用的稳定性。在Tau-bench、AgentBench等Agent基准上较GPT-5提升约18%，并支持更精细的工具调用控制。',
+                guide: ['通过OpenAI API使用', '支持Parallel Tool Calls与延迟加载', '启用reasoning_effort控制推理深度', '支持Batch API和Prompt Caching降低成本']
+            },
+            'gpt-5.3-codex': {
+                title: 'GPT-5.3 Codex', vendor: 'OpenAI', vendorIcon: 'O', vendorColor: 'bg-green-600',
+                description: '代码专用版，软件开发Agent最佳搭档',
+                releaseDate: '2026-02-04', price: '¥0.110/1K输入, ¥0.88/1K输出', context: '400K tokens',
+                modality: '文本、代码、图像', capability: '代码生成、Agent',
+                scenarios: ['代码工程', '代码审查', 'Bug修复', '自动化重构'],
+                tags: ['编程', 'Agent', '工具调用', '代码专用'],
+                intro: 'GPT-5.3 Codex是OpenAI在2026年2月发布的代码专用模型，专为软件工程Agent设计。在SWE-bench Pro、SWE-bench Verified、Multi-SWE-Bench等编程基准上达到业界SOTA，并强化了在大型代码库中跨文件修改的能力。',
+                guide: ['通过OpenAI API使用codex专用模型', '结合Codex CLI/IDE插件提升开发效率', '支持Shell/Python/JS等工具调用', '企业版支持私有代码库索引']
+            },
+            'gpt-5.4': {
+                title: 'GPT-5.4', vendor: 'OpenAI', vendorIcon: 'O', vendorColor: 'bg-green-600',
+                description: '2026年春季旗舰，深度推理与工具调用再升级',
+                releaseDate: '2026-04-23', price: '¥0.105/1K输入, ¥0.80/1K输出', context: '400K tokens',
+                modality: '文本、图像、音频、视频', capability: '深度推理、Agent',
+                scenarios: ['复杂推理', '代码工程', '多模态创作', '企业知识管理'],
+                tags: ['旗舰', '多模态', 'Agent', '推理'],
+                intro: 'GPT-5.4是OpenAI在2026年4月发布的旗舰模型，引入"Chain of Tools"机制，让模型在推理过程中可主动选择调用工具的时机与顺序。在数学、编程、博士级科学问题（GPQA Diamond）上较5.2进一步提升。',
+                guide: ['通过OpenAI API或ChatGPT使用', '启用Chain of Tools自动编排工具', '支持Reasoning Tokens精细计费', 'Pro版用户独享深度推理能力']
+            },
+            'gpt-5.4-pro': {
+                title: 'GPT-5.4 Pro', vendor: 'OpenAI', vendorIcon: 'O', vendorColor: 'bg-green-600',
+                description: 'GPT-5.4 Pro版，更长推理与最高智能水平',
+                releaseDate: '2026-04-23', price: '¥0.420/1K输入, ¥3.20/1K输出', context: '400K tokens',
+                modality: '文本、图像、音频、视频', capability: '扩展推理、最高智能',
+                scenarios: ['博士级研究', '复杂决策', '代码工程', '多模态分析'],
+                tags: ['Pro', '深度推理', '旗舰', '最高智能'],
+                intro: 'GPT-5.4 Pro是GPT-5.4的Pro版本，提供更长的推理时间和更高的智能上限。可处理长达数小时的复杂任务，在ARC-AGI、FrontierMath等高难度基准上保持业界领先。适合高价值、深度研究类任务。',
+                guide: ['仅对ChatGPT Pro订阅与API Tier 5+开放', '支持更长的reasoning_tokens（最高数百K）', '支持o-series风格的扩展推理', '可结合Tools API构建企业级Agent']
+            },
+            'gpt-5.5': {
+                title: 'GPT-5.5', vendor: 'OpenAI', vendorIcon: 'O', vendorColor: 'bg-green-600',
+                description: '2026年夏季旗舰，多模态与Agent双线跃升',
+                releaseDate: '2026-05-28', price: '¥0.115/1K输入, ¥0.88/1K输出', context: '400K tokens',
+                modality: '文本、图像、音频、视频、3D', capability: '3D理解、统一多模态',
+                scenarios: ['复杂推理', '3D场景理解', '代码工程', '智能体任务'],
+                tags: ['旗舰', '3D', '多模态', 'Agent'],
+                intro: 'GPT-5.5是OpenAI在2026年5月底发布的最新旗舰版本，新增原生3D场景理解能力，可解析点云、NeRF等多种3D表示。在视频理解、Agent任务稳定性上较5.4进一步提升。',
+                guide: ['通过OpenAI API或ChatGPT使用', '支持3D场景描述与点云输入', '启用Reasoning Tokens精确计费', '支持Memory功能实现长期记忆']
+            },
+            'gpt-oss-120b': {
+                title: 'GPT-OSS-120B', vendor: 'OpenAI', vendorIcon: 'O', vendorColor: 'bg-green-600',
+                description: 'OpenAI首款开源大模型，开放权重可商用',
+                releaseDate: '2025-08-05', price: '开源免费 / API按量计费', context: '128K tokens',
+                modality: '文本', capability: '开源、可商用',
+                scenarios: ['私有化部署', '代码生成', '通用对话', '二次开发'],
+                tags: ['开源', '可商用', 'MoE', '企业级'],
+                intro: 'GPT-OSS-120B是OpenAI于2025年8月发布的开源大模型（120B参数MoE架构），采用Apache 2.0许可证，可自由商用。性能接近o3-mini，是企业私有化部署和定制化开发的理想选择。',
+                guide: ['通过Hugging Face下载模型权重', '支持vLLM、SGLang、Transformers部署', '需至少80GB显存（H100级别）', '提供完整的Function Calling支持']
+            },
+            'gpt-image-2': {
+                title: 'GPT-Image-2', vendor: 'OpenAI', vendorIcon: 'O', vendorColor: 'bg-green-600',
+                description: 'OpenAI第二代图像生成模型，复杂指令遵循',
+                releaseDate: '2026-03-12', price: '¥0.075/低质量, ¥0.30/高质量(1024×1024)', context: '图像输入',
+                modality: '文本、图像输入/输出', capability: '图像生成、精确编辑',
+                scenarios: ['图像创作', '产品设计', '营销素材', 'UI原型'],
+                tags: ['图像生成', '精确编辑', '文本渲染', '旗舰'],
+                intro: 'GPT-Image-2是OpenAI 2026年3月发布的第二代图像生成模型，在复杂指令遵循、文字渲染、风格多样化上较DALL·E 3大幅提升。支持参考图、Inpainting、风格转换等多种编辑方式。',
+                guide: ['通过OpenAI API使用gpt-image-2', '支持size: 1024x1024/1024x1536/1536x1024', '支持response_format: url/b64_json', '支持n参数批量生成']
+            },
+            // ========== 千问Qwen 全系列 ==========
+            'qwen3-coder-480b-a35b-instruct': {
+                title: 'Qwen3-Coder-480B-A35B-Instruct', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3代码专用版，480B MoE架构编程旗舰',
+                releaseDate: '2025-07-23', price: '¥0.018/1K输入, ¥0.090/1K输出', context: '256K tokens',
+                modality: '文本、代码', capability: '代码生成、Agent开发',
+                scenarios: ['软件工程', '代码审查', '智能体开发', '复杂重构'],
+                tags: ['编程', 'MoE', 'Agent', '长上下文'],
+                intro: 'Qwen3-Coder-480B-A35B-Instruct是阿里通义千问2025年7月发布的代码专用旗舰，采用480B总参/35B激活的MoE架构，原生支持256K上下文。在SWE-bench Verified上达到69.6%准确率，是当前开源代码模型的SOTA。',
+                guide: ['通过阿里云百炼ModelStudio使用', '结合Qwen Code CLI进行本地编码', '支持Qwen-Agent快速构建开发助手', '支持256K超长代码库上下文']
+            },
+            'qwen3-vl-235b-a22b-instruct': {
+                title: 'Qwen3-VL-235B-A22B-Instruct', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3视觉版235B参数，多模态理解旗舰',
+                releaseDate: '2025-09-23', price: '¥0.020/1K输入, ¥0.100/1K输出', context: '256K tokens',
+                modality: '文本、图像、视频', capability: '视觉理解、文档解析',
+                scenarios: ['视觉问答', '文档理解', '视频分析', 'GUI自动化'],
+                tags: ['多模态', '视觉', '视频理解', 'MoE'],
+                intro: 'Qwen3-VL-235B-A22B-Instruct是千问3视觉版的多模态旗舰模型（235B总参/22B激活MoE），原生支持图像、视频和长文档理解。可识别图片中物体坐标、解析图表数据、操控GUI界面，是企业级视觉Agent的首选。',
+                guide: ['通过阿里云百炼使用', '支持视频关键帧与时间戳理解', '可输出物体定位坐标实现GUI操作', '支持256K长上下文处理长视频']
+            },
+            'qwen3-vl-235b-a22b-thinking': {
+                title: 'Qwen3-VL-235B-A22B-Thinking', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3视觉思考版，深度推理增强',
+                releaseDate: '2025-09-23', price: '¥0.025/1K输入, ¥0.125/1K输出', context: '256K tokens',
+                modality: '文本、图像、视频', capability: '深度视觉推理',
+                scenarios: ['复杂图表分析', '多步视觉推理', '科研图像', '视觉Agent'],
+                tags: ['多模态', '深度推理', '视觉', '思考'],
+                intro: 'Qwen3-VL-235B-A22B-Thinking是Instruct版的"深度思考"版本，通过增加推理深度显著提升复杂视觉任务的准确率。在多步视觉推理、数学图表理解、科学图像分析等任务上较Instruct版提升约15%。',
+                guide: ['通过阿里云百炼启用thinking模式', '适合复杂多步视觉推理任务', '支持详细思维链输出', '可结合工具调用构建视觉Agent']
+            },
+            'qwen3-embedding-8b': {
+                title: 'Qwen3-Embedding-8B', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3向量嵌入模型，多语言语义检索',
+                releaseDate: '2025-06-05', price: '¥0.001/1K tokens', context: '32K tokens',
+                modality: '文本', capability: '语义嵌入、检索',
+                scenarios: ['RAG检索', '语义搜索', '文本去重', '推荐系统'],
+                tags: ['嵌入', 'RAG', '多语言', '检索'],
+                intro: 'Qwen3-Embedding-8B是阿里通义千问2025年6月发布的向量嵌入模型（8B参数），支持100+种语言。在MTEB（多任务嵌入基准）英文榜单上达到SOTA，中文检索效果领先，是企业RAG应用的首选嵌入模型。',
+                guide: ['通过阿里云百炼API调用', '支持自定义维度（最高4096维）', '结合DashVector/Elasticsearch使用', '支持100+种语言与代码检索']
+            },
+            'qwen3-reranker-8b': {
+                title: 'Qwen3-Reranker-8B', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3重排序模型，提升RAG检索精度',
+                releaseDate: '2025-06-05', price: '¥0.002/1K tokens', context: '32K tokens',
+                modality: '文本', capability: '语义重排序',
+                scenarios: ['RAG精排', '搜索结果排序', '问答系统', '文档检索'],
+                tags: ['重排序', 'RAG', '检索增强', '排序'],
+                intro: 'Qwen3-Reranker-8B是千问3系列的重排序（Reranker）模型，专为提升RAG系统的检索精度设计。基于Cross-Encoder架构，对Query-Document对进行深度语义匹配，可显著提升最终答案的准确性。',
+                guide: ['作为RAG流程的第二阶段排序器使用', '配合Qwen3-Embedding形成完整检索链', '通过阿里云百炼API调用', '适合中文+英文混合检索场景']
+            },
+            'qwen3-vl-30b-a3b-instruct': {
+                title: 'Qwen3-VL-30B-A3B-Instruct', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3视觉版轻量旗舰，30B MoE架构',
+                releaseDate: '2025-09-23', price: '¥0.008/1K输入, ¥0.040/1K输出', context: '128K tokens',
+                modality: '文本、图像、视频', capability: '视觉理解、性价比',
+                scenarios: ['视觉问答', '文档理解', '多模态对话', '中小企业应用'],
+                tags: ['多模态', '视觉', '轻量', '性价比'],
+                intro: 'Qwen3-VL-30B-A3B-Instruct是千问3视觉版的轻量版本（30B总参/3B激活MoE），在保持旗舰级视觉能力的同时显著降低成本。适合中小企业的多模态应用和实时视觉场景。',
+                guide: ['通过阿里云百炼使用', '支持128K上下文与视频理解', '适合成本敏感的视觉应用', '可结合Qwen-Agent快速落地']
+            },
+            'qwen3-235b-a22b-thinking-2507': {
+                title: 'Qwen3-235B-A22B-Thinking-2507', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3旗舰思考版，2507更新加强推理',
+                releaseDate: '2025-07-25', price: '¥0.022/1K输入, ¥0.110/1K输出', context: '128K tokens',
+                modality: '文本', capability: '深度推理、数学',
+                scenarios: ['数学推理', '代码生成', '科学分析', '复杂规划'],
+                tags: ['推理', '数学', '思考', 'MoE'],
+                intro: 'Qwen3-235B-A22B-Thinking-2507是千问3旗舰思考模型2025年7月25日更新版本，在数学竞赛（AIME）、代码生成（LiveCodeBench）、博士级科学问题（GPQA Diamond）等基准上达到开源SOTA。',
+                guide: ['通过阿里云百炼API调用', '启用thinking参数控制推理深度', '支持详细思维链展示', '结合vLLM/SGLang本地部署']
+            },
+            'qwen3-235b-a22b-instruct-2507': {
+                title: 'Qwen3-235B-A22B-Instruct-2507', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3旗舰标准版，2507更新优化指令遵循',
+                releaseDate: '2025-07-25', price: '¥0.018/1K输入, ¥0.090/1K输出', context: '128K tokens',
+                modality: '文本', capability: '通用对话、指令遵循',
+                scenarios: ['通用助手', '代码生成', '长文档处理', '企业应用'],
+                tags: ['通用', '指令遵循', 'MoE', '开源'],
+                intro: 'Qwen3-235B-A22B-Instruct-2507是千问3旗舰Instruct版本2025年7月25日更新，在指令遵循、长文档处理、代码生成等任务上大幅优化。235B总参数/22B激活的MoE架构，性能接近闭源旗舰但完全开源。',
+                guide: ['通过阿里云百炼或Hugging Face使用', '支持128K上下文与多语言', '适合企业私有化部署', '支持Function Calling与工具使用']
+            },
+            'wan2.6-i2v': {
+                title: 'Wan2.6-I2V', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '通义万相2.6图生视频版，电影级运镜',
+                releaseDate: '2026-01-22', price: '¥0.20/视频秒', context: '图像输入',
+                modality: '图像、视频输出', capability: '图生视频、运镜控制',
+                scenarios: ['短视频创作', '广告制作', '影视特效', '产品演示'],
+                tags: ['视频生成', '图生视频', '运镜', '电影级'],
+                intro: 'Wan2.6-I2V是阿里通义万相2026年1月发布的图生视频模型（I2V），支持高达1080P分辨率、10秒视频输出和50+种电影级运镜指令。在VBench榜单上位列前列，是中文场景下最易用的I2V模型之一。',
+                guide: ['通过阿里云百炼API调用', '支持运镜指令（推/拉/摇/移）', '可结合wan2.6-t2i实现多模态创作', '支持角色一致性（S2V）功能']
+            },
+            'qwen3-vl-flash': {
+                title: 'Qwen3-VL-Flash', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3视觉版Flash，高速低成本',
+                releaseDate: '2025-10-15', price: '¥0.003/1K输入, ¥0.012/1K输出', context: '128K tokens',
+                modality: '文本、图像、视频', capability: '高速视觉理解',
+                scenarios: ['实时视觉对话', '内容审核', '电商搜图', '短视频理解'],
+                tags: ['多模态', '高速', '低成本', '视觉'],
+                intro: 'Qwen3-VL-Flash是千问3视觉版的轻量版本，主打高速度与低价格。在保持基本多模态能力的同时，单价仅为旗舰版的1/7，适合实时视觉对话、内容审核、电商搜图等高频场景。',
+                guide: ['通过阿里云百炼API使用', '支持图像、视频、文档输入', '结合Qwen-Agent构建实时视觉助手', '支持函数调用与结构化输出']
+            },
+            'qwen-flash': {
+                title: 'Qwen-Flash', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问Flash版本，文本极速响应',
+                releaseDate: '2025-10-15', price: '¥0.002/1K输入, ¥0.008/1K输出', context: '128K tokens',
+                modality: '文本', capability: '高速文本生成',
+                scenarios: ['实时对话', '内容创作', '翻译', '大规模批处理'],
+                tags: ['高速', '低成本', '文本', '轻量'],
+                intro: 'Qwen-Flash是千问3系列的轻量文本模型，专为实时对话和大规模批处理设计。在保持千问3系列基础能力的同时，提供毫秒级响应，是客服、聊天机器人和批量文本处理的首选。',
+                guide: ['通过阿里云百炼API调用', '支持128K上下文', '适合高吞吐量场景', '支持Function Calling']
+            },
+            'qwen3-30b-a3b-instruct-2507': {
+                title: 'Qwen3-30B-A3B-Instruct-2507', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3轻量旗舰，30B MoE架构',
+                releaseDate: '2025-07-29', price: '¥0.005/1K输入, ¥0.025/1K输出', context: '128K tokens',
+                modality: '文本', capability: '通用对话、性价比',
+                scenarios: ['通用助手', '企业应用', '私有化部署', '代码生成'],
+                tags: ['轻量', 'MoE', '开源', '性价比'],
+                intro: 'Qwen3-30B-A3B-Instruct-2507是千问3系列的轻量旗舰版本（30B总参/3B激活），2025年7月更新版。具备128K上下文与优秀的指令遵循能力，单张A100/H100即可部署，是企业私有化的理想选择。',
+                guide: ['通过阿里云百炼或Hugging Face使用', '支持vLLM/SGLang本地部署', '单卡A100即可推理', '支持Function Calling与工具使用']
+            },
+            'qwen3-max-2026-01-23': {
+                title: 'Qwen3-Max-2026-01-23', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3 Max最新版，2026-01快照',
+                releaseDate: '2026-01-23', price: '¥0.040/1K输入, ¥0.200/1K输出', context: '256K tokens',
+                modality: '文本', capability: '旗舰推理、长上下文',
+                scenarios: ['复杂推理', '代码工程', '企业级应用', '长文档分析'],
+                tags: ['旗舰', '推理', '长上下文', '思考'],
+                intro: 'Qwen3-Max-2026-01-23是千问3 Max系列在2026年1月23日的最新快照版本，采用更大参数规模（超过720B），在数学、编程、科学推理上达到业界SOTA。支持256K上下文，适合企业级高难度任务。',
+                guide: ['通过阿里云百炼API调用', '支持256K长上下文与思考模式', '支持多轮工具调用', '结合Qwen-Agent构建企业应用']
+            },
+            'wan2.6-t2i': {
+                title: 'Wan2.6-T2I', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '通义万相2.6文生图，中文渲染领先',
+                releaseDate: '2026-01-22', price: '¥0.025/图像', context: '文本输入',
+                modality: '文本、图像输出', capability: '文生图、中文渲染',
+                scenarios: ['海报设计', '营销素材', '产品图', 'IP形象'],
+                tags: ['文生图', '中文渲染', '设计', '艺术'],
+                intro: 'Wan2.6-T2I是通义万相2.6的文生图模型，2026年1月发布。在中文文字渲染、艺术风格多样化、复杂构图指令遵循上业界领先。支持高达2K分辨率输出，是中文海报和营销素材创作的首选。',
+                guide: ['通过阿里云百炼API调用', '支持2K分辨率输出', '支持多种艺术风格（写实/动漫/国风）', '中文文字渲染准确率高']
+            },
+            'qwen3-vl-plus': {
+                title: 'Qwen3-VL-Plus', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3视觉增强版，企业级多模态',
+                releaseDate: '2025-11-12', price: '¥0.012/1K输入, ¥0.060/1K输出', context: '128K tokens',
+                modality: '文本、图像、视频', capability: '企业级视觉理解',
+                scenarios: ['企业文档处理', '视觉Agent', '多模态搜索', '视频分析'],
+                tags: ['多模态', '视觉', '企业级', '长上下文'],
+                intro: 'Qwen3-VL-Plus是千问3视觉版的增强版本，2025年11月发布。重点优化了企业场景的复杂文档理解、图表分析、视频问答等任务，是企业级多模态应用的高性价比选择。',
+                guide: ['通过阿里云百炼使用', '支持128K上下文处理长视频', '结合Qwen-Agent快速构建视觉应用', '支持函数调用与坐标输出']
+            },
+            'qwen3.5-35b-a3b': {
+                title: 'Qwen3.5-35B-A3B', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3.5轻量旗舰，35B MoE架构',
+                releaseDate: '2026-03-15', price: '¥0.006/1K输入, ¥0.030/1K输出', context: '128K tokens',
+                modality: '文本', capability: '通用对话、性价比',
+                scenarios: ['通用助手', '代码生成', '企业应用', '私有化部署'],
+                tags: ['千问3.5', 'MoE', '轻量', '开源'],
+                intro: 'Qwen3.5-35B-A3B是千问3.5系列的轻量旗舰版本（35B总参/3B激活），2026年3月发布。在指令遵循、长文档处理、多语言支持上较3.0显著提升，单卡H100即可高效推理。',
+                guide: ['通过阿里云百炼或Hugging Face使用', '支持vLLM/SGLang本地部署', '单卡H100即可推理', '支持128K上下文与Function Calling']
+            },
+            'qwen3.5-flash': {
+                title: 'Qwen3.5-Flash', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3.5极速版，超低延迟',
+                releaseDate: '2026-03-15', price: '¥0.0015/1K输入, ¥0.006/1K输出', context: '128K tokens',
+                modality: '文本', capability: '极速响应、低成本',
+                scenarios: ['实时对话', '内容创作', '批处理', '边缘部署'],
+                tags: ['千问3.5', '极速', '低成本', '轻量'],
+                intro: 'Qwen3.5-Flash是千问3.5系列的极速版本，2026年3月发布。在保持3.5系列基础能力的同时，提供毫秒级响应，单价极低，是实时对话、大规模批处理和边缘部署的首选。',
+                guide: ['通过阿里云百炼API调用', '支持128K上下文', '适合高吞吐量场景', '支持Function Calling']
+            },
+            'qwen3.5-397b-a17b': {
+                title: 'Qwen3.5-397B-A17B', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3.5超大MoE，397B参数旗舰',
+                releaseDate: '2026-04-08', price: '¥0.030/1K输入, ¥0.150/1K输出', context: '256K tokens',
+                modality: '文本', capability: '旗舰推理、长上下文',
+                scenarios: ['复杂推理', '代码工程', '长文档分析', '企业级应用'],
+                tags: ['千问3.5', 'MoE', '旗舰', '长上下文'],
+                intro: 'Qwen3.5-397B-A17B是千问3.5系列的超大MoE模型（397B总参/17B激活），2026年4月发布。在数学、编程、博士级科学问题等高难度基准上达到开源SOTA，是当前最强大的开源大模型之一。',
+                guide: ['通过阿里云百炼API调用', '支持256K上下文与思考模式', '支持工具调用与多轮对话', '适合企业级高难度任务']
+            },
+            'qwen3.5-397b-a17b-claude': {
+                title: 'Qwen3.5-397B-A17B (Claude兼容版)', vendor: '通义千问', vendorIcon: 'Q', vendorColor: 'bg-primary',
+                description: '千问3.5超大MoE Claude API兼容版',
+                releaseDate: '2026-04-08', price: '¥0.030/1K输入, ¥0.150/1K输出', context: '256K tokens',
+                modality: '文本', capability: 'Claude API兼容、企业迁移',
+                scenarios: ['企业迁移', '代码工程', '长文档分析', 'Agent开发'],
+                tags: ['千问3.5', 'Claude兼容', 'MoE', '企业级'],
+                intro: 'Qwen3.5-397B-A17B (Claude兼容版) 是千问3.5超大模型的Claude API兼容版本，提供Anthropic API协议适配，可直接替换Claude系列模型，无缝对接现有Claude生态工具。',
+                guide: ['通过阿里云百炼使用Claude兼容API', '可直接替换claude-3.5-sonnet等模型', '适合从Claude生态迁移的企业', '支持Claude Code IDE插件']
+            },
+            // ========== 智谱GLM 全系列 ==========
+            'glm-4.6': {
+                title: 'GLM-4.6', vendor: '智谱AI', vendorIcon: 'Z', vendorColor: 'bg-blue-500',
+                description: '智谱GLM-4.6，代码与Agent能力升级',
+                releaseDate: '2025-09-30', price: '¥0.008/1K输入, ¥0.040/1K输出', context: '200K tokens',
+                modality: '文本', capability: '代码、Agent',
+                scenarios: ['代码工程', '智能体任务', '通用对话', '企业应用'],
+                tags: ['编程', 'Agent', '工具调用', '开源'],
+                intro: 'GLM-4.6是智谱AI在2025年9月底发布的主力升级版，在编码、长程任务、工具调用上较4.5显著提升。支持200K上下文，是国产开源模型中的优秀代表。',
+                guide: ['通过智谱AI开放平台调用', '支持Function Calling与工具使用', '支持GLM-Z1深度思考模式', '结合LangChain/CrewAI构建Agent']
+            },
+            'glm-4.7': {
+                title: 'GLM-4.7', vendor: '智谱AI', vendorIcon: 'Z', vendorColor: 'bg-blue-500',
+                description: '智谱GLM-4.7，2025冬季升级推理增强',
+                releaseDate: '2025-12-12', price: '¥0.010/1K输入, ¥0.050/1K输出', context: '200K tokens',
+                modality: '文本', capability: '深度推理、多模态',
+                scenarios: ['复杂推理', '代码工程', '智能体任务', '企业知识管理'],
+                tags: ['推理', '多模态', 'Agent', '思考'],
+                intro: 'GLM-4.7是智谱AI在2025年12月发布的旗舰升级版，重点强化推理能力与多模态理解。原生支持图像输入，在数学、编程、博士级科学问题等基准上达到业界领先。',
+                guide: ['通过智谱AI开放平台调用', '支持200K上下文与图像输入', '启用GLM-Z1深度思考模式', '支持Function Calling与结构化输出']
+            },
+            'glm-5': {
+                title: 'GLM-5', vendor: '智谱AI', vendorIcon: 'Z', vendorColor: 'bg-blue-500',
+                description: '智谱GLM-5，2026春季旗舰跃升',
+                releaseDate: '2026-04-15', price: '¥0.015/1K输入, ¥0.075/1K输出', context: '200K tokens',
+                modality: '文本、图像、视频', capability: '原生多模态、深度推理',
+                scenarios: ['复杂推理', '代码工程', '多模态处理', '智能体任务'],
+                tags: ['旗舰', '多模态', '推理', '原生'],
+                intro: 'GLM-5是智谱AI在2026年4月发布的最新旗舰模型，采用全新架构支持原生多模态理解。在数学、编程、博士级科学问题等高难度基准上达到业界SOTA，是国产大模型的代表性突破。',
+                guide: ['通过智谱AI开放平台调用', '原生支持文本、图像、视频输入', '支持200K上下文与思考模式', '支持工具调用与多轮对话']
+            },
+            'glm-5.1': {
+                title: 'GLM-5.1', vendor: '智谱AI', vendorIcon: 'Z', vendorColor: 'bg-blue-500',
+                description: '智谱GLM-5.1，2026夏季升级Agent增强',
+                releaseDate: '2026-05-22', price: '¥0.018/1K输入, ¥0.090/1K输出', context: '256K tokens',
+                modality: '文本、图像、视频、音频', capability: 'Agent、统一多模态',
+                scenarios: ['智能体任务', '复杂推理', '代码工程', '多模态创作'],
+                tags: ['旗舰', 'Agent', '原生多模态', '256K'],
+                intro: 'GLM-5.1是智谱AI在2026年5月发布的最新旗舰升级版，重点强化智能体（Agent）任务与多模态创作能力。新增原生音频理解，256K上下文，是企业级Agent开发的首选。',
+                guide: ['通过智谱AI开放平台调用', '支持256K长上下文', '原生支持文本、图像、视频、音频', '结合GLM-Agent SDK快速构建生产级Agent']
+            },
+            // ========== Eleven Labs ==========
+            'eleven-v3': {
+                title: 'Eleven v3', vendor: 'ElevenLabs', vendorIcon: 'E', vendorColor: 'bg-purple-600',
+                description: 'ElevenLabs最新语音合成模型，多语种情感丰富',
+                releaseDate: '2025-06-05', price: '$0.30/1K字符', context: '文本输入',
+                modality: '文本、音频输出', capability: '语音合成、情感控制',
+                scenarios: ['有声读物', '视频配音', '客服语音', '多语种内容'],
+                tags: ['语音合成', '多语种', '情感', '多说话人'],
+                intro: 'Eleven v3是ElevenLabs 2025年6月发布的最新语音合成（TTS）模型，支持70+种语言、情感标签（<emotion>）、多人对话生成。是当前业界最自然、最具表现力的TTS模型之一。',
+                guide: ['通过ElevenLabs API调用', '支持情感标签控制语调', '支持多人对话生成', '提供3000+种社区声音']
+            },
+            'eleven-flash-v2': {
+                title: 'Eleven Flash v2', vendor: 'ElevenLabs', vendorIcon: 'E', vendorColor: 'bg-purple-600',
+                description: 'ElevenLabs Flash版，75ms超低延迟',
+                releaseDate: '2024-10-15', price: '$0.15/1K字符', context: '文本输入',
+                modality: '文本、音频输出', capability: '超低延迟语音合成',
+                scenarios: ['实时对话', '客服系统', '语音助手', '游戏NPC'],
+                tags: ['语音合成', '低延迟', '实时', 'Flash'],
+                intro: 'Eleven Flash v2是ElevenLabs 2024年10月发布的超低延迟版本，推理延迟低至75ms，是构建实时语音对话应用的理想选择。保持高质量的同时显著降低成本。',
+                guide: ['通过ElevenLabs API调用', '支持流式输出实现实时播放', '适合实时对话与客服系统', '支持32种语言']
+            },
+            'eleven-flash-v2-5': {
+                title: 'Eleven Flash v2.5', vendor: 'ElevenLabs', vendorIcon: 'E', vendorColor: 'bg-purple-600',
+                description: 'Flash v2升级版，延迟更低音质更好',
+                releaseDate: '2025-04-10', price: '$0.12/1K字符', context: '文本输入',
+                modality: '文本、音频输出', capability: '超低延迟、高保真',
+                scenarios: ['实时对话', '客服系统', '语音助手', '多语种实时翻译'],
+                tags: ['语音合成', '低延迟', '高保真', 'Flash'],
+                intro: 'Eleven Flash v2.5是Flash v2的2025年4月升级版，在保持75ms超低延迟的同时，音质和自然度大幅提升。价格也较v2下降约20%，是实时语音应用的性价比首选。',
+                guide: ['通过ElevenLabs API调用', '支持流式输出', '新增32种语言与情感控制', '适合大规模客服与实时对话']
+            },
+            // ========== MiniMax（MiniMax） ==========
+            'minimax-m2.1': {
+                title: 'Minimax M2.1', vendor: 'MiniMax（稀宇科技）', vendorIcon: 'M', vendorColor: 'bg-orange-500',
+                description: 'MiniMax M2系列语言模型，国产开源代表',
+                releaseDate: '2024-10-15', price: '¥0.005/1K输入, ¥0.020/1K输出', context: '128K tokens',
+                modality: '文本', capability: '通用对话、代码',
+                scenarios: ['通用助手', '代码生成', '企业应用', '私有化部署'],
+                tags: ['国产', '开源', '通用', '性价比'],
+                intro: 'Minimax M2.1是稀宇科技2024年10月发布的中量级语言模型，支持128K上下文，是MiniMax M2系列的开源版本。在多项中文基准上表现优秀，是国产开源大模型的代表。',
+                guide: ['通过MiniMax开放平台调用', '支持vLLM/SGLang本地部署', '支持Function Calling', '适合中文企业应用']
+            },
+            'minimax-m2.5': {
+                title: 'Minimax M2.5', vendor: 'MiniMax（稀宇科技）', vendorIcon: 'M', vendorColor: 'bg-orange-500',
+                description: 'M2.5升级，2025春季开源旗舰',
+                releaseDate: '2025-04-22', price: '¥0.006/1K输入, ¥0.025/1K输出', context: '128K tokens',
+                modality: '文本', capability: '通用对话、Agent',
+                scenarios: ['通用助手', '代码生成', '智能体任务', '企业应用'],
+                tags: ['国产', '开源', 'Agent', '工具调用'],
+                intro: 'Minimax M2.5是稀宇科技2025年4月发布的M2升级版，在推理、代码、Agent任务上较M2.1显著提升。支持Function Calling和工具调用，是构建企业级智能体的高性价比选择。',
+                guide: ['通过MiniMax开放平台或开源权重使用', '支持Function Calling与工具使用', '可结合海螺AI的智能体平台', '适合中文场景的Agent开发']
+            },
+            'hailuo-02': {
+                title: 'Hailuo 02', vendor: 'MiniMax（稀宇科技）', vendorIcon: 'H', vendorColor: 'bg-orange-500',
+                description: '海螺02视频生成模型，全球排名第二',
+                releaseDate: '2025-06-18', price: '¥0.50/视频(768p-6s), ¥1.50/视频(1080p-6s)', context: '文本/图像输入',
+                modality: '文本、图像、视频输出', capability: '视频生成、物理模拟',
+                scenarios: ['短视频创作', '广告制作', '影视特效', '内容营销'],
+                tags: ['视频生成', '原生1080P', 'NCR架构', '物理模拟'],
+                intro: 'Hailuo 02是稀宇科技2025年6月发布的视频生成旗舰，采用创新的Noise-aware Compute Redistribution (NCR)架构，参数与训练数据均为上一代3-4倍。在Artificial Analysis视频竞技场全球排名第2，超越谷歌Veo 3 Preview和快手可灵2.0。',
+                guide: ['通过海螺AI Web/App或MiniMax开放平台使用', '支持768p-6s/768p-10s/1080p-6s三种规格', '支持Start/End Frame镜头控制', '可结合Media Agent构建自动化视频工作流']
+            },
+            'hailuo-2.3': {
+                title: 'Hailuo 2.3', vendor: 'MiniMax（稀宇科技）', vendorIcon: 'H', vendorColor: 'bg-orange-500',
+                description: '海螺2.3版本，复杂动作与微表情领先',
+                releaseDate: '2025-10-15', price: '¥0.60/视频(1080p-6s), ¥0.90/视频(1080p-10s)', context: '文本/图像输入',
+                modality: '文本、图像、视频输出', capability: '复杂动作、微表情、风格稳定',
+                scenarios: ['剧情短片', '角色动画', '艺术风格', '内容创作'],
+                tags: ['视频生成', '复杂动作', '微表情', '动漫'],
+                intro: 'Hailuo 2.3是稀宇科技2025年10月发布的视频生成升级版，重点强化复杂动作、人物微表情、风格稳定性和运动控制。是海螺AI当前的主推版本，适合剧情短片和风格化内容创作。',
+                guide: ['通过海螺AI Web/App或MiniMax开放平台使用', '支持Director运镜指令控制', '支持anime与艺术风格增强', '可结合Media Agent自动创作']
+            },
+            'hailuo-2.3-fast': {
+                title: 'Hailuo 2.3 Fast', vendor: 'MiniMax（稀宇科技）', vendorIcon: 'H', vendorColor: 'bg-orange-500',
+                description: '海螺2.3快速版，更便宜更快速',
+                releaseDate: '2025-10-15', price: '¥0.30/视频(1080p-6s)', context: '文本/图像输入',
+                modality: '文本、图像、视频输出', capability: '快速视频生成',
+                scenarios: ['批量内容生产', '电商展示', '社媒内容', '快速原型'],
+                tags: ['视频生成', '快速', '低成本', '批量'],
+                intro: 'Hailuo 2.3 Fast是海螺2.3的快速版本，2025年10月同步发布。在保持2.3核心质量的同时，生成速度提升约2倍，价格降低约50%，是批量内容生产的高性价比选择。',
+                guide: ['通过海螺AI Web/App或MiniMax开放平台使用', '适合大规模批量视频生产', '质量与速度平衡的优选', '支持标准I2V与T2V流程']
+            },
+            'minimax-m2.7': {
+                title: 'Minimax M2.7', vendor: 'MiniMax（稀宇科技）', vendorIcon: 'M', vendorColor: 'bg-orange-500',
+                description: 'M2.7最新升级，原生多模态语言模型',
+                releaseDate: '2026-04-10', price: '¥0.010/1K输入, ¥0.040/1K输出', context: '256K tokens',
+                modality: '文本、图像、视频', capability: '原生多模态、Agent',
+                scenarios: ['通用助手', '代码生成', '智能体任务', '多模态应用'],
+                tags: ['国产', '原生多模态', 'Agent', '长上下文'],
+                intro: 'Minimax M2.7是稀宇科技2026年4月发布的最新语言模型，原生支持文本、图像、视频多模态输入。256K上下文窗口，在推理、代码、Agent任务上较M2.5大幅提升。',
+                guide: ['通过MiniMax开放平台或开源权重使用', '原生支持多模态输入', '支持Function Calling与工具使用', '可结合海螺AI的多模态能力']
+            },
+            // ========== Vidu ==========
+            'viduq2-turbo': {
+                title: 'Vidu Q2 Turbo', vendor: 'Vidu（生数科技）', vendorIcon: 'V', vendorColor: 'bg-rose-600',
+                description: 'Vidu Q2 Turbo版，国产视频生成高速版',
+                releaseDate: '2025-11-08', price: '¥0.30/视频(720p-5s)', context: '文本/图像输入',
+                modality: '文本、图像、视频输出', capability: '快速视频生成',
+                scenarios: ['短视频', '社媒内容', '电商展示', '快速原型'],
+                tags: ['视频生成', '快速', '低成本', 'Turbo'],
+                intro: 'Vidu Q2 Turbo是生数科技2025年11月发布的快速版本视频生成模型，在保持Q2基础质量的同时显著提升生成速度、降低成本。适合短视频、电商展示等高频生产场景。',
+                guide: ['通过Vidu开放平台调用', '支持文本和图像输入', '生成时间约30秒', '支持多种分辨率和时长']
+            },
+            'viduq2-pro': {
+                title: 'Vidu Q2 Pro', vendor: 'Vidu（生数科技）', vendorIcon: 'V', vendorColor: 'bg-rose-600',
+                description: 'Vidu Q2 Pro版，高质量视频生成',
+                releaseDate: '2025-09-20', price: '¥1.00/视频(1080p-8s)', context: '文本/图像输入',
+                modality: '文本、图像、视频输出', capability: '高质量视频生成',
+                scenarios: ['广告制作', '影视特效', '内容营销', '专业创作'],
+                tags: ['视频生成', '高质量', 'Pro', '1080P'],
+                intro: 'Vidu Q2 Pro是生数科技2025年9月发布的高质量视频生成旗舰版，支持1080P分辨率、8秒时长，主体一致性和复杂指令遵循能力业界领先。',
+                guide: ['通过Vidu开放平台调用', '支持文本和图像输入', '支持主体参考和镜头控制', '可结合Vidu Studio做后期']
+            },
+            'viduq2-pro-fast': {
+                title: 'Vidu Q2 Pro Fast', vendor: 'Vidu（生数科技）', vendorIcon: 'V', vendorColor: 'bg-rose-600',
+                description: 'Q2 Pro快速版，质量与速度平衡',
+                releaseDate: '2025-09-20', price: '¥0.60/视频(1080p-8s)', context: '文本/图像输入',
+                modality: '文本、图像、视频输出', capability: '平衡质量与速度',
+                scenarios: ['广告制作', '内容营销', '专业创作', '效率优先'],
+                tags: ['视频生成', '1080P', 'Fast', '平衡'],
+                intro: 'Vidu Q2 Pro Fast是Q2 Pro的快速版本，价格降低约40%，生成速度提升约2倍，适合效率优先的专业创作场景。',
+                guide: ['通过Vidu开放平台调用', '适合时间紧迫的专业项目', '支持主体参考和镜头控制', '可结合Vidu Studio做后期']
+            },
+            // ========== 腾讯混元 ==========
+            'hunyuan-t1-vision-20250916': {
+                title: '混元T1-Vision-20250916', vendor: '腾讯', vendorIcon: 'T', vendorColor: 'bg-blue-500',
+                description: '腾讯混元多模态思考版，深度视觉推理',
+                releaseDate: '2025-09-16', price: '¥0.008/1K输入, ¥0.040/1K输出', context: '128K tokens',
+                modality: '文本、图像、视频', capability: '深度视觉推理',
+                scenarios: ['多模态问答', '视觉推理', '文档分析', '视频理解'],
+                tags: ['多模态', '视觉', '推理', '思考'],
+                intro: '混元T1-Vision-20250916是腾讯混元2025年9月16日发布的多模态思考版模型（T1系列），主打深度视觉推理能力。在复杂图表分析、多步视觉推理等任务上业界领先。',
+                guide: ['通过腾讯云大模型知识引擎调用', '启用thinking模式进行深度推理', '支持图像和视频理解', '支持Function Calling']
+            },
+            'hunyuan-vision-1.5-instruct': {
+                title: '混元Vision 1.5 Instruct', vendor: '腾讯', vendorIcon: 'T', vendorColor: 'bg-blue-500',
+                description: '腾讯混元视觉版1.5，企业级多模态',
+                releaseDate: '2025-12-22', price: '¥0.006/1K输入, ¥0.030/1K输出', context: '128K tokens',
+                modality: '文本、图像、视频', capability: '视觉理解、性价比',
+                scenarios: ['视觉问答', '文档理解', '多模态客服', '短视频分析'],
+                tags: ['多模态', '视觉', '企业级', '性价比'],
+                intro: '混元Vision 1.5 Instruct是腾讯混元2025年12月发布的视觉版本，主打企业级多模态应用的高性价比选择。在视觉问答、文档理解、短视频分析等任务上表现优秀。',
+                guide: ['通过腾讯云大模型知识引擎调用', '支持图像和视频理解', '支持Function Calling', '适合企业多模态应用集成']
+            },
+            // ========== 小米 MiMo ==========
+            'mimo-v2-flash': {
+                title: 'MiMo-V2-Flash', vendor: '小米', vendorIcon: 'X', vendorColor: 'bg-orange-600',
+                description: '小米MiMo V2极速版，超快响应',
+                releaseDate: '2026-02-18', price: '¥0.002/1K输入, ¥0.008/1K输出', context: '64K tokens',
+                modality: '文本', capability: '极速响应、低成本',
+                scenarios: ['实时对话', '客服系统', '批处理', 'IoT设备'],
+                tags: ['极速', '低成本', '轻量', 'IoT'],
+                intro: 'MiMo-V2-Flash是小米2026年2月发布的极速版语言模型，主打毫秒级响应与极低成本。适合实时对话、客服系统、IoT设备等高频低延迟场景。',
+                guide: ['通过小米MiMo开放平台调用', '适合IoT和实时场景', '支持Function Calling', '支持边缘部署']
+            },
+            'mimo-v2-pro': {
+                title: 'MiMo V2 Pro', vendor: '小米', vendorIcon: 'X', vendorColor: 'bg-orange-600',
+                description: '小米MiMo V2 Pro，多模态旗舰',
+                releaseDate: '2026-01-15', price: '¥0.008/1K输入, ¥0.040/1K输出', context: '128K tokens',
+                modality: '文本、图像', capability: '多模态、性价比',
+                scenarios: ['通用助手', '多模态应用', '企业应用', '私有化部署'],
+                tags: ['多模态', '国产', '性价比', '企业级'],
+                intro: 'MiMo V2 Pro是小米2026年1月发布的多模态旗舰语言模型，支持文本、图像输入，是小米汽车、小爱同学等场景的核心模型。',
+                guide: ['通过小米MiMo开放平台调用', '支持图像和文本输入', '适合智能座舱与IoT场景', '支持Function Calling']
+            },
+            'mimo-v2-omni': {
+                title: 'MiMo-V2-Omni', vendor: '小米', vendorIcon: 'X', vendorColor: 'bg-orange-600',
+                description: '小米MiMo V2全模态，统一输入输出',
+                releaseDate: '2026-03-12', price: '¥0.012/1K输入, ¥0.060/1K输出', context: '128K tokens',
+                modality: '文本、图像、音频、视频', capability: '全模态理解与生成',
+                scenarios: ['多模态创作', '智能座舱', '家庭机器人', '多模态Agent'],
+                tags: ['全模态', '原生多模态', '国产', '智能硬件'],
+                intro: 'MiMo-V2-Omni是小米2026年3月发布的全模态旗舰模型，统一支持文本、图像、音频、视频输入与输出。是小米汽车智能座舱、米家机器人等场景的核心AI引擎。',
+                guide: ['通过小米MiMo开放平台调用', '支持全模态输入输出', '适合智能硬件集成', '支持Function Calling与工具使用']
+            },
+            'mimo-v2.5-pro': {
+                title: 'MiMo V2.5 Pro', vendor: '小米', vendorIcon: 'X', vendorColor: 'bg-orange-600',
+                description: '小米MiMo V2.5 Pro，2026夏季升级',
+                releaseDate: '2026-05-20', price: '¥0.010/1K输入, ¥0.050/1K输出', context: '128K tokens',
+                modality: '文本、图像、视频', capability: '多模态旗舰',
+                scenarios: ['通用助手', '代码生成', '智能体任务', '企业应用'],
+                tags: ['多模态', '旗舰', '国产', '智能硬件'],
+                intro: 'MiMo V2.5 Pro是小米2026年5月发布的多模态旗舰升级版，在推理、代码、智能体任务上较V2 Pro显著提升。是小米AI产品线的当前主推模型。',
+                guide: ['通过小米MiMo开放平台调用', '支持图像和视频输入', '支持Function Calling与工具使用', '适合智能硬件和IoT场景']
+            },
+            'mimo-v2.5': {
+                title: 'MiMo V2.5', vendor: '小米', vendorIcon: 'X', vendorColor: 'bg-orange-600',
+                description: '小米MiMo V2.5，标准版升级',
+                releaseDate: '2026-05-20', price: '¥0.006/1K输入, ¥0.030/1K输出', context: '128K tokens',
+                modality: '文本、图像', capability: '通用对话',
+                scenarios: ['通用助手', '客服系统', '文本创作', '企业应用'],
+                tags: ['国产', '通用', '性价比', '企业级'],
+                intro: 'MiMo V2.5是小米2026年5月发布的标准版升级模型，在保持V2基础能力的同时，显著提升指令遵循与多语言能力。是小米AI产品线的高性价比选择。',
+                guide: ['通过小米MiMo开放平台调用', '支持文本和图像输入', '适合智能助手和客服场景', '支持Function Calling']
+            },
+            // ========== 月之暗面 Kimi ==========
+            'kimi-k2-thinking': {
+                title: 'Kimi K2 Thinking', vendor: '月之暗面', vendorIcon: 'K', vendorColor: 'bg-gray-800',
+                description: 'Kimi K2深度思考版，开源旗舰',
+                releaseDate: '2025-11-06', price: '¥0.006/1K输入, ¥0.025/1K输出', context: '256K tokens',
+                modality: '文本', capability: '深度推理、Agent',
+                scenarios: ['代码工程', '智能体任务', '复杂推理', '工具调用'],
+                tags: ['推理', 'Agent', '开源', 'MoE'],
+                intro: 'Kimi K2 Thinking是月之暗面2025年11月发布的K2深度思考版本，1T总参/32B激活的MoE架构。在数学（AIME）、编程（SWE-bench）、工具调用（ToolBench）等基准上达到开源SOTA。',
+                guide: ['通过Moonshot AI开放平台或Hugging Face使用', '支持Function Calling与工具使用', '支持vLLM/SGLang本地部署', '结合Kimi Code IDE提升开发效率']
+            },
+            'kimi-k2-thinking-turbo': {
+                title: 'Kimi K2 Thinking Turbo', vendor: '月之暗面', vendorIcon: 'K', vendorColor: 'bg-gray-800',
+                description: 'K2 Thinking极速版，速度与质量平衡',
+                releaseDate: '2025-11-20', price: '¥0.008/1K输入, ¥0.030/1K输出', context: '256K tokens',
+                modality: '文本', capability: '快速深度推理',
+                scenarios: ['代码工程', '智能体任务', '实时推理', '企业应用'],
+                tags: ['推理', 'Agent', 'Turbo', '快速'],
+                intro: 'Kimi K2 Thinking Turbo是K2 Thinking的极速版本，2025年11月发布。在保持深度思考能力的同时显著提升推理速度，适合对响应时间敏感的智能体应用。',
+                guide: ['通过Moonshot AI开放平台使用', '支持Function Calling与工具使用', '推理速度比标准版快约2倍', '适合实时Agent场景']
+            },
+            'kimi-k2-turbo-preview': {
+                title: 'Kimi K2 Turbo (Preview)', vendor: '月之暗面', vendorIcon: 'K', vendorColor: 'bg-gray-800',
+                description: 'K2 Turbo预览版，开放API试用',
+                releaseDate: '2025-08-12', price: '¥0.005/1K输入, ¥0.020/1K输出', context: '128K tokens',
+                modality: '文本', capability: '快速推理、Agent',
+                scenarios: ['代码工程', '智能体任务', '通用对话', '企业应用'],
+                tags: ['预览版', 'Turbo', 'Agent', '开源'],
+                intro: 'Kimi K2 Turbo Preview是月之暗面2025年8月发布的K2 Turbo预览版本，主打高速推理与Agent能力。1T总参/32B激活MoE架构，128K上下文。',
+                guide: ['通过Moonshot AI开放平台使用', '预览期间价格优惠', '支持Function Calling与工具使用', '适合Agent和高并发场景']
+            },
+            'kimi-k2-turbo-enterprise': {
+                title: 'Kimi K2 Turbo Enterprise', vendor: '月之暗面', vendorIcon: 'K', vendorColor: 'bg-gray-800',
+                description: 'K2 Turbo企业版，专属部署与SLA',
+                releaseDate: '2025-09-15', price: '企业合约定价', context: '128K tokens',
+                modality: '文本', capability: '企业级Agent、SLA保障',
+                scenarios: ['企业知识管理', '金融分析', '代码工程', '私有化部署'],
+                tags: ['企业级', 'SLA', '私有化', 'Agent'],
+                intro: 'Kimi K2 Turbo Enterprise是K2 Turbo的企业版本，2025年9月发布。提供专属部署、SLA保障、合规审计、定制化微调等服务，是金融、政企等强合规场景的首选。',
+                guide: ['联系月之暗面企业销售签约', '支持私有化部署与定制微调', '提供99.9% SLA保障', '支持数据驻留与合规审计']
+            },
+            'kimi-k2.5': {
+                title: 'Kimi K2.5', vendor: '月之暗面', vendorIcon: 'K', vendorColor: 'bg-gray-800',
+                description: 'K2.5多模态升级版，2026春季旗舰',
+                releaseDate: '2026-03-18', price: '¥0.008/1K输入, ¥0.032/1K输出', context: '256K tokens',
+                modality: '文本、图像、视频', capability: '原生多模态、Agent',
+                scenarios: ['代码工程', '智能体任务', '多模态应用', '企业应用'],
+                tags: ['K2.5', '原生多模态', 'Agent', '长上下文'],
+                intro: 'Kimi K2.5是月之暗面2026年3月发布的K2系列多模态升级版，原生支持文本、图像、视频输入。256K上下文窗口，在推理、代码、Agent任务上较K2 Thinking进一步提升。',
+                guide: ['通过Moonshot AI开放平台或开源权重使用', '原生支持多模态输入', '支持Function Calling与工具使用', '支持vLLM/SGLang本地部署']
+            },
+            'kimi-k2.6': {
+                title: 'Kimi K2.6', vendor: '月之暗面', vendorIcon: 'K', vendorColor: 'bg-gray-800',
+                description: 'K2.6最新旗舰，2026夏季升级',
+                releaseDate: '2026-05-12', price: '¥0.010/1K输入, ¥0.040/1K输出', context: '256K tokens',
+                modality: '文本、图像、视频、音频', capability: '全模态、Agent',
+                scenarios: ['智能体任务', '代码工程', '多模态创作', '企业应用'],
+                tags: ['K2.6', '全模态', 'Agent', '最新旗舰'],
+                intro: 'Kimi K2.6是月之暗面2026年5月发布的最新旗舰模型，统一支持文本、图像、视频、音频多模态。在长程任务、智能体稳定性、工具调用效率上达到新的SOTA。',
+                guide: ['通过Moonshot AI开放平台使用', '支持全模态输入', '支持Function Calling与工具使用', '结合Kimi Agent快速构建生产级应用']
+            },
+            'kimi-k2-0905-preview': {
+                title: 'Kimi K2-0905 (Preview)', vendor: '月之暗面', vendorIcon: 'K', vendorColor: 'bg-gray-800',
+                description: 'K2 0905预览版，增强编码与Claude Code兼容',
+                releaseDate: '2025-09-05', price: '¥0.006/1K输入, ¥0.025/1K输出', context: '256K tokens',
+                modality: '文本', capability: '代码、Claude Code兼容',
+                scenarios: ['代码工程', '智能体任务', 'Claude Code集成', '复杂重构'],
+                tags: ['编码', 'Claude Code兼容', 'Agent', '开源'],
+                intro: 'Kimi K2-0905 Preview是月之暗面2025年9月5日发布的K2预览版本，主打增强的编码能力和Claude Code兼容性。256K上下文窗口，在SWE-bench Verified上达到69.2%准确率，接近Claude Sonnet 4水平。',
+                guide: ['通过Moonshot AI开放平台或Hugging Face使用', '与Claude Code IDE无缝集成', '支持vLLM/SGLang本地部署', '支持Anthropic兼容API协议']
+            },
+            // ========== DeepSeek ==========
+            'deepseek-r1-0528': {
+                title: 'DeepSeek-R1-0528', vendor: 'DeepSeek', vendorIcon: 'D', vendorColor: 'bg-blue-600',
+                description: 'DeepSeek R1 0528更新，深度推理增强',
+                releaseDate: '2025-05-28', price: '¥0.005/1K输入, ¥0.020/1K输出', context: '128K tokens',
+                modality: '文本', capability: '深度推理、数学',
+                scenarios: ['数学推理', '代码生成', '科学分析', '复杂规划'],
+                tags: ['推理', '开源', '数学', '思考'],
+                intro: 'DeepSeek-R1-0528是DeepSeek在2025年5月28日发布的R1推理模型更新版本，在AIME 2025、GPQA Diamond等高难度数学与科学基准上较原版R1提升约10%。保持开源和超低价格优势。',
+                guide: ['通过DeepSeek开放平台或Hugging Face使用', '支持Function Calling与工具使用', '支持vLLM/SGLang本地部署', '单卡H100即可高效推理']
+            },
+            'deepseek-v3-0324': {
+                title: 'DeepSeek-V3-0324', vendor: 'DeepSeek', vendorIcon: 'D', vendorColor: 'bg-blue-600',
+                description: 'DeepSeek V3 0324更新，编码与指令遵循升级',
+                releaseDate: '2025-03-24', price: '¥0.002/1K输入, ¥0.008/1K输出', context: '128K tokens',
+                modality: '文本', capability: '通用对话、代码',
+                scenarios: ['通用助手', '代码生成', '企业应用', '长文档处理'],
+                tags: ['通用', '开源', 'MoE', '性价比'],
+                intro: 'DeepSeek-V3-0324是DeepSeek在2025年3月24日发布的V3旗舰模型更新，671B总参/37B激活的MoE架构。在代码生成、指令遵循、长文档处理等任务上较V3原版显著提升。',
+                guide: ['通过DeepSeek开放平台或Hugging Face使用', '支持Function Calling与工具使用', '支持vLLM/SGLang本地部署', '极低价格适合大规模应用']
+            },
+            'deepseek-v3.1': {
+                title: 'DeepSeek-V3.1', vendor: 'DeepSeek', vendorIcon: 'D', vendorColor: 'bg-blue-600',
+                description: 'DeepSeek V3.1，混合推理架构',
+                releaseDate: '2025-08-19', price: '¥0.0025/1K输入, ¥0.010/1K输出', context: '128K tokens',
+                modality: '文本', capability: '混合推理、Agent',
+                scenarios: ['代码工程', '智能体任务', '深度推理', '企业应用'],
+                tags: ['混合推理', 'Agent', '开源', '工具调用'],
+                intro: 'DeepSeek-V3.1是DeepSeek 2025年8月发布的混合推理模型，创新性地把"思考模式"和"非思考模式"统一到单一模型。开发者可通过参数灵活切换，是开源模型在Agent能力上的重大突破。',
+                guide: ['通过DeepSeek开放平台或Hugging Face使用', '支持deepseek_thinking参数切换推理', '支持Function Calling与工具使用', '支持128K上下文与超长输出']
+            },
+            'deepseek-v3.2': {
+                title: 'DeepSeek V3.2', vendor: 'DeepSeek', vendorIcon: 'D', vendorColor: 'bg-blue-600',
+                description: 'DeepSeek V3.2，2025冬季升级',
+                releaseDate: '2025-12-12', price: '¥0.0028/1K输入, ¥0.011/1K输出', context: '128K tokens',
+                modality: '文本', capability: '混合推理、Agent',
+                scenarios: ['代码工程', '智能体任务', '深度推理', '企业应用'],
+                tags: ['V3.2', '混合推理', 'Agent', '开源'],
+                intro: 'DeepSeek V3.2是DeepSeek 2025年12月发布的V3系列升级版，在V3.1基础上优化推理效率与Agent稳定性。继续保持极致性价比，是国产开源模型的标杆。',
+                guide: ['通过DeepSeek开放平台或Hugging Face使用', '支持混合推理模式', '支持Function Calling与工具使用', '支持vLLM/SGLang本地部署']
+            },
+            'deepseek-v3.2-speciale': {
+                title: 'DeepSeek V3.2 Speciale（阶跃）', vendor: '阶跃星辰', vendorIcon: 'D', vendorColor: 'bg-cyan-600',
+                description: '阶跃星辰定制版DeepSeek V3.2 Speciale',
+                releaseDate: '2026-01-15', price: '¥0.003/1K输入, ¥0.012/1K输出', context: '128K tokens',
+                modality: '文本', capability: '深度推理、Agent',
+                scenarios: ['代码工程', '智能体任务', '深度推理', '企业应用'],
+                tags: ['阶跃', 'V3.2', 'Agent', '定制版'],
+                intro: 'DeepSeek V3.2 Speciale是阶跃星辰（StepFun）在DeepSeek V3.2基础上的定制优化版本，重点强化了智能体任务和工具调用能力。适合需要高稳定性的企业Agent场景。',
+                guide: ['通过阶跃星辰StepChat或API使用', '支持Function Calling与工具使用', '针对企业Agent场景优化', '支持vLLM本地部署']
+            },
+            'deepseek-v3-1-250821-wps': {
+                title: 'DeepSeek V3.1-250821 (WPS专版)', vendor: 'DeepSeek', vendorIcon: 'D', vendorColor: 'bg-blue-600',
+                description: 'WPS办公场景定制DeepSeek V3.1版本',
+                releaseDate: '2025-08-21', price: '仅WPS集成', context: '128K tokens',
+                modality: '文本', capability: '办公写作、表格分析',
+                scenarios: ['WPS文档', '表格分析', 'PPT创作', '邮件撰写'],
+                tags: ['WPS', '办公', '定制版', '集成'],
+                intro: 'DeepSeek V3.1-250821是DeepSeek为WPS办公场景专门优化的定制版本，强化了中文办公写作、表格公式、PPT生成等任务的处理能力。仅在WPS套件中可用。',
+                guide: ['仅在WPS Office套件中可用', '支持文档、表格、PPT场景', '针对中文办公优化', '支持Function Calling调用WPS功能']
+            },
+            'deepseek-v4-flash': {
+                title: 'DeepSeek V4 Flash', vendor: 'DeepSeek', vendorIcon: 'D', vendorColor: 'bg-blue-600',
+                description: 'DeepSeek V4系列Flash版，极致性价比',
+                releaseDate: '2026-04-20', price: '¥0.001/1K输入, ¥0.004/1K输出', context: '128K tokens',
+                modality: '文本', capability: '极速响应、低成本',
+                scenarios: ['实时对话', '大规模批处理', '客服系统', '边缘部署'],
+                tags: ['V4', 'Flash', '极速', '低成本'],
+                intro: 'DeepSeek V4 Flash是DeepSeek V4系列的轻量级版本，2026年4月发布。主打极致性价比，单价仅为标准版的1/4，适合实时对话、大规模批处理和边缘部署。',
+                guide: ['通过DeepSeek开放平台使用', '支持Function Calling', '适合高吞吐量场景', '支持vLLM本地部署']
+            },
+            'deepseek-v4-pro': {
+                title: 'DeepSeek V4 Pro', vendor: 'DeepSeek', vendorIcon: 'D', vendorColor: 'bg-blue-600',
+                description: 'DeepSeek V4 Pro旗舰，2026夏季SOTA',
+                releaseDate: '2026-05-25', price: '¥0.005/1K输入, ¥0.020/1K输出', context: '256K tokens',
+                modality: '文本、图像', capability: '深度推理、Agent',
+                scenarios: ['复杂推理', '代码工程', '智能体任务', '企业应用'],
+                tags: ['V4 Pro', '旗舰', 'Agent', '256K'],
+                intro: 'DeepSeek V4 Pro是DeepSeek 2026年5月发布的最新旗舰模型，原生支持图像和文本输入。256K上下文，在数学、编程、博士级科学问题等高难度基准上达到开源SOTA。',
+                guide: ['通过DeepSeek开放平台使用', '原生支持多模态输入', '支持Function Calling与工具使用', '支持vLLM/SGLang本地部署']
+            },
+            // ========== 豆包 SeeDream ==========
+            'seedream-4.5': {
+                title: 'SeeDream 4.5', vendor: '豆包（字节跳动）', vendorIcon: 'S', vendorColor: 'bg-rose-500',
+                description: '字节豆包SeeDream 4.5，统一图像生成旗舰',
+                releaseDate: '2026-04-15', price: '¥0.030/图像(1024×1024), ¥0.080/图像(2K)', context: '文本/图像输入',
+                modality: '文本、图像输入/输出', capability: '统一图像生成、编辑',
+                scenarios: ['图像创作', '产品图编辑', '海报设计', '营销素材'],
+                tags: ['图像生成', '统一生成', '字节', 'Pro'],
+                intro: 'SeeDream 4.5是字节跳动豆包团队2026年4月发布的最新统一图像生成模型，支持文生图、图生图、Inpainting、Outpainting等多种模式。最高支持2K分辨率，在VBench Image排行榜上长期保持领先。',
+                guide: ['通过火山引擎方舟或豆包API使用', '支持统一生成与编辑', '最高2K分辨率输出', '支持多参考图角色一致性']
+            },
+            // ========== 快手 Kling ==========
+            'kling-v2-1-master': {
+                title: 'Kling v2.1 Master', vendor: '快手', vendorIcon: 'K', vendorColor: 'bg-orange-500',
+                description: '快手可灵2.1 Master版，高质量视频生成',
+                releaseDate: '2025-05-29', price: '¥0.66/视频(1080p-5s)', context: '文本/图像输入',
+                modality: '文本、图像、视频输出', capability: '高质量视频、复杂指令',
+                scenarios: ['广告制作', '短视频创作', '影视特效', '内容营销'],
+                tags: ['视频生成', 'Master', '1080P', '复杂指令'],
+                intro: 'Kling v2.1 Master是快手可灵2025年5月发布的高质量视频生成版本，支持复杂指令理解、1080P分辨率、5秒/10秒时长。是当时可灵系列的最高质量版本，在语义理解和动态效果上业界领先。',
+                guide: ['通过可灵AI Web/App或快手API使用', '支持1080P和复杂运镜指令', '支持MVL多模态输入', '支持主体一致性（Elements）']
+            },
+            'kling-v2-5-turbo': {
+                title: 'Kling v2.5 Turbo', vendor: '快手', vendorIcon: 'K', vendorColor: 'bg-orange-500',
+                description: '可灵2.5 Turbo，性价比与质量平衡',
+                releaseDate: '2025-09-23', price: '¥0.30/视频(1080p-5s), ¥0.50/视频(1080p-10s)', context: '文本/图像输入',
+                modality: '文本、图像、视频输出', capability: '快速视频生成、复杂动作',
+                scenarios: ['广告制作', '体育动作', '剧情短片', '内容营销'],
+                tags: ['视频生成', 'Turbo', '性价比', '复杂动作'],
+                intro: 'Kling v2.5 Turbo是快手可灵2025年9月发布的极速版本，相比2.1 Master便宜近30%，同时在文本响应、动态效果、风格保持、美学效果上更优。是当时可灵系列的主推版本，月活超4500万创作者的选择。',
+                guide: ['通过可灵AI Web/App或快手API使用', '1080P-5s仅需25灵感值', '在复杂动作（体操、跳马等）效果领先', '支持MVL多模态输入']
+            },
+            'kling-v2-6': {
+                title: 'Kling v2.6', vendor: '快手', vendorIcon: 'K', vendorColor: 'bg-orange-500',
+                description: '可灵2.6版本，长视频与角色一致性',
+                releaseDate: '2025-12-10', price: '¥0.80/视频(1080p-10s)', context: '文本/图像输入',
+                modality: '文本、图像、视频输出', capability: '长视频、角色一致',
+                scenarios: ['剧情短片', '角色动画', '广告制作', '内容营销'],
+                tags: ['视频生成', '长视频', '角色一致', '1080P'],
+                intro: 'Kling v2.6是快手可灵2025年12月发布的高质量视频生成版本，支持长达3分钟的视频生成，并通过"Elements"功能实现多镜头角色一致性。是可灵系列在长视频领域的重大突破。',
+                guide: ['通过可灵AI Web/App或快手API使用', '支持最长3分钟视频生成', 'Elements功能实现多镜头角色一致', '支持MVL多模态输入']
+            },
+            'kling-video-o1': {
+                title: 'Kling Video O1', vendor: '快手', vendorIcon: 'K', vendorColor: 'bg-orange-500',
+                description: '可灵Video O1，2026春季推理视频版',
+                releaseDate: '2026-03-25', price: '¥1.00/视频(1080p-10s)', context: '文本/图像输入',
+                modality: '文本、图像、视频输出', capability: '推理式视频生成',
+                scenarios: ['复杂剧情', '多镜头创作', '影视特效', '高质量内容'],
+                tags: ['视频生成', '推理式', 'O1', '高质量'],
+                intro: 'Kling Video O1是快手可灵2026年3月发布的"推理式"视频生成模型，引入类似o1的"思考-再生成"机制，在复杂多镜头剧情创作上达到业界SOTA。',
+                guide: ['通过可灵AI Web/App或快手API使用', '适合复杂多镜头剧情创作', '支持主体一致性和MVL输入', '可结合可灵Studio做后期']
+            },
+            'kling-v3-omni': {
+                title: 'Kling V3 Omni', vendor: '快手', vendorIcon: 'K', vendorColor: 'bg-orange-500',
+                description: '可灵V3 Omni，全模态视频生成',
+                releaseDate: '2026-05-08', price: '¥1.20/视频(1080p-10s)', context: '文本/图像/音频输入',
+                modality: '文本、图像、音频、视频输出', capability: '全模态视频生成',
+                scenarios: ['影视特效', '音乐MV', '多模态内容', '高质量创作'],
+                tags: ['视频生成', '全模态', 'Omni', '音视频同步'],
+                intro: 'Kling V3 Omni是快手可灵2026年5月发布的全模态视频生成旗舰，统一支持文本、图像、音频输入，原生支持音视频同步生成。在视频质量、长度、复杂指令遵循上业界领先。',
+                guide: ['通过可灵AI Web/App或快手API使用', '支持音频驱动视频生成', '原生音视频同步', '支持MVL多模态输入']
+            },
+            'kling-v3': {
+                title: 'Kling V3', vendor: '快手', vendorIcon: 'K', vendorColor: 'bg-orange-500',
+                description: '可灵V3标准版，2026夏季旗舰',
+                releaseDate: '2026-05-28', price: '¥0.90/视频(1080p-10s)', context: '文本/图像输入',
+                modality: '文本、图像、视频输出', capability: '高质量视频',
+                scenarios: ['广告制作', '短视频创作', '剧情短片', '内容营销'],
+                tags: ['视频生成', 'V3', '旗舰', '1080P'],
+                intro: 'Kling V3是快手可灵2026年5月底发布的最新旗舰版本，在2.6基础上进一步提升视频质量、长度和复杂指令遵循能力。是可灵系列当前的主推版本，月活超4500万创作者的选择。',
+                guide: ['通过可灵AI Web/App或快手API使用', '支持1080P和复杂运镜指令', '支持MVL多模态输入', '支持主体一致性（Elements）']
             }
         };
 

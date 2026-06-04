@@ -547,7 +547,13 @@
 
                 <!-- 调用记录 -->
                 <div class="bg-white rounded-xl p-6 shadow-md">
-                    <h3 class="text-lg font-semibold text-secondary mb-4">调用记录</h3>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-secondary">调用记录</h3>
+                        <button onclick="openCallRecordsModal()" class="text-sm text-primary hover:text-primary-dark font-medium inline-flex items-center group">
+                            查看更多
+                            <i class="fas fa-chevron-right text-xs ml-1 group-hover:translate-x-0.5 transition-transform"></i>
+                        </button>
+                    </div>
                     <div class="overflow-x-auto">
                         <table class="w-full">
                             <thead>
@@ -595,7 +601,16 @@
 
                 <!-- 帮助文档与示例代码 -->
                 <div class="bg-white rounded-xl p-6 shadow-md">
-                    <h3 class="text-lg font-semibold text-secondary mb-4">帮助文档与示例代码</h3>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-secondary">帮助文档与示例代码</h3>
+                        <a href="https://ucn19uuu5wk8.feishu.cn/wiki/OqXLwWlFOizSJBkC0SKcl5Z4nue?from=from_copylink" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-primary border border-primary/30 rounded-lg hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 group">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M5.5 3.5h13a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2zm0 2v13h13v-13h-13zm2 3h9v1.5h-9V8.5zm0 3h9v1.5h-9v-1.5zm0 3h6v1.5h-6V14.5z"/>
+                            </svg>
+                            <span>帮助文档</span>
+                            <i class="fas fa-external-link-alt text-xs opacity-70 group-hover:opacity-100"></i>
+                        </a>
+                    </div>
                     <div class="space-y-4">
                         <div class="flex space-x-2 mb-4">
                             <button onclick="switchCodeLang('python')" class="code-lang-btn px-4 py-2 bg-primary text-white rounded-lg text-sm" data-lang="python">Python</button>
@@ -612,6 +627,94 @@
                     </div>
                 </div>
             </section>
+
+            <!-- 开具发票弹窗 -->
+            <div id="invoiceModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4 overflow-y-auto" onclick="if(event.target===this)closeInvoiceModal()">
+                <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl my-auto flex flex-col" style="max-height: calc(100vh - 2rem);">
+                    <!-- 头部固定 -->
+                    <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 flex-shrink-0">
+                        <div>
+                            <h3 class="text-lg font-bold text-secondary leading-tight">开具发票</h3>
+                            <p class="text-xs text-gray-500 mt-0.5" id="invoice-order-hint">请填写发票信息</p>
+                        </div>
+                        <button onclick="closeInvoiceModal()" class="text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <!-- 中间表单（独立滚动） -->
+                    <form id="invoice-form" onsubmit="submitInvoice(event)" class="flex-1 min-h-0 overflow-y-auto px-6 py-4 space-y-3">
+                        <!-- 开票金额（必填） -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">开票金额 <span class="text-red-500">*</span></label>
+                            <div class="relative flex items-center">
+                                <span class="absolute left-3 text-gray-400 text-sm pointer-events-none">¥</span>
+                                <input type="number" id="invoice-amount" step="0.01" min="0" required placeholder="0.00" class="w-full pl-7 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <button type="button" onclick="selectInvoiceFromOrder()" class="ml-2 text-xs text-primary hover:text-primary-dark whitespace-nowrap flex-shrink-0">选择开票订单</button>
+                            </div>
+                        </div>
+                        <!-- 开票邮箱 -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">开票邮箱</label>
+                            <input type="email" id="invoice-email" placeholder="请输入接收发票的邮箱" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <!-- 手机号码 -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">手机号码</label>
+                            <input type="tel" id="invoice-phone" placeholder="请输入接收发票通知的手机号" maxlength="11" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <!-- 发票类型（数电普通/专用） -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">发票类型</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button type="button" onclick="selectInvoiceType('general')" id="invoice-type-general" class="px-3 py-2.5 border-2 border-primary bg-primary/5 text-primary rounded-xl text-sm font-medium transition flex items-center justify-center space-x-1.5">
+                                    <span>数电普通发票</span>
+                                    <i class="fas fa-check text-xs"></i>
+                                </button>
+                                <button type="button" onclick="selectInvoiceType('special')" id="invoice-type-special" class="px-3 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium transition flex items-center justify-center space-x-1.5 hover:border-gray-300">
+                                    <span class="text-gray-700">数电专用发票</span>
+                                    <i class="fas fa-check text-xs text-transparent"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- 抬头类型（个人/企业） -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">抬头类型</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button type="button" onclick="selectHeaderType('personal')" id="invoice-header-personal" class="px-3 py-2.5 border-2 border-primary bg-primary/5 text-primary rounded-xl text-sm font-medium transition flex items-center justify-center space-x-1.5">
+                                    <span>个人</span>
+                                    <i class="fas fa-check text-xs"></i>
+                                </button>
+                                <button type="button" onclick="selectHeaderType('enterprise')" id="invoice-header-enterprise" class="px-3 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium transition flex items-center justify-center space-x-1.5 hover:border-gray-300">
+                                    <span class="text-gray-700">企业</span>
+                                    <i class="fas fa-check text-xs text-transparent"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- 抬头名称（必填） -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">抬头名称 <span class="text-red-500">*</span></label>
+                            <input type="text" id="invoice-header-name" required placeholder="请输入抬头名称" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <p id="invoice-header-name-hint" class="text-xs text-gray-400 mt-1 hidden"></p>
+                        </div>
+                        <!-- 企业税号（仅企业时显示） -->
+                        <div id="invoice-tax-no-wrap" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">企业税号 <span class="text-red-500">*</span></label>
+                            <input type="text" id="invoice-tax-no" placeholder="请输入企业纳税人识别号" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <!-- 发票备注（100字限制） -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1.5">发票备注</label>
+                            <textarea id="invoice-remark" maxlength="100" rows="2" placeholder="该备注会展示在发票备注栏，限制 100 字以内" oninput="updateInvoiceNoteCount()" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none"></textarea>
+                            <p class="text-right text-xs text-gray-400 mt-1"><span id="invoice-note-count">0</span>/100</p>
+                        </div>
+                    </form>
+                    <!-- 底部按钮固定 -->
+                    <div class="flex items-center space-x-3 px-6 py-3 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex-shrink-0">
+                        <button type="button" onclick="closeInvoiceModal()" class="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-lg hover:bg-white transition text-sm">取消</button>
+                        <button type="submit" form="invoice-form" id="invoice-submit-btn" class="flex-1 bg-primary text-white py-2.5 rounded-lg font-semibold hover:bg-primary-dark transition text-sm">申请开票</button>
+                    </div>
+                </div>
+            </div>
 
             <!-- 服务申请 -->
             <section id="my-applications-section" class="space-y-6 hidden">
@@ -712,6 +815,41 @@
         </main>
     </div>
 
+    <!-- 完整调用记录弹窗（放在 main 之外，避免被父级 section 隐藏） -->
+    <div id="callRecordsModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4 overflow-y-auto" onclick="if(event.target===this)closeCallRecordsModal()">
+        <div class="bg-white rounded-2xl max-w-3xl w-full shadow-2xl my-auto flex flex-col" style="max-height: calc(100vh - 2rem);">
+            <!-- 头部固定 -->
+            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 flex-shrink-0">
+                <div>
+                    <h3 class="text-lg font-bold text-secondary leading-tight">完整调用记录</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">共 <span id="call-records-total">0</span> 条记录</p>
+                </div>
+                <button onclick="closeCallRecordsModal()" class="text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- 表格区（独立滚动） -->
+            <div class="flex-1 min-h-0 overflow-y-auto px-6 py-4">
+                <table class="w-full">
+                    <thead class="sticky top-0 bg-white">
+                        <tr class="border-b border-gray-200">
+                            <th class="text-left py-3 px-3 text-xs font-medium text-gray-500">时间</th>
+                            <th class="text-left py-3 px-3 text-xs font-medium text-gray-500">模型</th>
+                            <th class="text-right py-3 px-3 text-xs font-medium text-gray-500">Token消耗</th>
+                            <th class="text-left py-3 px-3 text-xs font-medium text-gray-500">状态</th>
+                            <th class="text-right py-3 px-3 text-xs font-medium text-gray-500">用时</th>
+                        </tr>
+                    </thead>
+                    <tbody id="call-records-tbody"></tbody>
+                </table>
+            </div>
+            <!-- 底部按钮固定 -->
+            <div class="flex items-center justify-end px-6 py-3 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex-shrink-0">
+                <button type="button" onclick="closeCallRecordsModal()" class="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-white transition text-sm">关闭</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 个人实名认证弹窗 -->
     <div id="personalAuthModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-2xl max-w-md w-full mx-4 p-8 shadow-2xl">
@@ -740,63 +878,116 @@
     </div>
 
     <!-- 企业认证弹窗 -->
-    <div id="enterpriseAuthModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 overflow-y-auto">
-        <div class="bg-white rounded-2xl max-w-lg w-full mx-4 p-8 shadow-2xl my-8">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-secondary">企业认证</h3>
-                <button onclick="closeEnterpriseAuthModal()" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times text-xl"></i>
+    <div id="enterpriseAuthModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4 overflow-y-auto" onclick="if(event.target===this)closeEnterpriseAuthModal()">
+        <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl my-auto flex flex-col" style="max-height: calc(100vh - 2rem);">
+            <!-- 头部固定 -->
+            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 flex-shrink-0">
+                <div>
+                    <h3 class="text-lg font-bold text-secondary leading-tight">企业认证</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">请如实填写企业及认证材料信息</p>
+                </div>
+                <button onclick="closeEnterpriseAuthModal()" class="text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="enterprise-auth-form" onsubmit="submitEnterpriseAuth(event)" class="space-y-4">
+            <!-- 中间内容区（独立滚动） -->
+            <form id="enterprise-auth-form" onsubmit="submitEnterpriseAuth(event)" class="flex-1 min-h-0 overflow-y-auto px-6 py-4 space-y-3" style="overscroll-behavior: contain;">
+                <!-- 认证方式单选 -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">统一社会信用代码 <span class="text-red-500">*</span></label>
-                    <input type="text" id="enterprise-code-input" required placeholder="请输入18位统一社会信用代码" maxlength="18" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">认证方式 <span class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center justify-center px-3 py-2.5 border-2 rounded-xl cursor-pointer transition has-[:checked]:border-primary has-[:checked]:bg-primary/5 hover:border-gray-300" id="legal-self-label">
+                            <input type="radio" name="auth-type" value="self" checked class="hidden" onchange="toggleAuthTypeFields()">
+                            <div class="flex items-center space-x-1.5">
+                                <i class="fas fa-user-tie text-primary text-sm"></i>
+                                <span class="text-sm font-medium text-gray-700">法人本人认证</span>
+                            </div>
+                        </label>
+                        <label class="flex items-center justify-center px-3 py-2.5 border-2 border-gray-200 rounded-xl cursor-pointer transition has-[:checked]:border-primary has-[:checked]:bg-primary/5 hover:border-gray-300" id="legal-agent-label">
+                            <input type="radio" name="auth-type" value="agent" class="hidden" onchange="toggleAuthTypeFields()">
+                            <div class="flex items-center space-x-1.5">
+                                <i class="fas fa-user-friends text-primary text-sm"></i>
+                                <span class="text-sm font-medium text-gray-700">委托人认证</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <!-- 基础字段（始终显示且必填） -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">统一社会信用代码 <span class="text-red-500">*</span></label>
+                    <input type="text" id="enterprise-code-input" required placeholder="请输入18位统一社会信用代码" maxlength="18" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                     <p id="enterprise-code-error" class="text-red-500 text-xs mt-1 hidden">请输入正确的18位统一社会信用代码</p>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">企业名称 <span class="text-red-500">*</span></label>
-                    <input type="text" id="enterprise-name-input" required placeholder="请输入企业全称" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">企业名称 <span class="text-red-500">*</span></label>
+                    <input type="text" id="enterprise-name-input" required placeholder="请输入企业全称" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">法人姓名 <span class="text-red-500">*</span></label>
-                    <input type="text" id="enterprise-legal-input" required placeholder="请输入法人姓名" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">法人姓名 <span class="text-red-500">*</span></label>
+                    <input type="text" id="enterprise-legal-input" required placeholder="请输入法人姓名" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">企业营业执照复印件 <span class="text-red-500">*</span></label>
-                    <div id="biz-license-upload" class="upload-area rounded-xl p-6 text-center cursor-pointer" onclick="document.getElementById('biz-license-input').click()">
-                        <i class="fas fa-file-image text-2xl text-gray-400 mb-2"></i>
-                        <p class="text-gray-500 text-sm">点击上传营业执照（jpg/png/pdf）</p>
-                        <p id="biz-license-filename" class="text-green-600 text-sm mt-2 hidden"></p>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">企业营业执照复印件 <span class="text-red-500">*</span></label>
+                    <div id="biz-license-upload" class="upload-area rounded-lg p-3 text-center cursor-pointer flex items-center space-x-3" onclick="document.getElementById('biz-license-input').click()">
+                        <i class="fas fa-file-image text-xl text-gray-400 flex-shrink-0"></i>
+                        <div class="flex-1 text-left">
+                            <p class="text-gray-500 text-sm">点击上传营业执照（jpg/png/pdf）</p>
+                            <p id="biz-license-filename" class="text-green-600 text-xs mt-0.5 hidden"></p>
+                        </div>
                         <input type="file" id="biz-license-input" accept=".jpg,.png,.pdf" class="hidden" onchange="handleFileSelect(this, 'biz-license-filename', 'biz-license-upload')">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">法人身份证复印件 <span class="text-red-500">*</span></label>
-                    <div id="legal-idcard-upload" class="upload-area rounded-xl p-6 text-center cursor-pointer" onclick="document.getElementById('legal-idcard-input').click()">
-                        <i class="fas fa-id-card text-2xl text-gray-400 mb-2"></i>
-                        <p class="text-gray-500 text-sm">点击上传法人身份证复印件（jpg/png/pdf）</p>
-                        <p id="legal-idcard-filename" class="text-green-600 text-sm mt-2 hidden"></p>
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">法人身份证复印件 <span class="text-red-500">*</span></label>
+                    <div id="legal-idcard-upload" class="upload-area rounded-lg p-3 text-center cursor-pointer flex items-center space-x-3" onclick="document.getElementById('legal-idcard-input').click()">
+                        <i class="fas fa-id-card text-xl text-gray-400 flex-shrink-0"></i>
+                        <div class="flex-1 text-left">
+                            <p class="text-gray-500 text-sm">点击上传法人身份证复印件（jpg/png/pdf）</p>
+                            <p id="legal-idcard-filename" class="text-green-600 text-xs mt-0.5 hidden"></p>
+                        </div>
                         <input type="file" id="legal-idcard-input" accept=".jpg,.png,.pdf" class="hidden" onchange="handleFileSelect(this, 'legal-idcard-filename', 'legal-idcard-upload')">
                     </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        委托书
-                        <span class="text-gray-400 font-normal text-xs ml-1">（若非法人本人办理，则必填）</span>
-                    </label>
-                    <div id="auth-letter-upload" class="upload-area rounded-xl p-6 text-center cursor-pointer" onclick="document.getElementById('auth-letter-input').click()">
-                        <i class="fas fa-file-alt text-2xl text-gray-400 mb-2"></i>
-                        <p class="text-gray-500 text-sm">点击上传委托书（jpg/png/pdf）</p>
-                        <p id="auth-letter-filename" class="text-green-600 text-sm mt-2 hidden"></p>
-                        <input type="file" id="auth-letter-input" accept=".jpg,.png,.pdf" class="hidden" onchange="handleFileSelect(this, 'auth-letter-filename', 'auth-letter-upload')">
+
+                <!-- 委托人专属字段（仅"委托人认证"时显示） -->
+                <div id="agent-fields" class="hidden space-y-3 pt-3 border-t border-dashed border-gray-200">
+                    <div class="flex items-center space-x-1.5 text-xs text-primary font-medium">
+                        <i class="fas fa-info-circle"></i>
+                        <span>以下为委托人认证补充材料</span>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">委托人姓名 <span class="text-red-500">*</span></label>
+                        <input type="text" id="agent-name-input" placeholder="请输入委托人姓名" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">委托人身份证复印件 <span class="text-red-500">*</span></label>
+                        <div id="agent-idcard-upload" class="upload-area rounded-lg p-3 text-center cursor-pointer flex items-center space-x-3" onclick="document.getElementById('agent-idcard-input').click()">
+                            <i class="fas fa-id-card text-xl text-gray-400 flex-shrink-0"></i>
+                            <div class="flex-1 text-left">
+                                <p class="text-gray-500 text-sm">点击上传委托人身份证复印件（jpg/png/pdf）</p>
+                                <p id="agent-idcard-filename" class="text-green-600 text-xs mt-0.5 hidden"></p>
+                            </div>
+                            <input type="file" id="agent-idcard-input" accept=".jpg,.png,.pdf" class="hidden" onchange="handleFileSelect(this, 'agent-idcard-filename', 'agent-idcard-upload')">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">委托书 <span class="text-red-500">*</span></label>
+                        <div id="auth-letter-upload" class="upload-area rounded-lg p-3 text-center cursor-pointer flex items-center space-x-3" onclick="document.getElementById('auth-letter-input').click()">
+                            <i class="fas fa-file-alt text-xl text-gray-400 flex-shrink-0"></i>
+                            <div class="flex-1 text-left">
+                                <p class="text-gray-500 text-sm">点击上传委托书（jpg/png/pdf）</p>
+                                <p id="auth-letter-filename" class="text-green-600 text-xs mt-0.5 hidden"></p>
+                            </div>
+                            <input type="file" id="auth-letter-input" accept=".jpg,.png,.pdf" class="hidden" onchange="handleFileSelect(this, 'auth-letter-filename', 'auth-letter-upload')">
+                        </div>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4 pt-4 border-t border-gray-100">
-                    <button type="button" onclick="closeEnterpriseAuthModal()" class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition">取消</button>
-                    <button type="submit" id="enterprise-auth-submit-btn" class="flex-1 bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition">提交认证</button>
-                </div>
             </form>
+            <!-- 底部按钮固定 -->
+            <div class="flex items-center space-x-3 px-6 py-3 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex-shrink-0">
+                <button type="button" onclick="closeEnterpriseAuthModal()" class="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-lg hover:bg-white transition text-sm">取消</button>
+                <button type="submit" id="enterprise-auth-submit-btn" form="enterprise-auth-form" class="flex-1 bg-primary text-white py-2.5 rounded-lg font-semibold hover:bg-primary-dark transition text-sm">提交认证</button>
+            </div>
         </div>
     </div>
 
@@ -1088,6 +1279,53 @@
         }
 
         // ==================== 企业认证弹窗 ====================
+        // 切换认证方式字段显示
+        function toggleAuthTypeFields() {
+            const authType = document.querySelector('input[name="auth-type"]:checked').value;
+            const agentFields = document.getElementById('agent-fields');
+            const agentNameInput = document.getElementById('agent-name-input');
+            const agentIdcardInput = document.getElementById('agent-idcard-input');
+            const authLetterInput = document.getElementById('auth-letter-input');
+            const agentIdcardFileName = document.getElementById('agent-idcard-filename');
+            const authLetterFileName = document.getElementById('auth-letter-filename');
+            const agentIdcardUpload = document.getElementById('agent-idcard-upload');
+            const authLetterUpload = document.getElementById('auth-letter-upload');
+            const selfLabel = document.getElementById('legal-self-label');
+            const agentLabel = document.getElementById('legal-agent-label');
+
+            if (authType === 'agent') {
+                // 显示委托相关字段
+                agentFields.classList.remove('hidden');
+                agentNameInput.required = true;
+                agentIdcardInput.required = true;
+                authLetterInput.required = true;
+                agentLabel.classList.add('border-primary', 'bg-primary/5');
+                agentLabel.classList.remove('border-gray-200');
+                selfLabel.classList.remove('border-primary', 'bg-primary/5');
+                selfLabel.classList.add('border-gray-200');
+            } else {
+                // 隐藏委托相关字段并清空其值
+                agentFields.classList.add('hidden');
+                agentNameInput.required = false;
+                agentIdcardInput.required = false;
+                authLetterInput.required = false;
+                // 清空委托字段的值
+                agentNameInput.value = '';
+                agentIdcardInput.value = '';
+                authLetterInput.value = '';
+                agentIdcardFileName.classList.add('hidden');
+                agentIdcardFileName.textContent = '';
+                authLetterFileName.classList.add('hidden');
+                authLetterFileName.textContent = '';
+                agentIdcardUpload.classList.remove('has-file');
+                authLetterUpload.classList.remove('has-file');
+                selfLabel.classList.add('border-primary', 'bg-primary/5');
+                selfLabel.classList.remove('border-gray-200');
+                agentLabel.classList.remove('border-primary', 'bg-primary/5');
+                agentLabel.classList.add('border-gray-200');
+            }
+        }
+
         function openEnterpriseAuthModal() {
             document.getElementById('enterpriseAuthModal').classList.remove('hidden');
             document.getElementById('enterpriseAuthModal').classList.add('flex');
@@ -1097,16 +1335,19 @@
             document.getElementById('enterprise-code-error').classList.add('hidden');
             document.getElementById('enterprise-auth-submit-btn').disabled = false;
             document.getElementById('enterprise-auth-submit-btn').textContent = '提交认证';
+            // 默认选择"法人本人认证"并触发切换逻辑以确保委托字段隐藏且清空
+            const selfRadio = document.querySelector('input[name="auth-type"][value="self"]');
+            if (selfRadio) {
+                selfRadio.checked = true;
+                toggleAuthTypeFields();
+            }
             // 重置文件上传区域
             document.getElementById('biz-license-input').value = '';
             document.getElementById('legal-idcard-input').value = '';
-            document.getElementById('auth-letter-input').value = '';
             document.getElementById('biz-license-filename').classList.add('hidden');
             document.getElementById('legal-idcard-filename').classList.add('hidden');
-            document.getElementById('auth-letter-filename').classList.add('hidden');
             document.getElementById('biz-license-upload').classList.remove('has-file');
             document.getElementById('legal-idcard-upload').classList.remove('has-file');
-            document.getElementById('auth-letter-upload').classList.remove('has-file');
         }
 
         function closeEnterpriseAuthModal() {
@@ -1122,6 +1363,7 @@
             const codeError = document.getElementById('enterprise-code-error');
             const bizFile = document.getElementById('biz-license-input').files;
             const legalFile = document.getElementById('legal-idcard-input').files;
+            const authType = document.querySelector('input[name="auth-type"]:checked').value;
 
             if (!code || !/^[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}$/.test(code)) {
                 codeError.classList.remove('hidden');
@@ -1146,9 +1388,30 @@
                 return;
             }
 
+            // 若选择"委托人认证"，则校验委托专属字段
+            if (authType === 'agent') {
+                const agentName = document.getElementById('agent-name-input').value.trim();
+                const agentIdcardFile = document.getElementById('agent-idcard-input').files;
+                const authLetterFile = document.getElementById('auth-letter-input').files;
+
+                if (!agentName) {
+                    showToast('请输入委托人姓名', 'error');
+                    return;
+                }
+                if (!agentIdcardFile || agentIdcardFile.length === 0) {
+                    showToast('请上传委托人身份证复印件', 'error');
+                    return;
+                }
+                if (!authLetterFile || authLetterFile.length === 0) {
+                    showToast('请上传委托书', 'error');
+                    return;
+                }
+            }
+
             realNameData.enterpriseName = name;
             realNameData.enterpriseCode = code;
             realNameData.legalName = legal;
+            realNameData.authType = authType;
 
             document.getElementById('enterprise-auth-submit-btn').disabled = true;
             document.getElementById('enterprise-auth-submit-btn').textContent = '提交中...';
@@ -1325,6 +1588,14 @@
         }
 
         // ==================== 订单管理渲染 ====================
+        // 内存中记录已开票订单（演示用，重启后清空）
+        var _invoicedOrders = {};
+        function markOrderInvoiced(orderId) {
+            _invoicedOrders[orderId] = true;
+        }
+        function isOrderInvoiced(orderId) {
+            return !!_invoicedOrders[orderId];
+        }
         function renderUserOrders() {
             var container = document.getElementById('user-order-list');
             if (!container) return;
@@ -1337,8 +1608,234 @@
             var pmMap = { '微信支付': 'bg-green-50 text-green-700', '支付宝': 'bg-blue-50 text-blue-700', '在线支付': 'bg-gray-50 text-gray-600' };
             container.innerHTML = '<div class="overflow-x-auto"><table class="w-full"><thead class="bg-gray-50"><tr><th class="text-left px-4 py-3 text-xs text-gray-400">订单编号</th><th class="text-left px-4 py-3 text-xs text-gray-400">充值金额</th><th class="text-left px-4 py-3 text-xs text-gray-400">支付方式</th><th class="text-left px-4 py-3 text-xs text-gray-400">时间</th><th class="text-left px-4 py-3 text-xs text-gray-400">状态</th><th class="text-right px-4 py-3 text-xs text-gray-400">操作</th></tr></thead><tbody>' +
                 orders.reverse().map(function(o) {
-                    return '<tr class="border-b border-gray-50 hover:bg-gray-50/50"><td class="px-4 py-3 font-mono text-xs text-gray-600">' + o.id + '</td><td class="px-4 py-3 font-semibold text-primary">¥' + o.amount.toFixed(2) + '</td><td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full ' + (pmMap[o.paymentMethod] || 'bg-gray-50 text-gray-600') + '">' + (o.paymentMethod || '在线支付') + '</span></td><td class="px-4 py-3 text-sm text-gray-500">' + o.time + '</td><td class="px-4 py-3"><span class="badge badge-success text-xs">' + o.status + '</span></td><td class="px-4 py-3 text-right"><button onclick="showToast(\'发票功能即将开放，敬请期待\',\'info\')" class="text-xs text-primary hover:text-primary-dark"><i class="fas fa-file-invoice mr-1"></i>发票</button></td></tr>';
+                    var actionCell;
+                    if (isOrderInvoiced(o.id)) {
+                        actionCell = '<td class="px-4 py-3 text-right"><button type="button" disabled class="text-xs text-gray-400 bg-gray-100 px-3 py-1.5 rounded-lg cursor-not-allowed inline-flex items-center"><i class="fas fa-check-circle mr-1"></i>已开具发票</button></td>';
+                    } else {
+                        actionCell = '<td class="px-4 py-3 text-right"><button onclick="openInvoiceModal(\'' + o.id + '\')" class="text-xs text-primary hover:text-primary-dark"><i class="fas fa-file-invoice mr-1"></i>开具发票</button></td>';
+                    }
+                    return '<tr class="border-b border-gray-50 hover:bg-gray-50/50"><td class="px-4 py-3 font-mono text-xs text-gray-600">' + o.id + '</td><td class="px-4 py-3 font-semibold text-primary">¥' + o.amount.toFixed(2) + '</td><td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full ' + (pmMap[o.paymentMethod] || 'bg-gray-50 text-gray-600') + '">' + (o.paymentMethod || '在线支付') + '</span></td><td class="px-4 py-3 text-sm text-gray-500">' + o.time + '</td><td class="px-4 py-3"><span class="badge badge-success text-xs">' + o.status + '</span></td>' + actionCell + '</tr>';
                 }).join('') + '</tbody></table></div>';
+        }
+
+        // ==================== 发票弹窗 ====================
+        var _currentInvoiceOrderId = null;
+        var _currentInvoiceOrderAmount = 0;
+        var _currentInvoiceType = 'general';
+        var _currentHeaderType = 'personal';
+
+        function openInvoiceModal(orderId) {
+            _currentInvoiceOrderId = orderId;
+            // 取出订单金额作为默认值
+            var uid = AppState.user ? AppState.user.id : 0;
+            var order = getUserOrders(uid).find(function(o){ return o.id === orderId; });
+            _currentInvoiceOrderAmount = order ? order.amount : 0;
+
+            // 重置默认值
+            _currentInvoiceType = 'general';
+            _currentHeaderType = 'personal';
+
+            document.getElementById('invoice-order-hint').textContent = '订单号：' + orderId;
+            document.getElementById('invoice-amount').value = _currentInvoiceOrderAmount.toFixed(2);
+            document.getElementById('invoice-email').value = '';
+            document.getElementById('invoice-phone').value = '';
+            document.getElementById('invoice-header-name').value = '个人';
+            document.getElementById('invoice-remark').value = '';
+            document.getElementById('invoice-note-count').textContent = '0';
+            document.getElementById('invoice-tax-no').value = '';
+            document.getElementById('invoice-tax-no-wrap').classList.add('hidden');
+            document.getElementById('invoice-tax-no').required = false;
+            document.getElementById('invoice-header-name-hint').classList.add('hidden');
+
+            // 视觉态恢复
+            selectInvoiceType('general');
+            selectHeaderType('personal');
+
+            // 按钮可用
+            document.getElementById('invoice-submit-btn').disabled = false;
+            document.getElementById('invoice-submit-btn').textContent = '申请开票';
+
+            document.getElementById('invoiceModal').classList.remove('hidden');
+            document.getElementById('invoiceModal').classList.add('flex');
+        }
+
+        function closeInvoiceModal() {
+            document.getElementById('invoiceModal').classList.add('hidden');
+            document.getElementById('invoiceModal').classList.remove('flex');
+            _currentInvoiceOrderId = null;
+        }
+
+        function selectInvoiceType(type) {
+            _currentInvoiceType = type;
+            var btnGeneral = document.getElementById('invoice-type-general');
+            var btnSpecial = document.getElementById('invoice-type-special');
+            var btnPersonal = document.getElementById('invoice-header-personal');
+            if (type === 'general') {
+                btnGeneral.classList.add('border-primary', 'bg-primary/5', 'text-primary');
+                btnGeneral.classList.remove('border-gray-200');
+                btnGeneral.querySelector('span').classList.remove('text-gray-700');
+                btnGeneral.querySelector('i').classList.remove('text-transparent');
+                btnSpecial.classList.remove('border-primary', 'bg-primary/5', 'text-primary');
+                btnSpecial.classList.add('border-gray-200');
+                btnSpecial.querySelector('span').classList.add('text-gray-700');
+                btnSpecial.querySelector('i').classList.add('text-transparent');
+                // 数电普通发票：个人/企业均可，恢复"个人"按钮可点
+                btnPersonal.disabled = false;
+                btnPersonal.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnPersonal.style.pointerEvents = '';
+            } else {
+                btnSpecial.classList.add('border-primary', 'bg-primary/5', 'text-primary');
+                btnSpecial.classList.remove('border-gray-200');
+                btnSpecial.querySelector('span').classList.remove('text-gray-700');
+                btnSpecial.querySelector('i').classList.remove('text-transparent');
+                btnGeneral.classList.remove('border-primary', 'bg-primary/5', 'text-primary');
+                btnGeneral.classList.add('border-gray-200');
+                btnGeneral.querySelector('span').classList.add('text-gray-700');
+                btnGeneral.querySelector('i').classList.add('text-transparent');
+                // 数电专用发票：仅企业可开，"个人"按钮置灰禁用
+                btnPersonal.disabled = true;
+                btnPersonal.classList.add('opacity-50', 'cursor-not-allowed');
+                // 阻止 disabled 态下的 hover/click 响应
+                btnPersonal.style.pointerEvents = 'none';
+                // 若当前是个人，则自动切换到企业
+                if (_currentHeaderType === 'personal') {
+                    selectHeaderType('enterprise');
+                }
+            }
+        }
+
+        function selectHeaderType(type) {
+            _currentHeaderType = type;
+            var btnPersonal = document.getElementById('invoice-header-personal');
+            var btnEnterprise = document.getElementById('invoice-header-enterprise');
+            var taxWrap = document.getElementById('invoice-tax-no-wrap');
+            var taxInput = document.getElementById('invoice-tax-no');
+            var headerNameInput = document.getElementById('invoice-header-name');
+            var headerNameHint = document.getElementById('invoice-header-name-hint');
+
+            if (type === 'personal') {
+                btnPersonal.classList.add('border-primary', 'bg-primary/5', 'text-primary');
+                btnPersonal.classList.remove('border-gray-200');
+                btnPersonal.querySelector('i').classList.remove('text-transparent');
+                btnEnterprise.classList.remove('border-primary', 'bg-primary/5', 'text-primary');
+                btnEnterprise.classList.add('border-gray-200');
+                btnEnterprise.querySelector('span').classList.add('text-gray-700');
+                btnEnterprise.querySelector('i').classList.add('text-transparent');
+                // 个人：隐藏税号，名称固定为"个人"
+                taxWrap.classList.add('hidden');
+                taxInput.required = false;
+                taxInput.value = '';
+                headerNameInput.value = '个人';
+                headerNameInput.readOnly = true;
+                headerNameInput.classList.add('bg-gray-50');
+                headerNameHint.classList.add('hidden');
+            } else {
+                btnEnterprise.classList.add('border-primary', 'bg-primary/5', 'text-primary');
+                btnEnterprise.classList.remove('border-gray-200');
+                btnEnterprise.querySelector('span').classList.remove('text-gray-700');
+                btnEnterprise.querySelector('i').classList.remove('text-transparent');
+                btnPersonal.classList.remove('border-primary', 'bg-primary/5', 'text-primary');
+                btnPersonal.classList.add('border-gray-200');
+                btnPersonal.querySelector('span').classList.add('text-gray-700');
+                btnPersonal.querySelector('i').classList.add('text-transparent');
+                // 企业：显示税号（必填），名称可输入
+                taxWrap.classList.remove('hidden');
+                taxInput.required = true;
+                headerNameInput.readOnly = false;
+                headerNameInput.classList.remove('bg-gray-50');
+                headerNameInput.value = '';
+                headerNameInput.placeholder = '请输入或搜索企业抬头名称';
+                headerNameHint.classList.add('hidden');
+            }
+        }
+
+        function updateInvoiceNoteCount() {
+            var len = document.getElementById('invoice-remark').value.length;
+            document.getElementById('invoice-note-count').textContent = len;
+        }
+
+        function selectInvoiceFromOrder() {
+            // 把金额恢复为当前订单金额
+            if (_currentInvoiceOrderAmount > 0) {
+                document.getElementById('invoice-amount').value = _currentInvoiceOrderAmount.toFixed(2);
+            }
+        }
+
+        function submitInvoice(event) {
+            event.preventDefault();
+            if (!_currentInvoiceOrderId) {
+                showToast('未关联订单', 'error');
+                return;
+            }
+            var amount = parseFloat(document.getElementById('invoice-amount').value);
+            if (!amount || amount <= 0) {
+                showToast('请输入有效的开票金额', 'error');
+                return;
+            }
+            if (_currentHeaderType === 'enterprise') {
+                var taxNo = document.getElementById('invoice-tax-no').value.trim();
+                if (!taxNo) {
+                    showToast('请输入企业税号', 'error');
+                    return;
+                }
+                var headerName = document.getElementById('invoice-header-name').value.trim();
+                if (!headerName) {
+                    showToast('请输入企业抬头名称', 'error');
+                    return;
+                }
+            }
+            // 提交
+            markOrderInvoiced(_currentInvoiceOrderId);
+            closeInvoiceModal();
+            showToast('发票申请已提交，预计 1-3 个工作日开具', 'success');
+            renderUserOrders();
+        }
+
+        // ==================== 完整调用记录弹窗 ====================
+        // 完整调用记录数据（在卡片 4 条基础上扩展，按时间倒序）
+        var _fullCallRecords = [
+            { time: '2026-05-20 14:30', model: 'GPT-4o',                tokens: 1250, status: '成功', duration: '2.3s' },
+            { time: '2026-05-20 14:28', model: 'DeepSeek-V3',           tokens: 640,  status: '成功', duration: '1.8s' },
+            { time: '2026-05-20 14:25', model: 'Claude-3.5-Sonnet',     tokens: 2100, status: '成功', duration: '3.1s' },
+            { time: '2026-05-20 14:20', model: 'Qwen-Max',              tokens: 890,  status: '失败', duration: '-'    },
+            { time: '2026-05-20 14:15', model: 'GPT-4o',                tokens: 1580, status: '成功', duration: '2.7s' },
+            { time: '2026-05-20 14:08', model: 'Hunyuan-Pro',           tokens: 720,  status: '成功', duration: '1.5s' },
+            { time: '2026-05-20 13:55', model: 'DeepSeek-V3',           tokens: 980,  status: '成功', duration: '2.0s' },
+            { time: '2026-05-20 13:42', model: 'Claude-3.5-Sonnet',     tokens: 2450, status: '成功', duration: '3.8s' },
+            { time: '2026-05-20 13:30', model: 'GPT-4o',                tokens: 1100, status: '成功', duration: '2.1s' },
+            { time: '2026-05-20 13:18', model: 'Qwen-Max',              tokens: 650,  status: '成功', duration: '1.6s' },
+            { time: '2026-05-20 13:05', model: 'DeepSeek-V3',           tokens: 1320, status: '成功', duration: '2.5s' },
+            { time: '2026-05-20 12:50', model: 'Hunyuan-Pro',           tokens: 480,  status: '失败', duration: '-'    },
+            { time: '2026-05-20 12:35', model: 'GPT-4o',                tokens: 1820, status: '成功', duration: '3.0s' },
+            { time: '2026-05-20 12:20', model: 'Claude-3.5-Sonnet',     tokens: 1670, status: '成功', duration: '2.9s' },
+            { time: '2026-05-20 12:05', model: 'DeepSeek-V3',           tokens: 540,  status: '成功', duration: '1.4s' }
+        ];
+
+        function openCallRecordsModal() {
+            var tbody = document.getElementById('call-records-tbody');
+            var totalEl = document.getElementById('call-records-total');
+            if (!tbody) return;
+            tbody.innerHTML = _fullCallRecords.map(function(r) {
+                var isFail = r.status === '失败';
+                var statusBadge = isFail
+                    ? '<span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs">失败</span>'
+                    : '<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs">成功</span>';
+                return '<tr class="border-b border-gray-100 hover:bg-gray-50">' +
+                    '<td class="py-3 px-3 text-sm text-gray-600 whitespace-nowrap">' + r.time + '</td>' +
+                    '<td class="py-3 px-3 text-sm text-gray-700">' + r.model + '</td>' +
+                    '<td class="py-3 px-3 text-sm text-gray-600 text-right tabular-nums">' + r.tokens.toLocaleString() + '</td>' +
+                    '<td class="py-3 px-3">' + statusBadge + '</td>' +
+                    '<td class="py-3 px-3 text-sm text-gray-600 text-right tabular-nums">' + r.duration + '</td>' +
+                    '</tr>';
+            }).join('');
+            totalEl.textContent = _fullCallRecords.length;
+            document.getElementById('callRecordsModal').classList.remove('hidden');
+            document.getElementById('callRecordsModal').classList.add('flex');
+        }
+
+        function closeCallRecordsModal() {
+            document.getElementById('callRecordsModal').classList.add('hidden');
+            document.getElementById('callRecordsModal').classList.remove('flex');
         }
 
         // ==================== 活动报名渲染 ====================
