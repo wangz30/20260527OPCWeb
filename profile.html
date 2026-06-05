@@ -95,6 +95,7 @@
                             </a>
                         </div>
                     </div>
+                    <a href="demands.html" class="text-gray-600 hover:text-primary font-medium transition">需求对接</a>
                     <a href="marketplace.html" class="text-gray-600 hover:text-primary font-medium transition">应用集市</a>
                     <div class="nav-dropdown relative group">
                         <a href="news.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
@@ -137,11 +138,7 @@
                     </a>
                     <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-primary" data-section="wallet">
                         <i class="fas fa-wallet w-5"></i>
-                        <span>钱包</span>
-                    </a>
-                    <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-primary" data-section="orders">
-                        <i class="fas fa-receipt w-5"></i>
-                        <span>订单管理</span>
+                        <span>服务额度</span>
                     </a>
                     <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-primary" data-section="ai-workbench">
                         <i class="fas fa-robot w-5"></i>
@@ -151,9 +148,17 @@
                         <i class="fas fa-clipboard-list w-5"></i>
                         <span>服务申请</span>
                     </a>
+                    <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-primary" data-section="app-applications">
+                        <i class="fas fa-store w-5"></i>
+                        <span>应用申请</span>
+                    </a>
                     <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-primary" data-section="my-events">
                         <i class="fas fa-calendar-check w-5"></i>
                         <span>活动报名</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:text-primary" data-section="demands">
+                        <i class="fas fa-bullhorn w-5"></i>
+                        <span>我的需求</span>
                     </a>
                 </nav>
             </div>
@@ -386,41 +391,41 @@
                 </div>
             </section>
 
-            <!-- 钱包 -->
+            <!-- 服务额度（原"钱包"模块） -->
             <section id="wallet-section" class="space-y-6 hidden">
-                <h2 class="text-2xl font-bold text-secondary">钱包</h2>
-                
+                <h2 class="text-2xl font-bold text-secondary">服务额度</h2>
+
                 <!-- 未认证提示 -->
                 <div id="wallet-unverified" class="bg-white rounded-xl p-12 shadow-md text-center hidden">
                     <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-lock text-3xl text-gray-400"></i>
                     </div>
                     <h3 class="text-xl font-bold text-secondary mb-2">请先完成身份认证</h3>
-                    <p class="text-gray-500 mb-6">完成身份认证后，即可查看余额和充值。</p>
+                    <p class="text-gray-500 mb-6">完成身份认证后，即可查看可用额度与申请服务支持。</p>
                     <button onclick="switchSection('account')" class="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition">
                         去认证
                     </button>
                 </div>
 
-                <!-- 钱包主体（仅认证用户可见） -->
+                <!-- 主体（仅认证用户可见） -->
                 <div id="wallet-main" class="hidden">
-                    <!-- 余额卡片 -->
+                    <!-- 额度卡片 -->
                     <div class="bg-gradient-to-r from-primary to-primary-dark rounded-xl p-8 text-white shadow-lg">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-primary-light mb-2">当前余额</p>
-                                <h3 id="wallet-balance-display" class="text-4xl font-bold">¥0.00</h3>
+                                <p class="text-primary-light mb-2">可用额度</p>
+                                <h3 id="wallet-balance-display" class="text-4xl font-bold"><span class="text-2xl font-medium mr-1">可用额度：</span>0</h3>
                             </div>
                             <button onclick="showRechargeModal()" class="bg-white text-primary px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                                充值
+                                申请额度
                             </button>
                         </div>
                     </div>
 
-                    <!-- 消费记录 -->
+                    <!-- 额度变动记录 -->
                     <div class="bg-white rounded-xl p-6 shadow-md mt-6">
                         <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-semibold text-secondary">消费记录</h3>
+                            <h3 class="text-lg font-semibold text-secondary">额度变动记录</h3>
                             <div class="flex space-x-2" id="wallet-filter-bar">
                                 <button class="px-4 py-2 bg-primary text-white rounded-lg text-sm" data-filter="all" onclick="renderWalletTransactions('all',this)">全部</button>
                                 <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50" data-filter="模型调用" onclick="renderWalletTransactions('模型调用',this)">模型调用</button>
@@ -431,24 +436,22 @@
                         <div id="transaction-list">
                             <div class="text-center py-12 text-gray-400">
                                 <i class="fas fa-receipt text-3xl mb-3"></i>
-                                <p>暂无消费记录</p>
+                                <p>暂无额度变动记录</p>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
 
-            <!-- 订单管理 -->
-            <section id="orders-section" class="space-y-6 hidden">
-                <div class="bg-white rounded-xl p-6 shadow-md">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-lg font-semibold text-secondary">充值订单</h3>
-                        <span class="text-sm text-gray-400"><i class="fas fa-info-circle mr-1"></i>充值记录即为您的订单</span>
-                    </div>
-                    <div id="user-order-list">
-                        <div class="text-center py-12 text-gray-400">
-                            <i class="fas fa-receipt text-3xl mb-3"></i>
-                            <p>暂无充值订单</p>
+                    <!-- 额度申请记录（合并到服务额度内） -->
+                    <div class="bg-white rounded-xl p-6 shadow-md mt-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold text-secondary">额度申请记录</h3>
+                            <span class="text-xs text-gray-400"><i class="fas fa-info-circle mr-1"></i>企业认证用户可查看历次额度申请及审核进度</span>
+                        </div>
+                        <div id="user-order-list">
+                            <div class="text-center py-12 text-gray-400">
+                                <i class="fas fa-receipt text-3xl mb-3"></i>
+                                <p>暂无额度申请记录</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -783,10 +786,39 @@
                 </div>
             </section>
 
+            <!-- 应用申请（应用广场-服务申请，独立于服务申请记录） -->
+            <section id="app-applications-section" class="space-y-6 hidden">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-secondary">应用申请</h2>
+                    <a href="marketplace.html" class="text-sm text-primary hover:text-primary-dark font-medium"><i class="fas fa-store mr-1"></i>前往应用广场</a>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-secondary">申请记录</h3>
+                        <div class="flex items-center space-x-2">
+                            <select id="app-apply-status-filter" onchange="renderMyAppApplications()" class="border border-gray-200 rounded-lg px-3 py-1.5 text-sm">
+                                <option value="all">全部状态</option>
+                                <option value="pending_contact">待对接</option>
+                                <option value="contacted">已联系</option>
+                                <option value="completed">已完成</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="my-app-applications-list" class="divide-y divide-gray-100">
+                        <div class="p-12 text-center text-gray-400">
+                            <i class="fas fa-store text-4xl mb-3"></i>
+                            <p>暂无应用申请记录</p>
+                            <a href="marketplace.html" class="mt-2 inline-block text-primary hover:text-primary-dark text-sm font-medium">前往应用广场申请</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- 活动报名记录 -->
             <section id="my-events-section" class="space-y-6 hidden">
                 <h2 class="text-2xl font-bold text-secondary">活动报名</h2>
-                
+
                 <div class="bg-white rounded-xl shadow-md overflow-hidden">
                     <div class="p-6 border-b border-gray-100">
                         <h3 class="text-lg font-semibold text-secondary">我的报名记录</h3>
@@ -796,6 +828,34 @@
                             <i class="fas fa-calendar-alt text-4xl mb-3"></i>
                             <p>暂无活动报名记录</p>
                             <a href="events.html" class="mt-2 inline-block text-primary hover:text-primary-dark text-sm font-medium">去报名活动</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 需求对接 -->
+            <section id="demands-section" class="space-y-6 hidden">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-secondary">我的需求</h2>
+                </div>
+
+                <!-- 提示信息 -->
+                <div class="bg-blue-50/60 border border-blue-100 rounded-xl px-4 py-3 text-xs text-blue-700 leading-relaxed flex items-start space-x-2">
+                    <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
+                    <span>本页仅展示您发布的需求及其审核状态。如需发布新需求，请前往 <a href="demands.html" class="font-semibold underline">需求信息页</a> 填写。</span>
+                </div>
+
+                <!-- 列表区 -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                        <h3 class="text-sm font-semibold text-secondary">我发布的需求</h3>
+                        <span id="myPublishedCount" class="text-xs text-gray-400">共 0 条</span>
+                    </div>
+                    <div id="myPublishedList" class="divide-y divide-gray-100">
+                        <div class="p-12 text-center text-gray-400">
+                            <i class="fas fa-inbox text-4xl mb-3"></i>
+                            <p>暂无发布的需求</p>
+                            <a href="demands.html" class="mt-2 inline-block text-primary hover:text-primary-dark text-sm font-medium">前往需求信息页</a>
                         </div>
                     </div>
                 </div>
@@ -1018,48 +1078,22 @@
         </div>
     </div>
 
-    <!-- 充值弹窗 -->
+    <!-- 申请额度弹窗（按认证类型分支展示） -->
     <div id="rechargeModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-secondary">账户充值</h3>
+                <h3 id="rechargeModalTitle" class="text-xl font-bold text-secondary">申请额度</h3>
                 <button onclick="closeRechargeModal()" class="text-gray-400 hover:text-gray-600">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">充值金额</label>
-                    <div class="grid grid-cols-3 gap-3 mb-3">
-                        <button type="button" onclick="selectAmount(100)" class="amount-btn py-2 border border-gray-300 rounded-lg hover:border-primary hover:text-primary transition">¥100</button>
-                        <button type="button" onclick="selectAmount(500)" class="amount-btn py-2 border border-gray-300 rounded-lg hover:border-primary hover:text-primary transition">¥500</button>
-                        <button type="button" onclick="selectAmount(1000)" class="amount-btn py-2 border border-gray-300 rounded-lg hover:border-primary hover:text-primary transition">¥1000</button>
-                    </div>
-                    <input type="number" id="customAmount" placeholder="自定义金额" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">支付方式</label>
-                    <div class="space-y-2">
-                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-                            <input type="radio" name="payment" value="alipay" class="text-primary focus:ring-primary">
-                            <span class="ml-3"><i class="fab fa-alipay text-blue-500 mr-2"></i>支付宝</span>
-                        </label>
-                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-                            <input type="radio" name="payment" value="wechat" class="text-primary focus:ring-primary">
-                            <span class="ml-3"><i class="fab fa-weixin text-green-500 mr-2"></i>微信支付</span>
-                        </label>
-                        <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-                            <input type="radio" name="payment" value="bank" class="text-primary focus:ring-primary">
-                            <span class="ml-3"><i class="fas fa-credit-card text-blue-700 mr-2"></i>银行卡</span>
-                        </label>
-                    </div>
-                </div>
-                <button onclick="submitRecharge()" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition">确认充值</button>
+            <div id="rechargeModalBody" class="space-y-4">
+                <!-- 内容由 openRechargeModal 动态按认证类型渲染 -->
             </div>
         </div>
     </div>
 
-    <!-- 重置API Key弹窗 -->
+    <!-- 重置 API Key 弹窗 -->
     <div id="resetKeyModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
             <div class="flex justify-between items-center mb-6">
@@ -1075,8 +1109,8 @@
                 <p class="text-gray-600">重置后，旧API Key将立即失效，所有使用旧Key的请求将失败。是否确认重置？</p>
             </div>
             <div class="flex space-x-4">
-                <button onclick="confirmResetKey()" class="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition">确认重置</button>
-                <button onclick="closeResetKeyModal()" class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50 transition">取消</button>
+                <button onclick="closeResetKeyModal()" class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition">取消</button>
+                <button onclick="confirmResetKey()" class="flex-1 bg-red-500 text-white py-3 rounded-lg font-semibold hover:bg-red-600 transition">确认重置</button>
             </div>
         </div>
     </div>
@@ -1163,7 +1197,11 @@
             // 钱包区域
             const walletUnverified = document.getElementById('wallet-unverified');
             const walletMain = document.getElementById('wallet-main');
-            
+
+            if (walletUnverified) {
+                const desc = walletUnverified.querySelector('p.text-gray-500');
+                if (desc) desc.textContent = '完成身份认证后，即可查看可用额度与申请服务支持。';
+            }
             if (walletUnverified) walletUnverified.classList.add('hidden');
             if (walletMain) walletMain.classList.add('hidden');
 
@@ -1173,7 +1211,11 @@
                 if (walletMain) {
                     walletMain.classList.remove('hidden');
                     const balanceDisplay = document.getElementById('wallet-balance-display');
-                    if (balanceDisplay) balanceDisplay.textContent = `¥${AppState.balance.toFixed(2)}`;
+                    if (balanceDisplay) {
+                        // 文案：可用额度：{数值}（不强调"元"，数值统一不带货币符号）
+                        const num = Number(AppState.balance) || 0;
+                        balanceDisplay.innerHTML = '<span class="text-2xl font-medium mr-1">可用额度：</span>' + num;
+                    }
                 }
             }
         }
@@ -1556,7 +1598,61 @@
             // 切换到订单管理时刷新记录
             if (section === 'orders') {
                 renderUserOrders();
+            }            // 切换到需求对接时刷新
+            if (section === 'demands') {
+                renderMyPublishedDemands();
+                renderMyAcceptedDemands();
             }
+            // 切换到钱包/服务额度时同步刷新额度申请记录（合并到该 section 内）
+            if (section === 'wallet') {
+                renderUserOrders();
+            }
+            // 切换到应用申请时刷新
+            if (section === 'app-applications') {
+                renderMyAppApplications();
+            }
+        }
+
+        // ==================== 应用申请（应用广场） ====================
+        function renderMyAppApplications() {
+            const list = (typeof getAppApplications === 'function') ? getAppApplications() : [];
+            const uid = (AppState.user && AppState.user.id) || '';
+            // 过滤当前用户
+            let mine = list.filter(function(a) { return !uid || a.userId === uid || a.userId === 'anonymous'; });
+            const filterEl = document.getElementById('app-apply-status-filter');
+            const fv = filterEl ? filterEl.value : 'all';
+            if (fv && fv !== 'all') mine = mine.filter(function(a) { return a.status === fv; });
+            const container = document.getElementById('my-app-applications-list');
+            if (!container) return;
+            if (!mine.length) {
+                container.innerHTML = '<div class="p-12 text-center text-gray-400"><i class="fas fa-store text-4xl mb-3"></i><p>暂无应用申请记录</p><a href="marketplace.html" class="mt-2 inline-block text-primary hover:text-primary-dark text-sm font-medium">前往应用广场申请</a></div>';
+                return;
+            }
+            container.innerHTML = mine.map(function(a) {
+                const badge = (typeof APP_APP_STATUS_BADGE !== 'undefined' && APP_APP_STATUS_BADGE[a.status]) || 'bg-gray-100 text-gray-500';
+                const label = (typeof APP_APP_STATUS_MAP !== 'undefined' && APP_APP_STATUS_MAP[a.status]) || a.status;
+                const timeLine = (a.status === 'contacted' && a.contactTime)
+                    ? '<div class="text-xs text-blue-500 mt-1">联系时间：' + escapeHtml(a.contactTime) + '</div>'
+                    : (a.status === 'completed' && a.completeTime)
+                        ? '<div class="text-xs text-green-600 mt-1">完成时间：' + escapeHtml(a.completeTime) + '</div>'
+                        : '';
+                return ''
+                    + '<div class="p-6 hover:bg-gray-50 transition">'
+                    + '  <div class="flex items-start justify-between gap-4">'
+                    + '    <div class="flex items-start gap-4 min-w-0 flex-1">'
+                    + '      <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0"><i class="fas fa-cube text-xl text-primary"></i></div>'
+                    + '      <div class="min-w-0 flex-1">'
+                    + '        <h4 class="font-semibold text-secondary">' + escapeHtml(a.appName) + '</h4>'
+                    + '        <div class="text-xs text-gray-400 mt-0.5 font-mono">' + escapeHtml(a.id) + '</div>'
+                    + '        <div class="text-sm text-gray-500 mt-1">申请时间：' + escapeHtml(a.createTime) + '</div>'
+                    + '        <div class="mt-2 text-sm text-gray-700 whitespace-pre-wrap break-words bg-gray-50 rounded-lg p-3 leading-relaxed">' + escapeHtml(a.description) + '</div>'
+                    +        timeLine
+                    + '      </div>'
+                    + '    </div>'
+                    + '    <span class="text-xs px-2.5 py-1 rounded-full whitespace-nowrap ' + badge + '">' + escapeHtml(label) + '</span>'
+                    + '  </div>'
+                    + '</div>';
+            }).join('');
         }
 
         // ==================== 钱包消费记录渲染 ====================
@@ -1575,15 +1671,15 @@
                 records = records.filter(function(r) { return r.type === filter; });
             }
             if (!records || records.length === 0) {
-                container.innerHTML = '<div class="text-center py-12 text-gray-400"><i class="fas fa-receipt text-3xl mb-3"></i><p>暂无消费记录</p></div>';
+                container.innerHTML = '<div class="text-center py-12 text-gray-400"><i class="fas fa-receipt text-3xl mb-3"></i><p>暂无额度变动记录</p></div>';
                 return;
             }
             var typeMap = { '模型调用': 'bg-purple-50 text-purple-700', '数据API': 'bg-blue-50 text-blue-700', '云资源': 'bg-cyan-50 text-cyan-700', '消费': 'bg-gray-50 text-gray-600' };
-            container.innerHTML = '<div class="overflow-x-auto"><table class="w-full"><thead class="bg-gray-50"><tr><th class="text-left px-4 py-3 text-xs text-gray-400">日期</th><th class="text-left px-4 py-3 text-xs text-gray-400">服务名称</th><th class="text-left px-4 py-3 text-xs text-gray-400">模型/类型</th><th class="text-right px-4 py-3 text-xs text-gray-400">金额</th><th class="text-right px-4 py-3 text-xs text-gray-400">Token消耗</th><th class="text-left px-4 py-3 text-xs text-gray-400">类型</th></tr></thead><tbody>' +
+            container.innerHTML = '<div class="overflow-x-auto"><table class="w-full"><thead class="bg-gray-50"><tr><th class="text-left px-4 py-3 text-xs text-gray-400">日期</th><th class="text-left px-4 py-3 text-xs text-gray-400">服务名称</th><th class="text-left px-4 py-3 text-xs text-gray-400">模型/类型</th><th class="text-right px-4 py-3 text-xs text-gray-400">消耗额度</th><th class="text-right px-4 py-3 text-xs text-gray-400">Token消耗</th><th class="text-left px-4 py-3 text-xs text-gray-400">类型</th></tr></thead><tbody>' +
                 records.reverse().map(function(r) {
                     var t = r.tokens;
                     var tokenStr = t && t > 0 ? (t >= 1000000 ? (t/1000000).toFixed(1) + 'M' : t >= 1000 ? (t/1000).toFixed(0) + 'K' : String(t)) : '--';
-                    return '<tr class="border-b border-gray-50 hover:bg-gray-50/50"><td class="px-4 py-2.5 text-sm text-gray-500">' + r.date + '</td><td class="px-4 py-2.5 text-sm font-medium text-gray-700">' + r.service + '</td><td class="px-4 py-2.5 text-sm text-gray-500">' + r.model + '</td><td class="px-4 py-2.5 text-sm text-right font-semibold text-gray-700">¥' + (r.amount||0).toFixed(2) + '</td><td class="px-4 py-2.5 text-sm text-right font-mono text-gray-600">' + tokenStr + '</td><td class="px-4 py-2.5"><span class="text-xs px-2 py-0.5 rounded-full ' + (typeMap[r.type] || 'bg-gray-50 text-gray-600') + '">' + r.type + '</span></td></tr>';
+                    return '<tr class="border-b border-gray-50 hover:bg-gray-50/50"><td class="px-4 py-2.5 text-sm text-gray-500">' + r.date + '</td><td class="px-4 py-2.5 text-sm font-medium text-gray-700">' + r.service + '</td><td class="px-4 py-2.5 text-sm text-gray-500">' + r.model + '</td><td class="px-4 py-2.5 text-sm text-right font-semibold text-gray-700">' + (r.amount||0).toFixed(0) + '</td><td class="px-4 py-2.5 text-sm text-right font-mono text-gray-600">' + tokenStr + '</td><td class="px-4 py-2.5"><span class="text-xs px-2 py-0.5 rounded-full ' + (typeMap[r.type] || 'bg-gray-50 text-gray-600') + '">' + r.type + '</span></td></tr>';
                 }).join('') + '</tbody></table></div>';
         }
 
@@ -1602,11 +1698,11 @@
             var uid = AppState.user ? AppState.user.id : 0;
             var orders = getUserOrders(uid);
             if (!orders || orders.length === 0) {
-                container.innerHTML = '<div class="text-center py-12 text-gray-400"><i class="fas fa-receipt text-3xl mb-3"></i><p>暂无充值订单</p></div>';
+                container.innerHTML = '<div class="text-center py-12 text-gray-400"><i class="fas fa-receipt text-3xl mb-3"></i><p>暂无额度申请记录</p></div>';
                 return;
             }
-            var pmMap = { '微信支付': 'bg-green-50 text-green-700', '支付宝': 'bg-blue-50 text-blue-700', '在线支付': 'bg-gray-50 text-gray-600' };
-            container.innerHTML = '<div class="overflow-x-auto"><table class="w-full"><thead class="bg-gray-50"><tr><th class="text-left px-4 py-3 text-xs text-gray-400">订单编号</th><th class="text-left px-4 py-3 text-xs text-gray-400">充值金额</th><th class="text-left px-4 py-3 text-xs text-gray-400">支付方式</th><th class="text-left px-4 py-3 text-xs text-gray-400">时间</th><th class="text-left px-4 py-3 text-xs text-gray-400">状态</th><th class="text-right px-4 py-3 text-xs text-gray-400">操作</th></tr></thead><tbody>' +
+            var pmMap = { '微信支付': 'bg-green-50 text-green-700', '支付宝': 'bg-blue-50 text-blue-700', '在线支付': 'bg-gray-50 text-gray-600', '银行转账': 'bg-amber-50 text-amber-700' };
+            container.innerHTML = '<div class="overflow-x-auto"><table class="w-full"><thead class="bg-gray-50"><tr><th class="text-left px-4 py-3 text-xs text-gray-400">申请编号</th><th class="text-left px-4 py-3 text-xs text-gray-400">申请额度</th><th class="text-left px-4 py-3 text-xs text-gray-400">支付方式</th><th class="text-left px-4 py-3 text-xs text-gray-400">时间</th><th class="text-left px-4 py-3 text-xs text-gray-400">状态</th><th class="text-right px-4 py-3 text-xs text-gray-400">操作</th></tr></thead><tbody>' +
                 orders.reverse().map(function(o) {
                     var actionCell;
                     if (isOrderInvoiced(o.id)) {
@@ -1614,7 +1710,7 @@
                     } else {
                         actionCell = '<td class="px-4 py-3 text-right"><button onclick="openInvoiceModal(\'' + o.id + '\')" class="text-xs text-primary hover:text-primary-dark"><i class="fas fa-file-invoice mr-1"></i>开具发票</button></td>';
                     }
-                    return '<tr class="border-b border-gray-50 hover:bg-gray-50/50"><td class="px-4 py-3 font-mono text-xs text-gray-600">' + o.id + '</td><td class="px-4 py-3 font-semibold text-primary">¥' + o.amount.toFixed(2) + '</td><td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full ' + (pmMap[o.paymentMethod] || 'bg-gray-50 text-gray-600') + '">' + (o.paymentMethod || '在线支付') + '</span></td><td class="px-4 py-3 text-sm text-gray-500">' + o.time + '</td><td class="px-4 py-3"><span class="badge badge-success text-xs">' + o.status + '</span></td>' + actionCell + '</tr>';
+                    return '<tr class="border-b border-gray-50 hover:bg-gray-50/50"><td class="px-4 py-3 font-mono text-xs text-gray-600">' + o.id + '</td><td class="px-4 py-3 font-semibold text-primary">' + o.amount + '</td><td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full ' + (pmMap[o.paymentMethod] || 'bg-gray-50 text-gray-600') + '">' + (o.paymentMethod || '银行转账') + '</span></td><td class="px-4 py-3 text-sm text-gray-500">' + o.time + '</td><td class="px-4 py-3"><span class="badge badge-success text-xs">' + o.status + '</span></td>' + actionCell + '</tr>';
                 }).join('') + '</tbody></table></div>';
         }
 
@@ -1931,13 +2027,13 @@
         let currentApiKey = '';
 
         function handleGenerateApiKey() {
-            // 检查余额
+            // 检查可用额度
             if (AppState.balance <= 0) {
                 showAuthModal({
-                    title: '余额不足',
-                    message: '当前余额为 0，无法生成 API Key。请先充值。',
+                    title: '可用额度不足',
+                    message: '当前可用额度为 0，无法生成 API Key。请先申请服务支持。',
                     icon: 'fa-wallet',
-                    btnText: '去充值',
+                    btnText: '前往申请',
                     next: 'recharge'
                 });
                 return;
@@ -1961,13 +2057,13 @@
 
         // ==================== 调试运行 ====================
         function runDebug() {
-            // 检查余额
+            // 检查可用额度
             if (AppState.balance <= 0) {
                 showAuthModal({
-                    title: '余额不足',
-                    message: '当前余额为 0，无法调用模型。请先充值后再进行调试。',
+                    title: '可用额度不足',
+                    message: '当前可用额度为 0，无法调用模型。请先申请服务支持。',
                     icon: 'fa-wallet',
-                    btnText: '去充值',
+                    btnText: '前往申请',
                     next: 'recharge'
                 });
                 return;
@@ -2269,13 +2365,123 @@ func main() {
             document.getElementById('passwordModal').classList.remove('flex');
         }
 
+        // 申请额度弹窗（按认证类型分支）
         function showRechargeModal() {
+            // 个人实名：仅展示联系信息，不开放自行申请
+            // 企业实名：展示银行账户 + 申请额度 + 已完成转账上传凭证
+            const body = document.getElementById('rechargeModalBody');
+            const title = document.getElementById('rechargeModalTitle');
+            const status = AppState.realNameStatus;
+            if (status === 'verified') {
+                // 个人实名
+                title.textContent = '申请额度';
+                body.innerHTML = ''
+                    + '<div class="text-center py-4">'
+                    + '  <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-user-tie text-2xl text-primary"></i></div>'
+                    + '  <h4 class="text-base font-semibold text-secondary mb-2">请联系工作人员获取更多服务支持</h4>'
+                    + '  <p class="text-sm text-gray-500 mb-5 leading-relaxed">个人实名用户暂不开放在线自助申请额度，请通过以下邮箱与我们联系：</p>'
+                    + '  <div class="space-y-2 text-sm text-left bg-gray-50 rounded-lg p-4">'
+                    + '    <div class="flex items-center"><i class="fas fa-envelope w-5 text-gray-400 mr-2"></i><span class="text-gray-700">gbanexus@hiic.com.cn</span><button onclick="copyText(\'gbanexus@hiic.com.cn\')" class="text-xs text-primary ml-2">复制</button></div>'
+                    + '  </div>'
+                    + '  <button onclick="closeRechargeModal()" class="mt-5 w-full bg-primary text-white py-2.5 rounded-lg font-semibold hover:bg-primary-dark transition">我知道了</button>'
+                    + '</div>';
+            } else if (status === 'enterprise_verified') {
+                // 企业实名
+                title.textContent = '申请额度';
+                body.innerHTML = ''
+                    + '<div class="rounded-lg border border-amber-200 bg-amber-50/60 p-4">'
+                    + '  <div class="text-sm font-semibold text-amber-800 mb-2"><i class="fas fa-university mr-1.5"></i>公司银行账户信息</div>'
+                    + '  <div class="text-xs text-amber-900 space-y-1 leading-relaxed">'
+                    + '    <div><span class="text-gray-500">开户行：</span>招商银行 广州分行</div>'
+                    + '    <div><span class="text-gray-500">户名：</span>粤港澳大湾区大数据中心（OPC 社区运营主体）</div>'
+                    + '    <div class="flex items-center"><span class="text-gray-500">账号：</span><span class="font-mono">6225 8888 8888 8888</span><button onclick="copyText(\'6225888888888888\')" class="text-xs text-primary ml-2">复制</button></div>'
+                    + '  </div>'
+                    + '</div>'
+                    + '<div>'
+                    + '  <label class="block text-sm font-medium text-gray-700 mb-2">申请额度数值 <span class="text-red-500">*</span>（单位：元）</label>'
+                    + '  <div class="relative">'
+                    + '    <input type="number" id="customAmount" min="1" placeholder="请输入额度数值" class="w-full px-4 py-2 pr-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">'
+                    + '    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 pointer-events-none">元</span>'
+                    + '  </div>'
+                    + '</div>'
+                    + '<div>'
+                    + '  <button type="button" id="rechargeUploadBtn" onclick="showRechargeUploadArea()" class="w-full py-2.5 border-2 border-dashed border-primary/40 text-primary rounded-lg text-sm font-semibold hover:bg-primary/5 transition"><i class="fas fa-paperclip mr-1.5"></i>已完成转账，上传凭证</button>'
+                    + '  <div id="rechargeUploadArea" class="hidden mt-3 p-4 border border-gray-200 rounded-lg bg-gray-50">'
+                    + '    <label class="flex items-center justify-center gap-1.5 px-4 py-2.5 border border-primary text-primary rounded-lg text-sm cursor-pointer hover:bg-primary/5 transition mb-2">'
+                    + '      <i class="fas fa-cloud-upload-alt"></i><span>选择凭证文件（支持图片/PDF）</span>'
+                    + '      <input type="file" id="rechargeVoucherInput" accept="image/*,application/pdf" class="hidden" onchange="handleRechargeVoucherSelect(this)">'
+                    + '    </label>'
+                    + '    <div id="rechargeVoucherName" class="text-xs text-gray-500">未选择文件</div>'
+                    + '  </div>'
+                    + '</div>'
+                    + '<button onclick="submitRecharge()" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition mt-2">提交申请</button>';
+                // 初始化默认值
+                const amt = document.getElementById('customAmount'); if (amt) amt.value = '';
+            } else {
+                // 未认证
+                title.textContent = '申请额度';
+                body.innerHTML = '<div class="text-center py-6 text-sm text-gray-500">请先完成身份认证</div>';
+            }
             document.getElementById('rechargeModal').classList.remove('hidden');
             document.getElementById('rechargeModal').classList.add('flex');
         }
         function closeRechargeModal() {
             document.getElementById('rechargeModal').classList.add('hidden');
             document.getElementById('rechargeModal').classList.remove('flex');
+        }
+        // 显示上传凭证区域
+        function showRechargeUploadArea() {
+            const area = document.getElementById('rechargeUploadArea');
+            if (area) area.classList.remove('hidden');
+        }
+        // 处理凭证文件选择
+        function handleRechargeVoucherSelect(input) {
+            const label = document.getElementById('rechargeVoucherName');
+            if (input.files && input.files.length > 0) {
+                const f = input.files[0];
+                input.dataset.attachedName = f.name;
+                const sizeKb = f.size > 1024 ? (f.size / 1024).toFixed(1) + ' KB' : f.size + ' B';
+                label.textContent = '已选择：' + f.name + ' · ' + sizeKb;
+                label.classList.add('text-primary', 'font-medium');
+                label.classList.remove('text-gray-500');
+            } else {
+                label.textContent = '未选择文件';
+            }
+        }
+        // 选择预设额度（兼容旧 API）
+        function selectAmount(amount) {
+            const el = document.getElementById('customAmount');
+            if (el) el.value = amount;
+        }
+        // 提交申请（仅企业）
+        function submitRecharge() {
+            const status = AppState.realNameStatus;
+            if (status === 'verified') {
+                // 个人：弹窗内已说明联系工作人员，不需提交
+                showToast('请联系工作人员获取服务支持', 'info');
+                return;
+            }
+            if (status !== 'enterprise_verified') {
+                showToast('请先完成企业认证', 'error');
+                return;
+            }
+            const amount = parseFloat(document.getElementById('customAmount').value);
+            if (!amount || amount <= 0) { showToast('请输入正确的申请额度', 'error'); return; }
+            const unitEl = document.getElementById('customAmountUnit');
+            const unit = unitEl ? unitEl.value : '元';
+            const fileInput = document.getElementById('rechargeVoucherInput');
+            const voucherName = (fileInput && fileInput.dataset && fileInput.dataset.attachedName) || '';
+            // 生成申请记录（订单），状态"待审核"，不实际加余额
+            addBalance(amount, '银行转账', { type: 'recharge_request', status: '待审核', paymentMethod: '银行转账', unit: unit, voucherName: voucherName });
+            closeRechargeModal();
+            showToast('我们已收到您的材料，工作人员将在 1 个工作日内审核，审核通过后将为您增加服务额度', 'success');
+            // 刷新订单列表（额度申请记录）
+            if (typeof renderUserOrders === 'function') renderUserOrders();
+        }
+
+        function changePassword() {
+            closePasswordModal();
+            showToast('密码修改成功');
         }
 
         function showResetKeyModal() {
@@ -2285,25 +2491,6 @@ func main() {
         function closeResetKeyModal() {
             document.getElementById('resetKeyModal').classList.add('hidden');
             document.getElementById('resetKeyModal').classList.remove('flex');
-        }
-
-        function selectAmount(amount) {
-            document.getElementById('customAmount').value = amount;
-        }
-
-        function submitRecharge() {
-            const amount = parseFloat(document.getElementById('customAmount').value);
-            if (!amount || amount <= 0) {
-                showToast('请输入正确的充值金额', 'error');
-                return;
-            }
-            closeRechargeModal();
-            addBalance(amount);
-        }
-
-        function changePassword() {
-            closePasswordModal();
-            showToast('密码修改成功');
         }
 
         function confirmResetKey() {
@@ -2325,6 +2512,124 @@ func main() {
                 if (e.target === this) closeEnterpriseAuthModal();
             });
         });
+
+        // ==================== 需求对接 业务 ====================
+        function escapeHtml(s) {
+            if (s === null || s === undefined) return '';
+            return String(s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+        function demandStatusBadge(s) { return DEMAND_STATUS_BADGE[s] || 'bg-gray-50 text-gray-600'; }
+        function demandStatusLabel(s) { return DEMAND_STATUS_MAP[s] || s; }
+        function demandAuditBadge(s) { return DEMAND_AUDIT_BADGE[s] || 'bg-gray-50 text-gray-600'; }
+        function demandAuditLabel(s) { return DEMAND_AUDIT_MAP[s] || s; }
+
+        // 子 tab 切换（已废弃：保留为空函数以防外部调用报错）
+        function switchDemandSubTab(tab) {
+            // 不再支持多 tab，仅显示我发布的需求
+            return;
+        }
+
+        // 渲染"我发布的需求"（仅展示审核状态，去承接化）
+        function renderMyPublishedDemands() {
+            const uid = AppState.user ? AppState.user.id : 0;
+            const list = getDemands().filter(function(d) { return d.publisherId === uid; });
+            const container = document.getElementById('myPublishedList');
+            const countEl = document.getElementById('myPublishedCount');
+            if (countEl) countEl.textContent = '共 ' + list.length + ' 条';
+            if (!list.length) {
+                container.innerHTML = '<div class="p-12 text-center text-gray-400"><i class="fas fa-inbox text-4xl mb-3"></i><p>暂无发布的需求</p><a href="demands.html" class="mt-2 inline-block text-primary hover:text-primary-dark text-sm font-medium">前往需求信息页</a></div>';
+                return;
+            }
+            container.innerHTML = list.map(function(d) {
+                // 审核状态文案（用户视角）
+                let auditText = '审核中';
+                let auditClass = 'bg-amber-50 text-amber-700';
+                let auditIcon = 'fas fa-hourglass-half text-amber-500';
+                if (d.auditStatus === 'approved') {
+                    auditText = '审核通过 · 已发布在主站';
+                    auditClass = 'bg-green-50 text-green-700';
+                    auditIcon = 'fas fa-check-circle text-green-500';
+                } else if (d.auditStatus === 'rejected') {
+                    auditText = '已驳回';
+                    auditClass = 'bg-red-50 text-red-700';
+                    auditIcon = 'fas fa-times-circle text-red-500';
+                }
+                // 驳回原因展示
+                const rejectHint = (d.auditStatus === 'rejected' && d.auditMessage)
+                    ? '<div class="mt-3 p-2 rounded bg-red-50 border border-red-100 text-xs text-red-700"><i class="fas fa-exclamation-circle mr-1"></i>驳回原因：' + escapeHtml(d.auditMessage) + '</div>'
+                    : '';
+                // 操作按钮：仅查看（无承接/交付流程）
+                const actions = [
+                    '<button onclick="openDemandDetailFromProfile(\'' + d.id + '\')" class="text-xs px-3 py-1.5 border border-gray-200 rounded text-gray-600 hover:border-primary hover:text-primary">查看</button>'
+                ];
+                // 已下架：增加标识
+                const offShelfTag = d.status === 'off_shelf'
+                    ? '<span class="text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-700">已下架</span>'
+                    : '';
+                return ''
+                    + '<div class="p-6 hover:bg-gray-50/50 transition">'
+                    + '  <div class="flex items-start justify-between gap-4">'
+                    + '    <div class="flex-1 min-w-0">'
+                    + '      <div class="flex items-center gap-2 mb-2 flex-wrap">'
+                    + '        <span class="text-xs text-gray-400 font-mono">' + d.id + '</span>'
+                    + '        <span class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full ' + auditClass + '"><i class="' + auditIcon + '"></i>' + auditText + '</span>'
+                    +          offShelfTag
+                    + (d.category ? '<span class="text-xs px-2 py-0.5 rounded-full bg-gray-50 text-gray-500">' + escapeHtml(d.category) + '</span>' : '')
+                    + '      </div>'
+                    + '      <h3 class="text-base font-semibold text-secondary mb-1">' + escapeHtml(d.title) + '</h3>'
+                    + '      <p class="text-sm text-gray-600 line-clamp-2">' + escapeHtml(d.description) + '</p>'
+                    + '      <div class="flex items-center gap-4 mt-2 text-xs text-gray-500 flex-wrap">'
+                    + '        <span><i class="fas fa-coins text-amber-500 mr-1"></i>' + escapeHtml(d.budget || '面议') + '</span>'
+                    + '        <span><i class="far fa-calendar text-primary mr-1"></i>' + escapeHtml(d.deadline || '不限') + '</span>'
+                    + '        <span><i class="far fa-clock text-gray-400 mr-1"></i>' + escapeHtml(d.createTime) + '</span>'
+                    +        (d.auditTime ? '<span class="text-blue-600"><i class="far fa-calendar-check mr-1"></i>审核：' + escapeHtml(d.auditTime) + '</span>' : '')
+                    + '      </div>'
+                    +      rejectHint
+                    + '    </div>'
+                    + '    <div class="flex flex-col gap-2 flex-shrink-0">' + actions.join('') + '</div>'
+                    + '  </div>'
+                    + '</div>';
+            }).join('');
+        }
+
+        // 渲染"我承接的需求"已废弃，保留空函数以防外部调用报错
+        function renderMyAcceptedDemands() {
+            // 已不再支持承接需求，无操作
+            return;
+        }
+
+        // 辅助：渲染需求详情弹窗（共用 common.js 中的 window.openDemandDetail）
+        function openDemandDetailFromProfile(id) {
+            if (typeof window.openDemandDetail === 'function') {
+                window.openDemandDetail(id);
+            } else {
+                showToast('详情功能暂不可用', 'error');
+            }
+        }
+
+        // 弹窗工具
+        function openModal(id) { const el = document.getElementById(id); el.classList.add('show'); el.classList.remove('hidden'); el.style.display = 'flex'; }
+        function closeModal(id) { const el = document.getElementById(id); el.classList.remove('show'); el.classList.add('hidden'); el.style.display = ''; }
+
+        // 交付阶段徽章辅助（保留兼容旧调用）
+        function demandStageBadge(s) { return DEMAND_DELIVERY_STAGE_BADGE[s] || 'bg-gray-100 text-gray-500'; }
+        function demandStageLabel(s) { return DEMAND_DELIVERY_STAGE_MAP[s] || ''; }
+
+        // ==================== 已废弃的承接/交付/编辑/发布相关函数（保留为空函数以防外部调用报错） ====================
+        function openPublishDemandModal() { showToast('请前往需求信息页发布需求', 'info'); return; }
+        function submitPublishDemand() { return false; }
+        function openEditDemandModal() { showToast('编辑功能已下线，请联系管理员调整', 'info'); return; }
+        function submitEditDemand() { return false; }
+        function publisherOffShelfConfirm() { showToast('请联系管理员下架', 'info'); return; }
+        function verifyDeliveryConfirm() { showToast('交付流程已下线', 'info'); return; }
+        function markCompletedConfirm() { showToast('交付流程已下线', 'info'); return; }
+        function openUploadDeliveryModal() { showToast('交付流程已下线', 'info'); return; }
+        function submitUploadDelivery() { return false; }
+        function handleUploadFileSelect() { return; }
+        function clearUploadFile() { return; }
+        function openRejectDeliveryModal() { showToast('交付流程已下线', 'info'); return; }
     </script>
 
     <!-- 全站通用页脚 -->
@@ -2396,5 +2701,20 @@ func main() {
             </div>
         </div>
     </footer>
+
+    <!-- 需求详情弹窗（共用 window.openDemandDetail） -->
+    <div id="demandDetailOverlay" class="modal-overlay fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100 sticky top-0 bg-white">
+                <h3 class="text-lg font-bold text-secondary" id="demandDetailTitle">需求详情</h3>
+                <button onclick="closeModal('demandDetailOverlay')" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center">
+                    <i class="fas fa-times text-gray-400"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4" id="demandDetailBody">
+                <!-- 由 window.openDemandDetail 渲染 -->
+            </div>
+        </div>
+    </div>
 </body>
 </html>

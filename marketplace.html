@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -84,6 +84,7 @@
                             </a>
                         </div>
                     </div>
+                    <a href="demands.html" class="text-gray-600 hover:text-primary font-medium transition">需求对接</a>
                     <a href="marketplace.html" class="text-primary font-medium border-b-2 border-primary">应用集市</a>
                     <div class="nav-dropdown relative group">
                         <a href="news.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
@@ -156,7 +157,7 @@
                         <span>按GPU/CPU时长计费</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -171,7 +172,7 @@
                         <span>按资源时长计费</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -186,7 +187,7 @@
                         <span>按量付费+资源包</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -201,7 +202,7 @@
                         <span>按标注条数计费</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -216,7 +217,7 @@
                         <span>按需租用算力集群</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -231,7 +232,7 @@
                         <span>订阅制（积分）</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -246,7 +247,7 @@
                         <span>按资源使用量计费</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -261,7 +262,7 @@
                         <span>按资源使用量计费</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -276,7 +277,7 @@
                         <span>订阅制（Credits）</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
             </div>
 
@@ -295,7 +296,7 @@
                         <span>订阅制（积分）</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -310,7 +311,7 @@
                         <span>免费+按量付费</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -325,7 +326,7 @@
                         <span>免费开通+按量付费</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -340,7 +341,7 @@
                         <span>订阅制</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -355,7 +356,7 @@
                         <span>订阅制（Credits）</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
             </div>
 
@@ -374,7 +375,7 @@
                         <span>订阅制</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -389,7 +390,7 @@
                         <span>按算力/数据量计费</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -404,7 +405,7 @@
                         <span>订阅制</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -419,7 +420,7 @@
                         <span>咨询+服务</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -434,7 +435,7 @@
                         <span>订阅制+按调用量</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -449,7 +450,7 @@
                         <span>按项目/资源计费</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -464,7 +465,7 @@
                         <span>按设备接入量计费</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
             </div>
 
@@ -483,7 +484,7 @@
                         <span>按用户数计费</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -498,7 +499,7 @@
                         <span>平台订阅制</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
             </div>
 
@@ -517,7 +518,7 @@
                         <span>订阅制</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -532,7 +533,7 @@
                         <span>按次计费</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -547,7 +548,7 @@
                         <span>服务费</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -562,7 +563,7 @@
                         <span>订阅制</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
                 <div class="market-card bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex-1">
@@ -577,7 +578,7 @@
                         <span>订阅制</span>
                     </div>
                     </div>
-                    <button onclick="showAppPendingModal()" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
+                    <button onclick="openAppApplyModal(this)" class="w-full border border-primary text-primary py-2 rounded-lg text-sm font-medium hover:bg-primary hover:text-white transition mt-auto">申请服务</button>
                 </div>
             </div>
         </div>
@@ -674,15 +675,27 @@
         </div>
     </div>
 
-    <!-- 应用配置中弹窗 -->
+    <!-- 申请服务弹窗（应用广场-应用申请） -->
     <div id="appPendingModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-2xl max-w-sm w-full mx-4 p-8 shadow-2xl text-center">
-            <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-tools text-2xl text-primary"></i>
+        <div class="bg-white rounded-2xl max-w-md w-full mx-4 shadow-2xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100">
+                <h3 class="text-lg font-bold text-secondary">申请服务</h3>
+                <button onclick="closeAppPendingModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center">
+                    <i class="fas fa-times text-gray-400"></i>
+                </button>
             </div>
-            <h3 class="text-lg font-bold text-secondary mb-2">应用配置中</h3>
-            <p class="text-gray-500 text-sm mb-6">敬请期待，如有需要可联系gbanexus@hiic.com.cn</p>
-            <button onclick="closeAppPendingModal()" class="bg-primary text-white px-8 py-2.5 rounded-lg font-semibold hover:bg-primary-dark transition">知道了</button>
+            <form class="p-5 space-y-4" onsubmit="submitAppApplication(event)">
+                <input type="hidden" id="app-apply-name">
+                <div class="text-sm text-gray-600">服务：<span id="app-apply-title" class="font-medium text-secondary"></span></div>
+                <div>
+                    <label class="text-sm font-medium text-gray-600 block mb-1">申请说明 <span class="text-red-500">*</span></label>
+                    <textarea id="app-apply-desc" required rows="4" placeholder="请说明：为什么要申请此服务、准备如何使用等" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 pt-1">
+                    <button type="button" onclick="closeAppPendingModal()" class="px-5 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">取消</button>
+                    <button type="submit" class="px-5 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-dark">提交申请</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -708,14 +721,38 @@
             }
         });
 
-        // 申请弹窗
-        function showAppPendingModal() {
+        // 申请服务弹窗（应用广场-应用申请）
+        function openAppApplyModal(btn) {
+            // 提取服务名：先看 data-app-name，否则从最近 market-card 的 h4 取
+            let name = btn && btn.getAttribute && btn.getAttribute('data-app-name');
+            if (!name && btn && btn.closest) {
+                const card = btn.closest('.market-card');
+                if (card) {
+                    const h = card.querySelector('h4, h3');
+                    if (h) name = h.textContent.trim();
+                }
+            }
+            if (!name) name = '未命名服务';
+            document.getElementById('app-apply-name').value = name;
+            document.getElementById('app-apply-title').textContent = name;
+            document.getElementById('app-apply-desc').value = '';
             document.getElementById('appPendingModal').classList.remove('hidden');
             document.getElementById('appPendingModal').classList.add('flex');
         }
         function closeAppPendingModal() {
             document.getElementById('appPendingModal').classList.add('hidden');
             document.getElementById('appPendingModal').classList.remove('flex');
+        }
+        function submitAppApplication(e) {
+            e.preventDefault();
+            const name = document.getElementById('app-apply-name').value || '';
+            const desc = document.getElementById('app-apply-desc').value.trim();
+            if (!desc) { if (typeof showToast === 'function') showToast('请填写申请说明', 'error'); return; }
+            if (typeof addAppApplication === 'function') {
+                addAppApplication({ appName: name, description: desc });
+            }
+            closeAppPendingModal();
+            if (typeof showToast === 'function') showToast('申请已提交，我们将尽快与您联系', 'success');
         }
         document.getElementById('appPendingModal').addEventListener('click', function(e) {
             if (e.target === this) closeAppPendingModal();

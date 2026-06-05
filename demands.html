@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>需求信息 - 云上OPC社区</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#7c3aed',
+                        secondary: '#1e1b4b',
+                        accent: '#fbbf24',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-hero { background: linear-gradient(135deg, #1e1b4b 0%, #7c3aed 50%, #4c1d95 100%); }
+        .nav-dropdown-menu { display: none; }
+        .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+        .demand-card { transition: all 0.3s ease; }
+        .demand-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .category-tab { transition: all 0.2s ease; }
+        .category-tab.active { background-color: #7c3aed; color: white; border-color: #7c3aed; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 left-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-3">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <img src="logo.png" alt="云上OPC" class="w-8 h-8">
+                        <div class="flex flex-col leading-tight">
+                            <span class="text-base font-bold text-secondary">粤港澳大湾区大数据中心</span>
+                            <span class="text-sm font-semibold text-secondary/80">云上AI OPC社区</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-primary font-medium transition">首页</a>
+                    <div class="nav-dropdown relative group">
+                        <a href="services.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>能力中心</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="services.html#ai-models" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-brain w-5 text-primary"></i>
+                                <span>AI模型服务</span>
+                            </a>
+                            <a href="services.html#data-api" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-database w-5 text-primary"></i>
+                                <span>数据API服务</span>
+                            </a>
+                            <a href="services.html#cloud" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-cloud w-5 text-primary"></i>
+                                <span>云资源服务</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown relative group">
+                        <a href="events.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>创客空间</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="events.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-calendar-alt w-5 text-primary"></i>
+                                <span>社区活动</span>
+                            </a>
+                            <a href="maker-space.html" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-rocket w-5 text-primary"></i>
+                                <span>创客空间入驻</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="demands.html" class="text-primary font-medium border-b-2 border-primary">需求对接</a>
+                    <a href="marketplace.html" class="text-gray-600 hover:text-primary font-medium transition">应用集市</a>
+                    <div class="nav-dropdown relative group">
+                        <a href="news.html" class="text-gray-600 hover:text-primary font-medium transition flex items-center space-x-1 py-5">
+                            <span>新闻资讯</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                        </a>
+                        <div class="nav-dropdown-menu hidden group-hover:block absolute top-full left-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+                            <a href="news.html?category=policy" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-gavel w-5 text-primary"></i>
+                                <span>政策速递</span>
+                            </a>
+                            <a href="news.html?category=science" class="flex items-center space-x-3 px-4 py-3 hover:bg-gray-50 text-gray-700 transition">
+                                <i class="fas fa-flask w-5 text-primary"></i>
+                                <span>科普好文</span>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="about.html" class="text-gray-600 hover:text-primary font-medium transition">关于我们</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="user-section" class="flex items-center space-x-4">
+                        <a href="login.html" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition">登录/注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero区域 -->
+    <section class="relative h-[400px] overflow-hidden mt-[72px]" style="background-image: url('需求对接.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+        <div class="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center text-center">
+            <h1 class="text-5xl font-bold text-white mb-4">需求信息</h1>
+            <p class="text-xl text-white/90 max-w-2xl">浏览平台用户发布的需求信息，发现合适的合作机会，自行联系沟通</p>
+        </div>
+    </section>
+
+    <!-- 已发布需求列表（去承接化） -->
+    <section class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="demandList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 由 JS 渲染 -->
+            </div>
+            <div id="emptyState" class="hidden text-center py-20">
+                <i class="fas fa-inbox text-6xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500">暂无相关需求</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 发布需求入口 -->
+    <section class="py-12 bg-gradient-to-br from-primary/5 via-white to-primary/5">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl font-bold text-secondary mb-3">有需求想发布？</h2>
+            <p class="text-gray-500 mb-6">已登录且完成身份认证的用户可填写并提交需求，提交后将进入管理员审核流程，审核通过后展示在主站；审核进度可在「个人中心 - 需求对接」查看</p>
+            <button onclick="handlePublishDemand()" class="inline-flex items-center space-x-2 bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition shadow-lg">
+                <i class="fas fa-plus-circle"></i>
+                <span>发布需求</span>
+            </button>
+            <p class="text-xs text-gray-400 mt-3"><i class="fas fa-info-circle mr-1"></i>需完成登录与实名认证</p>
+        </div>
+    </section>
+
+    <!-- 全站通用页脚 -->
+    <footer class="bg-[#1a1a4e] text-white relative">
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
+                <div class="footer-brand">
+                    <div class="flex items-center space-x-3 mb-5">
+                        <img src="logo.png" alt="云上OPC" class="w-9 h-9 rounded-xl">
+                        <span class="text-xl font-bold tracking-tight">云上OPC社区</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-1">AI协同 · 数据赋能 · 云服务 · 创业孵化</p>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">一站式线上综合服务赋能平台</p>
+                </div>
+                <div class="footer-support">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">服务支持</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-clock text-primary/70 text-xs"></i>
+                            </div>
+                            <span>周一至周五 9:00 - 18:00</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-gray-400 text-sm">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0">
+                                <i class="far fa-envelope text-primary/70 text-xs"></i>
+                            </div>
+                            <span>gbanexus@hiic.com.cn</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">快速链接</h3>
+                    <div class="space-y-3">
+                        <a href="services.html#ai-models" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>AI模型服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="services.html#data-api" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>数据API服务</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                        <a href="maker-space.html" class="group flex items-center justify-between text-gray-400 hover:text-white text-sm transition-all duration-200 py-1">
+                            <span>创客空间入驻</span>
+                            <i class="fas fa-arrow-right text-[10px] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-qrcode flex flex-col items-center">
+                    <h3 class="text-sm font-semibold mb-5 text-white/90 uppercase tracking-wider">扫码关注公众号</h3>
+                    <div class="bg-white rounded-xl p-3 inline-block">
+                        <img src="二维码.jpg" alt="公众号二维码" class="w-32 h-32 object-contain">
+                    </div>
+                </div>
+            </div>
+            <div class="mt-14 pt-8 border-t border-white/10">
+                <p class="text-center text-gray-500 text-xs">© 2026 云上OPC社区 版权所有</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 需求详情弹窗 -->
+    <div id="demandDetailOverlay" class="modal-overlay fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100 sticky top-0 bg-white">
+                <h3 class="text-lg font-bold text-secondary" id="demandDetailTitle">需求详情</h3>
+                <button onclick="closeModal('demandDetailOverlay')" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center">
+                    <i class="fas fa-times text-gray-400"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4" id="demandDetailBody">
+                <!-- 由 JS 渲染 -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        // 当前筛选 tab
+        let currentDemandTab = 'all';
+
+        // 弹窗工具
+        function openModal(id) { document.getElementById(id).classList.add('show'); document.getElementById(id).classList.remove('hidden'); document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).classList.remove('show'); document.getElementById(id).classList.add('hidden'); document.getElementById(id).style.display = ''; }
+
+        // 切换 tab
+        // 状态辅助：仅展示已审核通过、未下架的需求
+        function renderDemands() {
+            // 主站仅展示"已审核通过"的需求。旧数据的 status 为 published/taken/completed，
+            // 在新模型下都视为"已发布"（去承接化，仅作信息展示）。
+            const all = getDemands().filter(function(d) {
+                if (d.auditStatus !== 'approved') return false;
+                if (d.status === 'off_shelf') return false;
+                if (d.status === 'rejected') return false;
+                if (d.status === 'pending_audit') return false;
+                return true;
+            });
+            const container = document.getElementById('demandList');
+            const empty = document.getElementById('emptyState');
+            if (all.length === 0) {
+                container.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+            container.innerHTML = all.map(function(d) {
+                // 按钮统一为"获取联系方式"（点击后打开详情弹窗，展示联系方式）
+                const actionBtn = '<button onclick="openDemandDetail(\'' + d.id + '\')" class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm"><i class="fas fa-id-card text-xs"></i><span>获取联系方式</span></button>';
+                return ''
+                    + '<div class="demand-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">'
+                    + '  <div class="p-6 flex-1">'
+                    + '    <div class="flex items-start justify-between mb-3 gap-2">'
+                    + '      <h3 class="text-lg font-bold text-secondary line-clamp-1 flex-1 pr-2" title="' + escapeHtml(d.title) + '">' + escapeHtml(d.title) + '</h3>'
+                    + '      <div class="flex flex-col items-end gap-1.5 flex-shrink-0">'
+                    + '        <span class="text-xs px-2.5 py-1 rounded-full bg-green-50 text-green-700 whitespace-nowrap">已发布</span>'
+                    + '        <span class="text-xs px-2 py-0.5 rounded-full bg-gray-50 text-gray-500 whitespace-nowrap">' + escapeHtml(d.category || '其他') + '</span>'
+                    + '      </div>'
+                    + '    </div>'
+                    + '    <p class="text-gray-600 text-sm line-clamp-3 mb-4" style="min-height:3.6em;">' + escapeHtml(d.description) + '</p>'
+                    + '    <div class="grid grid-cols-2 gap-3 text-xs text-gray-500 mb-3">'
+                    + '      <div class="flex items-center"><i class="fas fa-coins text-amber-500 mr-1.5"></i><span>预算：' + escapeHtml(d.budget || '面议') + '</span></div>'
+                    + '      <div class="flex items-center"><i class="far fa-calendar text-primary mr-1.5"></i><span>截止：' + escapeHtml(d.deadline || '不限') + '</span></div>'
+                    + '      <div class="flex items-center"><i class="fas fa-user text-gray-400 mr-1.5"></i><span>' + escapeHtml(d.publisher) + '</span></div>'
+                    + '      <div class="flex items-center"><i class="far fa-clock text-gray-400 mr-1.5"></i><span>' + escapeHtml(d.createTime) + '</span></div>'
+                    + '    </div>'
+                    + (d.attachment ? '<div class="text-xs text-gray-500"><i class="fas fa-paperclip text-gray-400 mr-1"></i>附件：' + escapeHtml(d.attachment) + '</div>' : '')
+                    + '  </div>'
+                    + '  <div class="px-6 pb-5 flex items-center justify-between">'
+                    + '    <span class="text-xs text-gray-400 font-mono">' + d.id + '</span>'
+                    +      actionBtn
+                    + '  </div>'
+                    + '</div>';
+            }).join('');
+        }
+
+        // ====== 主站发布需求（认证拦截 + 字段补全） ======
+        function handlePublishDemand() {
+            withAuthChain({
+                action: '发布需求',
+                callbackName: '__goPublishDemand',
+                args: []
+            });
+        }
+        function __goPublishDemand() {
+            openSitePublishDemandModal();
+        }
+        function openSitePublishDemandModal() {
+            const u = (typeof AppState !== 'undefined' && AppState.user) || {};
+            const cmp = document.getElementById('spd-company');
+            const phn = document.getElementById('spd-phone');
+            const eml = document.getElementById('spd-email');
+            if (cmp && !cmp.value) cmp.value = u.company || '';
+            if (phn && !phn.value) phn.value = u.phone || '';
+            if (eml && !eml.value) eml.value = u.email || '';
+            openModal('sitePublishDemandOverlay');
+        }
+        function closeSitePublishDemandModal() {
+            closeModal('sitePublishDemandOverlay');
+        }
+        function submitSitePublishDemand(e) {
+            e.preventDefault();
+            const data = {
+                title: document.getElementById('spd-title').value.trim(),
+                description: document.getElementById('spd-desc').value.trim(),
+                category: document.getElementById('spd-category').value,
+                budget: document.getElementById('spd-budget').value.trim(),
+                deadline: document.getElementById('spd-deadline').value,
+                attachment: document.getElementById('spd-attachment').value.trim()
+            };
+            if (!data.title || !data.description) { showToast('请填写完整标题与描述', 'error'); return; }
+            if (!data.category) { showToast('请选择需求类型', 'error'); return; }
+            if (!data.budget) { showToast('请填写预算范围', 'error'); return; }
+            const company = document.getElementById('spd-company').value.trim();
+            const phone = document.getElementById('spd-phone').value.trim();
+            const email = document.getElementById('spd-email').value.trim();
+            if (!company || !phone) { showToast('请填写公司名称与联系电话', 'error'); return; }
+            if (AppState.user) {
+                if (!AppState.user.company) AppState.user.company = company;
+                if (!AppState.user.phone) AppState.user.phone = phone;
+                if (!AppState.user.email) AppState.user.email = email;
+                if (typeof saveAppState === 'function') saveAppState();
+            }
+            const d = addDemand(data);
+            closeSitePublishDemandModal();
+            showToast('需求已提交，编号 ' + d.id + '，请等待管理员审核。审核状态可在「个人中心 - 需求对接」查看', 'success');
+            ['spd-title','spd-desc','spd-category','spd-budget','spd-deadline','spd-attachment','spd-company','spd-phone','spd-email'].forEach(function(id){ const el=document.getElementById(id); if(el) el.value=''; });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderDemands();
+        });
+    </script>
+
+    <!-- 主站发布需求弹窗 DOM -->
+    <div id="sitePublishDemandOverlay" class="modal-overlay fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="flex items-center justify-between p-5 border-b border-gray-100 sticky top-0 bg-white">
+                <h3 class="text-lg font-bold text-secondary">发布需求</h3>
+                <button onclick="closeSitePublishDemandModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"><i class="fas fa-times text-gray-400"></i></button>
+            </div>
+            <form class="p-5 space-y-4" onsubmit="submitSitePublishDemand(event)">
+                <div><label class="text-sm font-medium text-gray-600 block mb-1">需求标题 <span class="text-red-500">*</span></label><input type="text" id="spd-title" required maxlength="50" placeholder="一句话说明需求" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"></div>
+                <div><label class="text-sm font-medium text-gray-600 block mb-1">需求描述 <span class="text-red-500">*</span></label><textarea id="spd-desc" required rows="4" placeholder="详细描述背景、目标、约束、交付物" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"></textarea></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-sm font-medium text-gray-600 block mb-1">需求类型 <span class="text-red-500">*</span></label><select id="spd-category" required class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white"><option value="">请选择</option><option>AI 模型</option><option>数据 API</option><option>云资源</option><option>解决方案</option><option>培训咨询</option><option>其他</option></select></div>
+                    <div><label class="text-sm font-medium text-gray-600 block mb-1">预算范围 <span class="text-red-500">*</span></label><input type="text" id="spd-budget" required placeholder="例如 10万-20万 / 面议" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-sm font-medium text-gray-600 block mb-1">期望完成时间</label><input type="date" id="spd-deadline" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"></div>
+                    <div><label class="text-sm font-medium text-gray-600 block mb-1">附件名 <span class="text-gray-400">（可选）</span></label><input type="text" id="spd-attachment" placeholder="如：需求文档v1.0.pdf" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"><p class="text-xs text-gray-400 mt-1">原型仅记录文件名</p></div>
+                </div>
+                <div class="rounded-lg border border-blue-100 bg-blue-50/40 p-3">
+                    <div class="text-xs font-semibold text-blue-700 mb-2"><i class="fas fa-id-card mr-1.5"></i>联系方式（自动填入，可修改）</div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div><label class="text-xs text-gray-500 block mb-0.5">公司名称 <span class="text-red-500">*</span></label><input type="text" id="spd-company" required class="w-full border border-gray-200 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"></div>
+                        <div><label class="text-xs text-gray-500 block mb-0.5">联系电话 <span class="text-red-500">*</span></label><input type="text" id="spd-phone" required class="w-full border border-gray-200 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"></div>
+                        <div class="col-span-2"><label class="text-xs text-gray-500 block mb-0.5">联系邮箱</label><input type="email" id="spd-email" class="w-full border border-gray-200 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"></div>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeSitePublishDemandModal()" class="px-5 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">取消</button>
+                    <button type="submit" class="px-5 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-dark">提交发布</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

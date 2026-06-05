@@ -76,7 +76,9 @@
 
             <a href="#" onclick="switchSection('events')" class="sidebar-link" data-section="events"><i class="fas fa-calendar-alt w-5 text-center"></i>活动管理</a>
 
-            <a href="#" onclick="switchSection('orders')" class="sidebar-link" data-section="orders"><i class="fas fa-receipt w-5 text-center"></i>订单管理</a>
+            <a href="#" onclick="switchSection('orders')" class="sidebar-link" data-section="orders"><i class="fas fa-receipt w-5 text-center"></i>额度申请管理</a>
+
+            <a href="#" onclick="switchSection('demands')" class="sidebar-link" data-section="demands"><i class="fas fa-bullhorn w-5 text-center"></i>需求审核<span id="demandPendingBadge" class="ml-auto bg-danger text-white text-xs px-1.5 py-0.5 rounded-full" style="display:none">0</span></a>
 
             <div class="sidebar-group">
                 <div class="sidebar-link" onclick="toggleSubmenu(this)"><i class="fas fa-wpforms w-5 text-center"></i>表单管理<i class="fas fa-chevron-down ml-auto text-xs"></i></div>
@@ -161,8 +163,92 @@
 
         <!-- ========== 审批管理 ========== -->
         <section id="sec-approvals" class="admin-section">
-            <div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-bold text-secondary">审批管理</h2><p class="text-sm text-gray-500 mt-1">管理用户服务申请与审批</p></div><div class="flex items-center space-x-2"><select id="approvalTypeFilter" onchange="renderApprovals()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="all">全部类型</option><option value="data-api">数据API</option><option value="cloud">云资源</option><option value="maker">创客空间入驻</option></select><select id="approvalStatusFilter" onchange="renderApprovals()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="all">全部状态</option><option value="pending">待审批</option><option value="approved">已通过</option><option value="rejected">已驳回</option></select></div></div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">申请编号</th><th class="text-left px-5 py-3">申请人</th><th class="text-left px-5 py-3">服务类别</th><th class="text-left px-5 py-3">申请内容</th><th class="text-left px-5 py-3">申请时间</th><th class="text-left px-5 py-3">状态</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="approvalTableBody"></tbody></table></div>
+            <div class="mb-4">
+                <h2 class="text-2xl font-bold text-secondary">审批管理</h2>
+                <p class="text-sm text-gray-500 mt-1">管理用户服务申请与应用申请对接</p>
+            </div>
+            <!-- 子模块切换 -->
+            <div class="border-b border-gray-200 mb-5">
+                <nav class="flex space-x-6">
+                    <button onclick="switchApprovalSubtab('service')" id="apstab-service" class="apstab-btn py-3 px-1 border-b-2 border-primary text-primary font-semibold text-sm">服务审批</button>
+                    <button onclick="switchApprovalSubtab('app')" id="apstab-app" class="apstab-btn py-3 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm">应用申请对接 <span id="appApplyPendingBadge" class="ml-1 text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full"></span></button>
+                </nav>
+            </div>
+            <!-- 子模块：服务审批（原内容） -->
+            <div id="apstab-panel-service">
+                <div class="flex items-center justify-between mb-5"><div></div><div class="flex items-center space-x-2"><button onclick="openCreateApplicationModal()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition"><i class="fas fa-plus mr-1.5"></i>创建申请</button><select id="approvalTypeFilter" onchange="renderApprovals()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="all">全部类型</option><option value="data-api">数据API</option><option value="cloud">云资源</option><option value="maker">创客空间入驻</option></select><select id="approvalStatusFilter" onchange="renderApprovals()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="all">全部状态</option><option value="pending">待审批</option><option value="approved">已通过</option><option value="rejected">已驳回</option></select></div></div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">申请编号</th><th class="text-left px-5 py-3">申请人</th><th class="text-left px-5 py-3">服务类别</th><th class="text-left px-5 py-3">申请内容</th><th class="text-left px-5 py-3">申请时间</th><th class="text-left px-5 py-3">状态</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="approvalTableBody"></tbody></table></div>
+            </div>
+            <!-- 子模块：应用申请对接（新增） -->
+            <div id="apstab-panel-app" class="hidden">
+                <div class="flex items-center justify-between mb-5">
+                    <div class="flex items-center space-x-2">
+                        <select id="appApplyStatusFilter" onchange="renderAppApplicationsAdmin()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm">
+                            <option value="all">全部状态</option>
+                            <option value="pending_contact">待对接</option>
+                            <option value="contacted">已联系</option>
+                            <option value="completed">已完成</option>
+                        </select>
+                    </div>
+                    <div class="text-xs text-gray-400">无"通过/驳回"，仅人工记录对接进度</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="text-left px-5 py-3">申请编号</th>
+                                <th class="text-left px-5 py-3">用户名</th>
+                                <th class="text-left px-5 py-3">手机号</th>
+                                <th class="text-left px-5 py-3">服务名称</th>
+                                <th class="text-left px-5 py-3">申请说明</th>
+                                <th class="text-left px-5 py-3">申请时间</th>
+                                <th class="text-left px-5 py-3">状态</th>
+                                <th class="text-right px-5 py-3">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appApplyTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== 需求管理 ========== -->
+        <section id="sec-demands" class="admin-section">
+            <div class="flex items-center justify-between mb-5">
+                <div><h2 class="text-2xl font-bold text-secondary">需求管理</h2><p class="text-sm text-gray-500 mt-1">审核用户发布的需求，审核通过后将展示在主站</p></div>
+                <div class="flex items-center space-x-2">
+                    <select id="demandAuditFilter" onchange="renderDemandsAdmin()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm">
+                        <option value="all">全部审核</option>
+                        <option value="pending">待审核</option>
+                        <option value="approved">已通过</option>
+                        <option value="rejected">已驳回</option>
+                    </select>
+                    <select id="demandStatusFilter" onchange="renderDemandsAdmin()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm">
+                        <option value="all">全部状态</option>
+                        <option value="pending_audit">审核中</option>
+                        <option value="approved">已发布</option>
+                        <option value="rejected">已驳回</option>
+                        <option value="off_shelf">已下架</option>
+                    </select>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-100">
+                        <tr>
+                            <th class="text-left px-5 py-3">需求编号</th>
+                            <th class="text-left px-5 py-3">标题</th>
+                            <th class="text-left px-5 py-3">类型</th>
+                            <th class="text-left px-5 py-3">发布人</th>
+                            <th class="text-left px-5 py-3">预算 / 截止</th>
+                            <th class="text-left px-5 py-3">审核</th>
+                            <th class="text-left px-5 py-3">状态</th>
+                            <th class="text-right px-5 py-3">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="demandsAdminTableBody"></tbody>
+                </table>
+            </div>
         </section>
 
         <!-- ========== 表单管理 > 表单配置 ========== -->
@@ -171,10 +257,10 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">表单名称</th><th class="text-left px-5 py-3">适用服务类型</th><th class="text-left px-5 py-3">字段数</th><th class="text-left px-5 py-3">状态</th><th class="text-left px-5 py-3">更新时间</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="formTableBody"></tbody></table></div>
         </section>
 
-        <!-- ========== 订单管理 ========== -->
+        <!-- ========== 额度申请管理（原"订单管理"） ========== -->
         <section id="sec-orders" class="admin-section">
-            <div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-bold text-secondary">订单管理</h2><p class="text-sm text-gray-500 mt-1">查看所有用户的充值订单与发票管理</p></div><div class="flex items-center space-x-2"><select id="orderUserFilter" onchange="renderOrders()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="all">全部用户</option></select></div></div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">订单编号</th><th class="text-left px-5 py-3">用户</th><th class="text-left px-5 py-3">充值金额</th><th class="text-left px-5 py-3">支付方式</th><th class="text-left px-5 py-3">时间</th><th class="text-left px-5 py-3">状态</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="orderTableBody"></tbody></table></div>
+            <div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-bold text-secondary">额度申请管理</h2><p class="text-sm text-gray-500 mt-1">查看所有用户的额度申请记录与发票管理</p></div><div class="flex items-center space-x-2"><select id="orderUserFilter" onchange="renderOrders()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="all">全部用户</option></select></div></div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">申请编号</th><th class="text-left px-5 py-3">用户</th><th class="text-left px-5 py-3">申请额度</th><th class="text-left px-5 py-3">凭证</th><th class="text-left px-5 py-3">支付方式</th><th class="text-left px-5 py-3">时间</th><th class="text-left px-5 py-3">状态</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="orderTableBody"></tbody></table></div>
         </section>
 
         <!-- ========== 用户管理 > 账号管理 ========== -->
@@ -185,20 +271,20 @@
 
         <!-- ========== 用户管理 > 额度管理 ========== -->
         <section id="sec-user-balance" class="admin-section">
-            <div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-bold text-secondary">用户额度管理</h2><p class="text-sm text-gray-500 mt-1">管理用户钱包余额与消费记录</p></div><input type="text" id="balanceUserSearch" oninput="renderUserBalance()" placeholder="搜索用户..." class="border border-gray-200 rounded-lg px-3 py-2 text-sm w-40"></div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">用户</th><th class="text-left px-5 py-3">钱包余额</th><th class="text-left px-5 py-3">累计消费</th><th class="text-left px-5 py-3">Token消耗</th><th class="text-left px-5 py-3">最近消费时间</th><th class="text-left px-5 py-3">消费笔数</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="userBalanceTableBody"></tbody></table></div>
+            <div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-bold text-secondary">用户额度管理</h2><p class="text-sm text-gray-500 mt-1">管理用户可用额度与额度变动记录</p></div><input type="text" id="balanceUserSearch" oninput="renderUserBalance()" placeholder="搜索用户..." class="border border-gray-200 rounded-lg px-3 py-2 text-sm w-40"></div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">用户</th><th class="text-left px-5 py-3">可用额度</th><th class="text-left px-5 py-3">累计消费</th><th class="text-left px-5 py-3">Token消耗</th><th class="text-left px-5 py-3">最近消费时间</th><th class="text-left px-5 py-3">消费笔数</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="userBalanceTableBody"></tbody></table></div>
         </section>
 
         <!-- ========== 租户管理 > 账号管理 ========== -->
         <section id="sec-tenant-accounts" class="admin-section">
             <div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-bold text-secondary">租户账号管理</h2><p class="text-sm text-gray-500 mt-1">管理组织/企业租户信息</p></div><div class="flex items-center space-x-2"><input type="text" id="tenantSearch" oninput="renderTenantAccounts()" placeholder="搜索..." class="border border-gray-200 rounded-lg px-3 py-2 text-sm w-40"><button onclick="openCreateTenantModal()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition"><i class="fas fa-plus mr-1.5"></i>新建租户</button></div></div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">组织名称</th><th class="text-left px-5 py-3">地区</th><th class="text-left px-5 py-3">认证方式</th><th class="text-left px-5 py-3">关联用户</th><th class="text-left px-5 py-3">钱包余额</th><th class="text-left px-5 py-3">状态</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="tenantAccountTableBody"></tbody></table></div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">组织名称</th><th class="text-left px-5 py-3">地区</th><th class="text-left px-5 py-3">认证方式</th><th class="text-left px-5 py-3">关联用户</th><th class="text-left px-5 py-3">可用额度</th><th class="text-left px-5 py-3">状态</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="tenantAccountTableBody"></tbody></table></div>
         </section>
 
         <!-- ========== 租户管理 > 额度管理 ========== -->
         <section id="sec-tenant-balance" class="admin-section">
             <h2 class="text-2xl font-bold text-secondary mb-5">租户额度管理</h2>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">组织名称</th><th class="text-left px-5 py-3">钱包余额</th><th class="text-left px-5 py-3">累计消费</th><th class="text-left px-5 py-3">Token消耗</th><th class="text-left px-5 py-3">关联用户数</th><th class="text-left px-5 py-3">最近消费</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="tenantBalanceTableBody"></tbody></table></div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">组织名称</th><th class="text-left px-5 py-3">可用额度</th><th class="text-left px-5 py-3">累计消费</th><th class="text-left px-5 py-3">Token消耗</th><th class="text-left px-5 py-3">关联用户数</th><th class="text-left px-5 py-3">最近消费</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="tenantBalanceTableBody"></tbody></table></div>
         </section>
     </main>
 </div>
@@ -482,6 +568,7 @@
 <!-- Toast容器 -->
 <div class="toast-container" id="toastContainer"></div>
 
+<script src="js/common.js"></script>
 <script>
 // ===== 样例数据集 =====
 const sampleModels = [
@@ -653,6 +740,102 @@ function toggleSubmenu(el){
         const chev=el.querySelector('.fa-chevron-down');
         if(chev){chev.style.transform=sub.classList.contains('open')?'rotate(180deg)':'rotate(0deg)'}
     }
+}
+
+// ========== 审批管理子模块切换 ==========
+function switchApprovalSubtab(name){
+    ['service','app'].forEach(function(k){
+        const btn = document.getElementById('apstab-' + k);
+        const panel = document.getElementById('apstab-panel-' + k);
+        if (!btn || !panel) return;
+        if (k === name) {
+            btn.className = 'apstab-btn py-3 px-1 border-b-2 border-primary text-primary font-semibold text-sm';
+            panel.classList.remove('hidden');
+        } else {
+            btn.className = 'apstab-btn py-3 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm';
+            panel.classList.add('hidden');
+        }
+    });
+    if (name === 'app') renderAppApplicationsAdmin();
+    if (name === 'service' && typeof renderApprovals === 'function') renderApprovals();
+}
+
+// ========== 应用申请对接（管理后台） ==========
+function appApplyStatusBadge(s){ return (typeof APP_APP_STATUS_BADGE!=='undefined' && APP_APP_STATUS_BADGE[s]) || 'bg-gray-100 text-gray-500'; }
+function appApplyStatusLabel(s){ return (typeof APP_APP_STATUS_MAP!=='undefined' && APP_APP_STATUS_MAP[s]) || s; }
+// 首次进入：admin 端注入应用申请示例数据（仅当 localStorage 中无任何数据时）
+(function seedAppApplicationsDemo(){
+    try {
+        if (localStorage.getItem('opc_app_applications')) return;
+        var now = new Date();
+        var fmt = function(offsetMin){
+            var d = new Date(now.getTime() - offsetMin*60000);
+            var pad = function(n){ return n<10 ? '0'+n : ''+n; };
+            return d.getFullYear() + '/' + pad(d.getMonth()+1) + '/' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+        };
+        var seed = [
+            { id:'APP20260605003', appName:'PAI-DSW（交互式建模）', description:'需要搭建团队AI模型开发环境，预期10人同时在线使用，主要用于NLP模型微调与效果评估。', userId:'u_ent1', userName:'陈雪', userCompany:'星辰科技有限公司', userPhone:'13900000001', createTime: fmt(45), status:'pending_contact', contactTime:'', completeTime:'' },
+            { id:'APP20260605004', appName:'PAI-DLC（分布式训练）', description:'准备在4卡A100上做多模态预训练，需要长期跑任务，麻烦尽快联系。', userId:'u_ent2', userName:'王浩', userCompany:'智源科技（广州）有限公司', userPhone:'13900000002', createTime: fmt(180), status:'contacted', contactTime: fmt(120), completeTime:'' },
+            { id:'APP20260605005', appName:'PAI-EAS（模型在线服务）', description:'模型已训练完成，希望部署为API对外提供服务，用于客服问答。', userId:'u_ent3', userName:'林悦', userCompany:'智造工作室', userPhone:'13800000003', createTime: fmt(2880), status:'contacted', contactTime: fmt(2400), completeTime:'' },
+            { id:'APP20260605006', appName:'PAI-DSW（交互式建模）', description:'做一份学生成绩预测模型，团队教学使用。', userId:'u_ent4', userName:'周敏', userCompany:'慧教研学（深圳）', userPhone:'13900000004', createTime: fmt(7200), status:'completed', contactTime: fmt(7100), completeTime: fmt(7000) },
+            { id:'APP20260605007', appName:'PAI-Designer（可视化建模）', description:'低代码搭一个营销文案生成应用，希望尽快试用。', userId:'u_ent5', userName:'赵宇', userCompany:'云海传媒有限公司', userPhone:'13700000005', createTime: fmt(30), status:'pending_contact', contactTime:'', completeTime:'' }
+        ];
+        localStorage.setItem('opc_app_applications', JSON.stringify(seed));
+    } catch(e) {}
+})();
+function renderAppApplicationsAdmin(){
+    const list = (typeof getAppApplications === 'function') ? getAppApplications() : [];
+    const fEl = document.getElementById('appApplyStatusFilter');
+    const fv = fEl ? fEl.value : 'all';
+    let items = fv === 'all' ? list.slice() : list.filter(function(a){ return a.status === fv; });
+    // 更新待对接角标
+    const badge = document.getElementById('appApplyPendingBadge');
+    if (badge) {
+        const pending = list.filter(function(a){ return a.status === 'pending_contact'; }).length;
+        badge.textContent = pending > 0 ? String(pending) : '';
+    }
+    const body = document.getElementById('appApplyTableBody');
+    if (!body) return;
+    if (!items.length) {
+        body.innerHTML = '<tr><td colspan="8" class="px-5 py-12 text-center text-gray-400"><i class="fas fa-inbox text-3xl mb-2"></i><p>暂无应用申请记录</p></td></tr>';
+        return;
+    }
+    body.innerHTML = items.map(function(a){
+        const idEsc = String(a.id).replace(/'/g, "&#39;");
+        const desc = (a.description || '').length > 60 ? (a.description.slice(0, 60) + '…') : a.description;
+        const statusBadge = appApplyStatusBadge(a.status);
+        const statusLabel = appApplyStatusLabel(a.status);
+        // 操作按钮：仅人工记录
+        let ops = '';
+        if (a.status === 'pending_contact') {
+            ops = '<button onclick="adminMarkAppApplyContacted(\'' + idEsc + '\')" class="text-xs bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600">标记已联系</button>';
+        } else if (a.status === 'contacted') {
+            ops = '<button onclick="adminMarkAppApplyCompleted(\'' + idEsc + '\')" class="text-xs bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600">完成对接</button>';
+        } else {
+            ops = '<span class="text-xs text-gray-400">已完结</span>';
+        }
+        return ''
+            + '<tr class="border-b border-gray-50 hover:bg-gray-50/50">'
+            + '<td class="px-5 py-3 font-mono text-xs text-gray-500">' + idEsc + '</td>'
+            + '<td class="px-5 py-3 text-sm text-gray-800">' + (a.userName || '') + (a.userCompany ? '<div class="text-xs text-gray-400">' + a.userCompany + '</div>' : '') + '</td>'
+            + '<td class="px-5 py-3 text-sm text-gray-600 font-mono">' + (a.userPhone || '-') + '</td>'
+            + '<td class="px-5 py-3 text-sm text-gray-800">' + (a.appName || '') + '</td>'
+            + '<td class="px-5 py-3 text-sm text-gray-600 max-w-xs"><div class="truncate" title="' + String(a.description||'').replace(/"/g,'&quot;') + '">' + desc + '</div></td>'
+            + '<td class="px-5 py-3 text-sm text-gray-500 whitespace-nowrap">' + (a.createTime || '') + '</td>'
+            + '<td class="px-5 py-3"><span class="text-xs px-2 py-0.5 rounded-full ' + statusBadge + '">' + statusLabel + '</span></td>'
+            + '<td class="px-5 py-3 text-right whitespace-nowrap">' + ops + '</td>'
+            + '</tr>';
+    }).join('');
+}
+function adminMarkAppApplyContacted(id){
+    if (typeof updateAppApplicationStatus === 'function') updateAppApplicationStatus(id, 'contacted');
+    if (typeof showToast === 'function') showToast('已标记为已联系', 'success');
+    renderAppApplicationsAdmin();
+}
+function adminMarkAppApplyCompleted(id){
+    if (typeof updateAppApplicationStatus === 'function') updateAppApplicationStatus(id, 'completed');
+    if (typeof showToast === 'function') showToast('已标记为已完成', 'success');
+    renderAppApplicationsAdmin();
 }
 
 function closeModal(id){document.getElementById(id).classList.remove('show')}
@@ -894,24 +1077,39 @@ function saveForm(e){
 function toggleFormStatus(id){const f=sampleForms.find(x=>x.id===id);if(f){f.status=f.status==='active'?'inactive':'active';renderFormTable();showToast(f.status==='active'?'表单已启用':'表单已停用','info')}}
 function deleteForm(id){if(!confirm('确定删除该表单？'))return;const i=sampleForms.findIndex(x=>x.id===id);if(i>=0)sampleForms.splice(i,1);renderFormTable();showToast('表单已删除','error')}
 
-// ========== 订单管理 ==========
+// ========== 额度申请管理（合并 sampleOrders 演示数据 + 个人中心真实提交） ==========
 function renderOrders(){
     var filter=document.getElementById('orderUserFilter').value;
     var sel=document.getElementById('orderUserFilter');
+    // 合并数据源：sampleOrders 演示数据 + localStorage 真实订单（来自个人中心提交）
+    var realOrders = (typeof getOrders === 'function') ? getOrders() : [];
+    var combined = (sampleOrders || []).concat(realOrders || []);
     if(sel.options.length<=1){
         var userIds=[];
-        sampleOrders.forEach(function(o){if(userIds.indexOf(o.userId)===-1)userIds.push(o.userId)});
-        userIds.forEach(function(uid){sel.innerHTML+='<option value="'+uid+'">'+sampleOrders.find(function(x){return x.userId===uid}).userName+'</option>'});
+        combined.forEach(function(o){if(userIds.indexOf(o.userId)===-1)userIds.push(o.userId)});
+        userIds.forEach(function(uid){
+            var u = combined.find(function(x){return x.userId===uid});
+            if (u) sel.innerHTML+='<option value="'+uid+'">'+(u.userName||'用户')+'</option>';
+        });
     }
-    var items=filter==='all'?sampleOrders:sampleOrders.filter(function(o){return o.userId===parseInt(filter)});
-    var pmMap={'微信支付':'bg-green-50 text-green-700','支付宝':'bg-blue-50 text-blue-700','在线支付':'bg-gray-50 text-gray-600'};
+    var items=filter==='all'?combined:combined.filter(function(o){return o.userId===parseInt(filter)});
+    var pmMap={'微信支付':'bg-green-50 text-green-700','支付宝':'bg-blue-50 text-blue-700','在线支付':'bg-gray-50 text-gray-600','银行转账':'bg-amber-50 text-amber-700'};
+    var statusMap={'待审核':'bg-amber-50 text-amber-700','已完成':'bg-green-50 text-green-700','已驳回':'bg-red-50 text-red-700'};
     document.getElementById('orderTableBody').innerHTML=items.map(function(o){
-        return '<tr class="border-b border-gray-50 hover:bg-gray-50/50"><td class="px-5 py-3 font-mono text-xs text-gray-600">'+o.id+'</td><td class="px-5 py-3"><div class="flex items-center space-x-2"><span class="font-medium text-gray-800">'+o.userName+'</span></div></td><td class="px-5 py-3 font-semibold text-primary">¥'+o.amount.toFixed(2)+'</td><td class="px-5 py-3"><span class="badge '+(pmMap[o.paymentMethod]||'bg-gray-50 text-gray-600')+'">'+o.paymentMethod+'</span></td><td class="px-5 py-3 text-sm text-gray-500">'+o.time+'</td><td class="px-5 py-3"><span class="badge badge-success">'+o.status+'</span></td><td class="px-5 py-3 text-right"><button onclick="adminInvoiceAction(\''+o.id+'\')" class="text-xs text-primary hover:text-primary-dark"><i class="fas fa-file-invoice mr-1"></i>发票</button></td></tr>';
-    }).join('');
+        var amt = o.amount;
+        var amtStr = (typeof amt === 'number') ? (amt + (o.unit ? (' ' + o.unit) : '')) : (amt || '');
+        var voucher = o.voucherName
+            ? '<span class="inline-flex items-center text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded"><i class="fas fa-paperclip mr-1"></i>'+ (o.voucherName.length>14 ? o.voucherName.slice(0,14)+'…' : o.voucherName) +'</span>'
+            : '<span class="text-xs text-gray-300">—</span>';
+        return '<tr class="border-b border-gray-50 hover:bg-gray-50/50"><td class="px-5 py-3 font-mono text-xs text-gray-600">'+o.id+'</td><td class="px-5 py-3"><div class="flex items-center space-x-2"><span class="font-medium text-gray-800">'+o.userName+'</span></div></td><td class="px-5 py-3 font-semibold text-primary">'+(typeof amt === 'number' ? amt : amt)+'</td><td class="px-5 py-3">'+voucher+'</td><td class="px-5 py-3"><span class="badge '+(pmMap[o.paymentMethod]||'bg-gray-50 text-gray-600')+'">'+o.paymentMethod+'</span></td><td class="px-5 py-3 text-sm text-gray-500">'+o.time+'</td><td class="px-5 py-3"><span class="badge '+(statusMap[o.status]||'bg-gray-50 text-gray-600')+'">'+o.status+'</span></td><td class="px-5 py-3 text-right">'+(o.invoiceAvailable ? '<button onclick="adminInvoiceAction(\''+o.id+'\')" class="text-xs text-primary hover:text-primary-dark"><i class="fas fa-file-invoice mr-1"></i>发票</button>' : '<span class="text-xs text-gray-300">—</span>')+'</td></tr>';
+    }).join('') || '<tr><td colspan="8" class="px-5 py-12 text-center text-gray-400"><i class="fas fa-inbox text-3xl mb-2"></i><p>暂无额度申请记录</p></td></tr>';
 }
 function adminInvoiceAction(id){
-    var o=sampleOrders.find(function(x){return x.id===id});
-    if(o&&o.invoiceAvailable){
+    var o = (sampleOrders||[]).find(function(x){return x.id===id});
+    if(!o && typeof getOrders === 'function') {
+        o = getOrders().find(function(x){return x.id===id});
+    }
+    if(o && o.invoiceAvailable){
         showToast('发票下载功能即将开放','info');
     }else{
         showToast('该订单暂未生成发票，请联系管理员','info');
@@ -1325,16 +1523,160 @@ function deleteCategoryItem(i){
 
 // ========== 弹窗关闭 ==========
 document.addEventListener('click',function(e){
-    const overlays=['userDetailOverlay','tenantDetailOverlay','approvalResultOverlay','bannerPreviewOverlay','homepageBannerOverlay','modelModalOverlay','dataApiModalOverlay','cloudModalOverlay','approvalDetailOverlay','createApplicationOverlay','newsModalOverlay','eventModalOverlay','createUserOverlay','batchImportOverlay','createTenantOverlay','balanceAdjustOverlay','categoryModalOverlay'];
+    const overlays=['userDetailOverlay','tenantDetailOverlay','approvalResultOverlay','bannerPreviewOverlay','homepageBannerOverlay','modelModalOverlay','dataApiModalOverlay','cloudModalOverlay','approvalDetailOverlay','createApplicationOverlay','newsModalOverlay','eventModalOverlay','createUserOverlay','batchImportOverlay','createTenantOverlay','balanceAdjustOverlay','categoryModalOverlay','demandDetailOverlay'];
     overlays.forEach(id=>{if(e.target.id===id)closeModal(id)});
 });
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){['userDetailOverlay','tenantDetailOverlay','approvalResultOverlay','bannerPreviewOverlay','homepageBannerOverlay','modelModalOverlay','dataApiModalOverlay','cloudModalOverlay','approvalDetailOverlay','createApplicationOverlay','newsModalOverlay','eventModalOverlay','createUserOverlay','batchImportOverlay','createTenantOverlay','balanceAdjustOverlay','categoryModalOverlay'].forEach(id=>closeModal(id))}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){['userDetailOverlay','tenantDetailOverlay','approvalResultOverlay','bannerPreviewOverlay','homepageBannerOverlay','modelModalOverlay','dataApiModalOverlay','cloudModalOverlay','approvalDetailOverlay','createApplicationOverlay','newsModalOverlay','eventModalOverlay','createUserOverlay','batchImportOverlay','createTenantOverlay','balanceAdjustOverlay','categoryModalOverlay','demandDetailOverlay'].forEach(id=>closeModal(id))}});
 
 document.getElementById('sidebarToggle').addEventListener('click',function(){
     const s=document.getElementById('sidebar'); s.style.display=s.style.display==='none'?'block':'none';
 });
 
+// ========== 需求管理 ==========
+function adEscape(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function renderDemandsAdmin() {
+    const auditFilter = (document.getElementById('demandAuditFilter') || {}).value || 'all';
+    const statusFilter = (document.getElementById('demandStatusFilter') || {}).value || 'all';
+    const list = getDemands().filter(function(d) {
+        if (auditFilter !== 'all' && d.auditStatus !== auditFilter) return false;
+        if (statusFilter !== 'all' && d.status !== statusFilter) return false;
+        return true;
+    });
+    const tbody = document.getElementById('demandsAdminTableBody');
+    if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-10 text-gray-400">暂无需求</td></tr>';
+    } else {
+        tbody.innerHTML = list.map(function(d) {
+            // 审核操作：仅"待审核"显示
+            const auditBtn = d.auditStatus === 'pending'
+                ? '<button onclick="auditDemandConfirm(\'' + d.id + '\', true)" class="text-green-600 hover:text-green-800 text-xs mr-2">通过</button><button onclick="auditDemandConfirm(\'' + d.id + '\', false)" class="text-red-600 hover:text-red-800 text-xs">驳回</button>'
+                : '<span class="text-gray-400 text-xs">-</span>';
+            // 下架操作：仅已发布的需求可下架
+            const offShelfBtn = (d.status === 'approved' && d.status !== 'off_shelf')
+                ? '<button onclick="offShelfDemandConfirm(\'' + d.id + '\')" class="text-red-600 hover:text-red-800 text-xs">下架</button>'
+                : '<span class="text-gray-400 text-xs">-</span>';
+            return ''
+                + '<tr class="border-b border-gray-100 hover:bg-gray-50/50">'
+                + '  <td class="px-5 py-3 text-xs text-gray-500 font-mono">' + d.id + '</td>'
+                + '  <td class="px-5 py-3"><div class="text-sm font-medium text-secondary line-clamp-1 max-w-xs" title="' + adEscape(d.title) + '">' + adEscape(d.title) + '</div></td>'
+                + '  <td class="px-5 py-3 text-xs"><span class="px-2 py-0.5 rounded-full bg-gray-50 text-gray-500">' + adEscape(d.category || '其他') + '</span></td>'
+                + '  <td class="px-5 py-3 text-sm text-gray-600">' + adEscape(d.publisher) + '</td>'
+                + '  <td class="px-5 py-3 text-xs text-gray-500"><div>' + adEscape(d.budget || '面议') + '</div><div class="text-gray-400">' + adEscape(d.deadline || '不限') + '</div></td>'
+                + '  <td class="px-5 py-3"><span class="text-xs px-2 py-0.5 rounded-full ' + (DEMAND_AUDIT_BADGE[d.auditStatus] || '') + '">' + (DEMAND_AUDIT_MAP[d.auditStatus] || d.auditStatus) + '</span></td>'
+                + '  <td class="px-5 py-3"><span class="text-xs px-2 py-0.5 rounded-full ' + (DEMAND_STATUS_BADGE[d.status] || '') + '">' + (DEMAND_STATUS_MAP[d.status] || d.status) + '</span></td>'
+                + '  <td class="px-5 py-3 text-right whitespace-nowrap">'
+                + '    <button onclick="openDemandDetailAdmin(\'' + d.id + '\')" class="text-primary hover:text-primary-dark text-xs mr-3">查看</button>'
+                +     auditBtn
+                +     offShelfBtn
+                + '  </td>'
+                + '</tr>';
+        }).join('');
+    }
+    // 更新待审核数量徽章
+    const pending = getDemands().filter(function(d) { return d.auditStatus === 'pending'; }).length;
+    const badge = document.getElementById('demandPendingBadge');
+    if (badge) {
+        badge.textContent = pending;
+        badge.style.display = pending > 0 ? 'inline-block' : 'none';
+    }
+}
+function auditDemandConfirm(id, pass) {
+    let msg = pass ? '确认通过该需求的审核？' : '确认驳回？';
+    if (!pass) {
+        const reason = prompt('请输入驳回原因（会展示给用户）：', '信息不完整或不符合平台规范');
+        if (reason === null) return;
+        if (!reason.trim()) { showToast('驳回原因不能为空', 'error'); return; }
+        // 写入驳回原因（先持久化，auditDemand 内部会再读取）
+        const list = getDemands();
+        const target = list.find(function(x) { return x.id === id; });
+        if (target) { target.auditMessage = reason.trim(); saveDemands(list); }
+    }
+    if (!confirm(msg)) return;
+    auditDemand(id, pass);
+    showToast(pass ? '已通过审核' : '已驳回', 'success');
+    renderDemandsAdmin();
+}
+function offShelfDemandConfirm(id) {
+    if (!confirm('确认下架该需求？')) return;
+    offShelfDemand(id);
+    showToast('已下架', 'success');
+    renderDemandsAdmin();
+}
+function openDemandDetailAdmin(id) {
+    const d = getDemandById(id);
+    if (!d) return;
+    const body = document.getElementById('demandDetailBody');
+    // 联系方式（仅展示需求方）
+    const pubC = d.publisherContact;
+    const pubBlock = pubC ? '<div class="text-xs text-gray-500 space-y-1">' +
+        '<div><i class="fas fa-building text-gray-400 w-4 mr-1"></i>' + adEscape(pubC.company || '-') + '</div>' +
+        '<div><i class="fas fa-phone text-gray-400 w-4 mr-1"></i>' + adEscape(pubC.phone || '-') + '</div>' +
+        '<div><i class="fas fa-envelope text-gray-400 w-4 mr-1"></i>' + adEscape(pubC.email || '-') + '</div></div>'
+        : '<div class="text-xs text-gray-400">-</div>';
+    const rejectHtml = d.auditMessage
+        ? '<div class="p-2 rounded bg-red-50 border border-red-100 text-xs text-red-700"><i class="fas fa-exclamation-circle mr-1"></i>驳回原因：' + adEscape(d.auditMessage) + (d.auditTime ? '<span class="text-red-400 ml-1">· ' + adEscape(d.auditTime) + '</span>' : '') + '</div>'
+        : '';
+    body.innerHTML = ''
+        + '<div class="flex items-center space-x-2 mb-2 flex-wrap gap-2">'
+        + '  <span class="text-xs px-2.5 py-1 rounded-full ' + (DEMAND_AUDIT_BADGE[d.auditStatus] || '') + '">审核：' + (DEMAND_AUDIT_MAP[d.auditStatus] || '') + '</span>'
+        + '  <span class="text-xs px-2.5 py-1 rounded-full ' + (DEMAND_STATUS_BADGE[d.status] || '') + '">状态：' + (DEMAND_STATUS_MAP[d.status] || '') + '</span>'
+        + '  <span class="text-xs px-2 py-0.5 rounded-full bg-gray-50 text-gray-500">' + adEscape(d.category || '其他') + '</span>'
+        + '  <span class="text-xs text-gray-400 font-mono">' + d.id + '</span>'
+        + '</div>'
+        + '<h2 class="text-xl font-bold text-secondary">' + adEscape(d.title) + '</h2>'
+        + '<div class="grid grid-cols-2 gap-3 text-sm bg-gray-50 rounded-lg p-4">'
+        + '  <div><span class="text-gray-500">发布人：</span><span class="text-gray-800">' + adEscape(d.publisher) + '</span></div>'
+        + '  <div><span class="text-gray-500">发布人ID：</span><span class="text-gray-500 text-xs font-mono">' + adEscape(d.publisherId) + '</span></div>'
+        + '  <div><span class="text-gray-500">发布时间：</span><span class="text-gray-800">' + adEscape(d.createTime) + '</span></div>'
+        + (d.auditTime ? '<div><span class="text-gray-500">审核时间：</span><span class="text-gray-800">' + adEscape(d.auditTime) + '</span></div>' : '')
+        + '  <div><span class="text-gray-500">预算：</span><span class="text-gray-800">' + adEscape(d.budget || '面议') + '</span></div>'
+        + '  <div><span class="text-gray-500">截止：</span><span class="text-gray-800">' + adEscape(d.deadline || '不限') + '</span></div>'
+        + '</div>'
+        // 联系信息（仅需求方）
+        + '<div><h4 class="text-sm font-semibold text-gray-700 mb-2"><i class="fas fa-id-card mr-1.5"></i>需求方联系信息</h4>'
+        + '<div class="p-3 rounded-lg border border-blue-100 bg-blue-50/40"><div class="text-xs text-blue-600 font-semibold mb-1.5">需求方（发布人）</div>' + pubBlock + '</div></div>'
+        // 驳回原因
+        + (rejectHtml ? '<div><h4 class="text-sm font-semibold text-gray-700 mb-2"><i class="fas fa-comment-dots mr-1.5"></i>审核备注</h4>' + rejectHtml + '</div>' : '')
+        // 需求描述
+        + '<div><h4 class="text-sm font-semibold text-gray-700 mb-2">需求描述</h4><div class="text-sm text-gray-700 whitespace-pre-wrap bg-gray-50 rounded-lg p-4 leading-relaxed">' + adEscape(d.description) + '</div></div>'
+        // 附件
+        + (d.attachment ? '<div class="text-sm"><i class="fas fa-paperclip text-gray-400 mr-1.5"></i>附件：<span class="text-gray-700">' + adEscape(d.attachment) + '</span></div>' : '');
+    document.getElementById('demandDetailOverlay').classList.add('show');
+    document.getElementById('demandDetailOverlay').style.display = 'flex';
+}
+// 切换到需求管理时刷新
+const _origSwitchSection = window.switchSection;
+window.switchSection = function(section) {
+    if (typeof _origSwitchSection === 'function') _origSwitchSection(section);
+    if (section === 'demands') renderDemandsAdmin();
+};
+// 启动时如果当前 section 是 demands 也刷新一次
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        const active = document.querySelector('.admin-section.active');
+        if (active && active.id === 'sec-demands') renderDemandsAdmin();
+        // 同时刷新待审核数量徽章
+        const pending = getDemands().filter(function(d){return d.auditStatus==='pending';}).length;
+        const badge = document.getElementById('demandPendingBadge');
+        if (badge) { badge.textContent = pending; badge.style.display = pending > 0 ? 'inline-block' : 'none'; }
+    }, 50);
+});
+
 init();
 </script>
+
+<!-- 需求详情弹窗（管理端） -->
+<div id="demandDetailOverlay" class="modal-overlay" style="display:none">
+    <div class="bg-white rounded-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div class="flex items-center justify-between p-5 border-b border-gray-100 sticky top-0 bg-white">
+            <h3 class="text-lg font-bold text-secondary">需求详情</h3>
+            <button onclick="closeModal('demandDetailOverlay')" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"><i class="fas fa-times text-gray-400"></i></button>
+        </div>
+        <div id="demandDetailBody" class="p-6 space-y-4"></div>
+    </div>
+</div>
 </body>
 </html>
