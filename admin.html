@@ -265,7 +265,7 @@
 
         <!-- ========== 用户管理 > 账号管理 ========== -->
         <section id="sec-user-accounts" class="admin-section">
-            <div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-bold text-secondary">用户账号管理</h2><p class="text-sm text-gray-500 mt-1">管理平台用户账号与权限</p></div><div class="flex items-center space-x-2"><input type="text" id="userSearch" oninput="renderUserAccounts()" placeholder="搜索..." class="border border-gray-200 rounded-lg px-3 py-2 text-sm w-40"><select id="userFilterStatus" onchange="renderUserAccounts()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="all">全部认证</option><option value="verified">已认证</option><option value="unverified">未认证</option><option value="enterprise_verified">企业认证</option></select><button onclick="openBatchImportModal()" class="border border-gray-200 text-gray-600 px-3 py-2 rounded-lg text-sm hover:bg-gray-50"><i class="fas fa-upload mr-1"></i>批量导入</button><button onclick="openCreateUserModal()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition"><i class="fas fa-plus mr-1.5"></i>新建用户</button></div></div>
+            <div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-bold text-secondary">用户账号管理</h2><p class="text-sm text-gray-500 mt-1">管理平台用户账号与权限</p></div><div class="flex items-center space-x-2"><input type="text" id="userSearch" oninput="renderUserAccounts()" placeholder="搜索..." class="border border-gray-200 rounded-lg px-3 py-2 text-sm w-40"><select id="userFilterStatus" onchange="renderUserAccounts()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="all">全部</option><option value="verified_any">已认证</option><option value="unverified">未认证</option><option value="verified">个人认证</option><option value="enterprise_verified">企业认证</option></select><button onclick="openBatchImportModal()" class="border border-gray-200 text-gray-600 px-3 py-2 rounded-lg text-sm hover:bg-gray-50"><i class="fas fa-upload mr-1"></i>批量导入</button><button onclick="openCreateUserModal()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition"><i class="fas fa-plus mr-1.5"></i>新建用户</button></div></div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">用户</th><th class="text-left px-5 py-3">手机号</th><th class="text-left px-5 py-3">邮箱</th><th class="text-left px-5 py-3">认证状态</th><th class="text-left px-5 py-3">组织</th><th class="text-left px-5 py-3">角色</th><th class="text-left px-5 py-3">状态</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="userAccountTableBody"></tbody></table></div>
         </section>
 
@@ -1209,7 +1209,8 @@ function renderUserAccounts(){
     const filterStatus=document.getElementById('userFilterStatus').value;
     let items=sampleUsers;
     if(search)items=items.filter(u=>u.name.toLowerCase().includes(search)||u.phone.includes(search)||u.username.toLowerCase().includes(search));
-    if(filterStatus!=='all')items=items.filter(u=>u.verified===filterStatus);
+    if(filterStatus==='verified_any'){items=items.filter(u=>u.verified==='verified'||u.verified==='enterprise_verified');}
+    else if(filterStatus!=='all'){items=items.filter(u=>u.verified===filterStatus);}
     const vl={unverified:'<span class="badge badge-danger">未认证</span>',verified:'<span class="badge badge-success">个人认证</span>',enterprise_verified:'<span class="badge badge-info">企业认证</span>'};
     document.getElementById('userAccountTableBody').innerHTML=items.map(u=>'<tr class="border-b border-gray-50 hover:bg-gray-50/50"><td class="px-5 py-3"><div class="flex items-center space-x-3"><img src="'+u.avatar+'" alt="'+u.name+'" class="w-8 h-8 rounded-full object-cover"><div><span class="font-medium text-gray-800">'+u.name+'</span><p class="text-xs text-gray-400">'+u.username+'</p></div></div></td><td class="px-5 py-3 text-sm text-gray-600">'+u.phone+'</td><td class="px-5 py-3 text-sm text-gray-600">'+u.email+'</td><td class="px-5 py-3">'+(vl[u.verified]||'')+'</td><td class="px-5 py-3 text-sm text-gray-600">'+(u.org||'--')+'</td><td class="px-5 py-3"><span class="badge '+(u.role==='admin'?'bg-purple-50 text-purple-700':'bg-gray-100 text-gray-600')+'">'+(u.role==='admin'?'管理员':'成员')+'</span></td><td class="px-5 py-3">'+(u.enabled?'<span class="badge badge-success">启用</span>':'<span class="badge badge-danger">停用</span>')+'</td><td class="px-5 py-3 text-right"><button onclick="toggleUserStatus('+u.id+')" class="text-xs '+(u.enabled?'text-orange-500':'text-green-500')+' mr-2"><i class="fas '+(u.enabled?'fa-ban':'fa-check')+'"></i></button><button onclick="viewUserDetail('+u.id+')" class="text-xs text-blue-500 hover:text-blue-700">详情</button></td></tr>').join('');
 }
@@ -1598,6 +1599,10 @@ function auditDemandConfirm(id, pass) {
     auditDemand(id, pass);
     showToast(pass ? '已通过审核' : '已驳回', 'success');
     renderDemandsAdmin();
+    // 审核通过 → 弹出"已同步至主站"预览覆盖层
+    if (pass) {
+        setTimeout(function() { showSyncToSitePreview(id); }, 200);
+    }
 }
 function offShelfDemandConfirm(id) {
     if (!confirm('确认下架该需求？')) return;
@@ -1678,5 +1683,141 @@ init();
         <div id="demandDetailBody" class="p-6 space-y-4"></div>
     </div>
 </div>
+
+<!-- 同步主站预览覆盖层（审核通过后弹出，模拟展示该需求已同步到主站） -->
+<div id="syncToSiteOverlay" class="modal-overlay" style="display:none">
+    <div class="bg-white rounded-2xl max-w-3xl w-full mx-4 max-h-[92vh] overflow-hidden shadow-2xl flex flex-col">
+        <div class="flex items-center justify-between p-5 border-b border-gray-100 bg-gradient-to-r from-green-50 to-emerald-50">
+            <div class="flex items-center gap-2">
+                <div class="w-9 h-9 rounded-full bg-green-500 flex items-center justify-center sync-pulse">
+                    <i class="fas fa-check text-white"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-secondary">已同步至主站</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">该需求已通过审核并发布，下方为主站展示效果预览</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <span id="syncCountdown" class="text-xs text-gray-400 font-mono"></span>
+                <button onclick="closeSyncToSitePreview()" class="w-8 h-8 rounded-full hover:bg-white/60 flex items-center justify-center"><i class="fas fa-times text-gray-500"></i></button>
+            </div>
+        </div>
+        <!-- 模拟主站顶部导航条 -->
+        <div class="px-5 py-2 bg-gray-50 border-b border-gray-100 flex items-center gap-2 text-xs text-gray-500">
+            <i class="fas fa-globe text-primary"></i>
+            <span>主站地址：</span>
+            <code class="text-primary font-mono">/demands.html</code>
+            <span class="ml-auto flex items-center gap-1.5 text-green-600">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-500 sync-blink"></span>
+                <span>实时同步中</span>
+            </span>
+        </div>
+        <!-- 同步路径动效 -->
+        <div class="px-5 py-3 bg-blue-50/40 border-b border-blue-100 flex items-center gap-2 text-xs text-blue-700">
+            <i class="fas fa-user-shield"></i>
+            <span>管理端审核</span>
+            <i class="fas fa-arrow-right text-blue-300"></i>
+            <i class="fas fa-database"></i>
+            <span>需求数据更新</span>
+            <i class="fas fa-arrow-right text-blue-300"></i>
+            <i class="fas fa-globe text-primary"></i>
+            <span class="font-semibold">主站"需求信息"页</span>
+            <span class="ml-auto text-blue-400">+1 张新卡片</span>
+        </div>
+        <!-- 需求卡片预览（主站真实样式） -->
+        <div class="flex-1 overflow-y-auto p-6 bg-gray-50/50">
+            <div id="syncPreviewCard" class="demand-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col max-w-2xl mx-auto sync-card-enter"></div>
+        </div>
+        <div class="p-4 border-t border-gray-100 flex items-center justify-between bg-white">
+            <div class="text-xs text-gray-400 flex items-center gap-1.5">
+                <i class="fas fa-info-circle"></i>
+                <span>该卡片现已对所有用户可见，发布者可在"个人中心-我的需求"查看</span>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="closeSyncToSitePreview()" class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">关闭</button>
+                <a href="demands.html" target="_blank" onclick="setTimeout(closeSyncToSitePreview,100)" class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-dark inline-flex items-center gap-1.5">
+                    <i class="fas fa-external-link-alt text-xs"></i>立即前往主站
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* 同步预览动效 */
+.sync-pulse { animation: sync-pulse 1.2s ease-in-out infinite; }
+@keyframes sync-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); } 50% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); } }
+.sync-blink { animation: sync-blink 1.5s ease-in-out infinite; }
+@keyframes sync-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.sync-card-enter { animation: sync-card-enter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+@keyframes sync-card-enter {
+    0% { transform: scale(0.85) translateY(20px); opacity: 0; }
+    60% { transform: scale(1.03) translateY(-4px); opacity: 1; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+.sync-highlight { box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3); }
+</style>
+
+<script>
+// ==================== 同步主站预览 ====================
+let _syncCountdownTimer = null;
+function showSyncToSitePreview(demandId) {
+    const d = getDemandById(demandId);
+    if (!d) return;
+    // 渲染主站样式的卡片（直接调用需求页的卡片HTML结构，参数保持一致）
+    const pc = d.publisherContact || {};
+    const cardHtml = ''
+        + '<div class="p-6 flex-1">'
+        + '  <div class="flex items-start justify-between mb-3 gap-2">'
+        + '    <h3 class="text-lg font-bold text-secondary line-clamp-1 flex-1 pr-2" title="' + escapeHtml(d.title) + '">' + escapeHtml(d.title) + '</h3>'
+        + '    <div class="flex flex-col items-end gap-1.5 flex-shrink-0">'
+        + '      <span class="text-xs px-2.5 py-1 rounded-full ' + statusBadgeClass(d.status) + ' whitespace-nowrap">' + statusLabel(d.status) + '</span>'
+        + '      <span class="text-xs px-2 py-0.5 rounded-full bg-gray-50 text-gray-500 whitespace-nowrap">' + escapeHtml(d.category || '其他') + '</span>'
+        + '    </div>'
+        + '  </div>'
+        + '  <p class="text-gray-600 text-sm line-clamp-3 mb-4" style="min-height:3.6em;">' + escapeHtml(d.description) + '</p>'
+        + '  <div class="grid grid-cols-2 gap-3 text-xs text-gray-500 mb-3">'
+        + '    <div class="flex items-center"><i class="fas fa-coins text-amber-500 mr-1.5"></i><span>预算：' + escapeHtml(d.budget || '面议') + '</span></div>'
+        + '    <div class="flex items-center"><i class="far fa-calendar text-primary mr-1.5"></i><span>截止：' + escapeHtml(d.deadline || '不限') + '</span></div>'
+        + '    <div class="flex items-center"><i class="fas fa-user text-gray-400 mr-1.5"></i><span>' + escapeHtml(d.publisher) + '</span></div>'
+        + '    <div class="flex items-center"><i class="far fa-clock text-gray-400 mr-1.5"></i><span>' + escapeHtml(d.createTime) + '</span></div>'
+        + '  </div>'
+        + (d.attachment ? '<div class="text-xs text-gray-500"><i class="fas fa-paperclip text-gray-400 mr-1"></i>附件：' + escapeHtml(d.attachment) + '</div>' : '')
+        + '</div>'
+        + '<div class="px-6 pb-5 flex items-center justify-between">'
+        + '  <span class="text-xs text-gray-400 font-mono">' + d.id + '</span>'
+        + '  <button class="inline-flex items-center gap-1.5 bg-primary text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-primary-dark transition shadow-sm" onclick="openDemandDetail(\'' + d.id + '\')"><i class="fas fa-id-card text-xs"></i><span>获取联系方式</span></button>'
+        + '</div>';
+    const card = document.getElementById('syncPreviewCard');
+    if (card) {
+        card.innerHTML = cardHtml;
+        // 重新触发动画
+        card.classList.remove('sync-card-enter');
+        void card.offsetWidth;
+        card.classList.add('sync-card-enter');
+    }
+    // 弹窗
+    const overlay = document.getElementById('syncToSiteOverlay');
+    if (overlay) {
+        overlay.style.display = 'flex';
+        overlay.classList.add('show');
+    }
+    // 倒计时 5 秒自动关闭
+    if (_syncCountdownTimer) clearInterval(_syncCountdownTimer);
+    let left = 5;
+    const cd = document.getElementById('syncCountdown');
+    if (cd) cd.textContent = left + 's 后自动关闭';
+    _syncCountdownTimer = setInterval(function() {
+        left -= 1;
+        if (left <= 0) { closeSyncToSitePreview(); return; }
+        if (cd) cd.textContent = left + 's 后自动关闭';
+    }, 1000);
+}
+function closeSyncToSitePreview() {
+    if (_syncCountdownTimer) { clearInterval(_syncCountdownTimer); _syncCountdownTimer = null; }
+    const overlay = document.getElementById('syncToSiteOverlay');
+    if (overlay) { overlay.style.display = 'none'; overlay.classList.remove('show'); }
+}
+</script>
 </body>
 </html>

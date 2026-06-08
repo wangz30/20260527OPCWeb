@@ -401,7 +401,7 @@
                         <i class="fas fa-lock text-3xl text-gray-400"></i>
                     </div>
                     <h3 class="text-xl font-bold text-secondary mb-2">请先完成身份认证</h3>
-                    <p class="text-gray-500 mb-6">完成身份认证后，即可查看可用额度与申请服务支持。</p>
+                    <p class="text-gray-500 mb-6">完成身份认证后，即可查看可用积分与申请服务支持。</p>
                     <button onclick="switchSection('account')" class="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition">
                         去认证
                     </button>
@@ -413,19 +413,19 @@
                     <div class="bg-gradient-to-r from-primary to-primary-dark rounded-xl p-8 text-white shadow-lg">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-primary-light mb-2">可用额度</p>
-                                <h3 id="wallet-balance-display" class="text-4xl font-bold"><span class="text-2xl font-medium mr-1">可用额度：</span>0</h3>
+                                <p class="text-primary-light mb-2">可用积分</p>
+                                <h3 id="wallet-balance-display" class="text-4xl font-bold"><span class="text-2xl font-medium mr-1">可用积分：</span>0</h3>
                             </div>
                             <button onclick="showRechargeModal()" class="bg-white text-primary px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                                申请额度
+                                申请积分
                             </button>
                         </div>
                     </div>
 
-                    <!-- 额度变动记录 -->
+                    <!-- 积分变动记录 -->
                     <div class="bg-white rounded-xl p-6 shadow-md mt-6">
                         <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-semibold text-secondary">额度变动记录</h3>
+                            <h3 class="text-lg font-semibold text-secondary">积分变动记录</h3>
                             <div class="flex space-x-2" id="wallet-filter-bar">
                                 <button class="px-4 py-2 bg-primary text-white rounded-lg text-sm" data-filter="all" onclick="renderWalletTransactions('all',this)">全部</button>
                                 <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50" data-filter="模型调用" onclick="renderWalletTransactions('模型调用',this)">模型调用</button>
@@ -436,21 +436,21 @@
                         <div id="transaction-list">
                             <div class="text-center py-12 text-gray-400">
                                 <i class="fas fa-receipt text-3xl mb-3"></i>
-                                <p>暂无额度变动记录</p>
+                                <p>暂无积分变动记录</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 额度申请记录（合并到服务额度内） -->
+                    <!-- 积分申请记录（合并到服务额度内） -->
                     <div class="bg-white rounded-xl p-6 shadow-md mt-6">
                         <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-lg font-semibold text-secondary">额度申请记录</h3>
-                            <span class="text-xs text-gray-400"><i class="fas fa-info-circle mr-1"></i>企业认证用户可查看历次额度申请及审核进度</span>
+                            <h3 class="text-lg font-semibold text-secondary">积分申请记录</h3>
+                            <span class="text-xs text-gray-400"><i class="fas fa-info-circle mr-1"></i>企业认证用户可查看历次积分申请及审核进度</span>
                         </div>
                         <div id="user-order-list">
                             <div class="text-center py-12 text-gray-400">
                                 <i class="fas fa-receipt text-3xl mb-3"></i>
-                                <p>暂无额度申请记录</p>
+                                <p>暂无积分申请记录</p>
                             </div>
                         </div>
                     </div>
@@ -1082,7 +1082,7 @@
     <div id="rechargeModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
             <div class="flex justify-between items-center mb-6">
-                <h3 id="rechargeModalTitle" class="text-xl font-bold text-secondary">申请额度</h3>
+                <h3 id="rechargeModalTitle" class="text-xl font-bold text-secondary">申请积分</h3>
                 <button onclick="closeRechargeModal()" class="text-gray-400 hover:text-gray-600">
                     <i class="fas fa-times"></i>
                 </button>
@@ -1200,7 +1200,7 @@
 
             if (walletUnverified) {
                 const desc = walletUnverified.querySelector('p.text-gray-500');
-                if (desc) desc.textContent = '完成身份认证后，即可查看可用额度与申请服务支持。';
+                if (desc) desc.textContent = '完成身份认证后，即可查看可用积分与申请服务支持。';
             }
             if (walletUnverified) walletUnverified.classList.add('hidden');
             if (walletMain) walletMain.classList.add('hidden');
@@ -1212,9 +1212,9 @@
                     walletMain.classList.remove('hidden');
                     const balanceDisplay = document.getElementById('wallet-balance-display');
                     if (balanceDisplay) {
-                        // 文案：可用额度：{数值}（不强调"元"，数值统一不带货币符号）
+                        // 文案：可用积分：{数值}（不强调"元"，数值统一不带货币符号）
                         const num = Number(AppState.balance) || 0;
-                        balanceDisplay.innerHTML = '<span class="text-2xl font-medium mr-1">可用额度：</span>' + num;
+                        balanceDisplay.innerHTML = '<span class="text-2xl font-medium mr-1">可用积分：</span>' + num;
                     }
                 }
             }
@@ -1671,11 +1671,11 @@
                 records = records.filter(function(r) { return r.type === filter; });
             }
             if (!records || records.length === 0) {
-                container.innerHTML = '<div class="text-center py-12 text-gray-400"><i class="fas fa-receipt text-3xl mb-3"></i><p>暂无额度变动记录</p></div>';
+                container.innerHTML = '<div class="text-center py-12 text-gray-400"><i class="fas fa-receipt text-3xl mb-3"></i><p>暂无积分变动记录</p></div>';
                 return;
             }
             var typeMap = { '模型调用': 'bg-purple-50 text-purple-700', '数据API': 'bg-blue-50 text-blue-700', '云资源': 'bg-cyan-50 text-cyan-700', '消费': 'bg-gray-50 text-gray-600' };
-            container.innerHTML = '<div class="overflow-x-auto"><table class="w-full"><thead class="bg-gray-50"><tr><th class="text-left px-4 py-3 text-xs text-gray-400">日期</th><th class="text-left px-4 py-3 text-xs text-gray-400">服务名称</th><th class="text-left px-4 py-3 text-xs text-gray-400">模型/类型</th><th class="text-right px-4 py-3 text-xs text-gray-400">消耗额度</th><th class="text-right px-4 py-3 text-xs text-gray-400">Token消耗</th><th class="text-left px-4 py-3 text-xs text-gray-400">类型</th></tr></thead><tbody>' +
+            container.innerHTML = '<div class="overflow-x-auto"><table class="w-full"><thead class="bg-gray-50"><tr><th class="text-left px-4 py-3 text-xs text-gray-400">日期</th><th class="text-left px-4 py-3 text-xs text-gray-400">服务名称</th><th class="text-left px-4 py-3 text-xs text-gray-400">模型/类型</th><th class="text-right px-4 py-3 text-xs text-gray-400">消耗积分</th><th class="text-right px-4 py-3 text-xs text-gray-400">Token消耗</th><th class="text-left px-4 py-3 text-xs text-gray-400">类型</th></tr></thead><tbody>' +
                 records.reverse().map(function(r) {
                     var t = r.tokens;
                     var tokenStr = t && t > 0 ? (t >= 1000000 ? (t/1000000).toFixed(1) + 'M' : t >= 1000 ? (t/1000).toFixed(0) + 'K' : String(t)) : '--';
@@ -1698,11 +1698,11 @@
             var uid = AppState.user ? AppState.user.id : 0;
             var orders = getUserOrders(uid);
             if (!orders || orders.length === 0) {
-                container.innerHTML = '<div class="text-center py-12 text-gray-400"><i class="fas fa-receipt text-3xl mb-3"></i><p>暂无额度申请记录</p></div>';
+                container.innerHTML = '<div class="text-center py-12 text-gray-400"><i class="fas fa-receipt text-3xl mb-3"></i><p>暂无积分申请记录</p></div>';
                 return;
             }
             var pmMap = { '微信支付': 'bg-green-50 text-green-700', '支付宝': 'bg-blue-50 text-blue-700', '在线支付': 'bg-gray-50 text-gray-600', '银行转账': 'bg-amber-50 text-amber-700' };
-            container.innerHTML = '<div class="overflow-x-auto"><table class="w-full"><thead class="bg-gray-50"><tr><th class="text-left px-4 py-3 text-xs text-gray-400">申请编号</th><th class="text-left px-4 py-3 text-xs text-gray-400">申请额度</th><th class="text-left px-4 py-3 text-xs text-gray-400">支付方式</th><th class="text-left px-4 py-3 text-xs text-gray-400">时间</th><th class="text-left px-4 py-3 text-xs text-gray-400">状态</th><th class="text-right px-4 py-3 text-xs text-gray-400">操作</th></tr></thead><tbody>' +
+            container.innerHTML = '<div class="overflow-x-auto"><table class="w-full"><thead class="bg-gray-50"><tr><th class="text-left px-4 py-3 text-xs text-gray-400">申请编号</th><th class="text-left px-4 py-3 text-xs text-gray-400">申请积分</th><th class="text-left px-4 py-3 text-xs text-gray-400">支付方式</th><th class="text-left px-4 py-3 text-xs text-gray-400">时间</th><th class="text-left px-4 py-3 text-xs text-gray-400">状态</th><th class="text-right px-4 py-3 text-xs text-gray-400">操作</th></tr></thead><tbody>' +
                 orders.reverse().map(function(o) {
                     var actionCell;
                     if (isOrderInvoiced(o.id)) {
@@ -2374,12 +2374,12 @@ func main() {
             const status = AppState.realNameStatus;
             if (status === 'verified') {
                 // 个人实名
-                title.textContent = '申请额度';
+                title.textContent = '申请积分';
                 body.innerHTML = ''
                     + '<div class="text-center py-4">'
                     + '  <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-user-tie text-2xl text-primary"></i></div>'
                     + '  <h4 class="text-base font-semibold text-secondary mb-2">请联系工作人员获取更多服务支持</h4>'
-                    + '  <p class="text-sm text-gray-500 mb-5 leading-relaxed">个人实名用户暂不开放在线自助申请额度，请通过以下邮箱与我们联系：</p>'
+                    + '  <p class="text-sm text-gray-500 mb-5 leading-relaxed">个人实名用户暂不开放在线自助申请积分，请通过以下邮箱与我们联系：</p>'
                     + '  <div class="space-y-2 text-sm text-left bg-gray-50 rounded-lg p-4">'
                     + '    <div class="flex items-center"><i class="fas fa-envelope w-5 text-gray-400 mr-2"></i><span class="text-gray-700">gbanexus@hiic.com.cn</span><button onclick="copyText(\'gbanexus@hiic.com.cn\')" class="text-xs text-primary ml-2">复制</button></div>'
                     + '  </div>'
@@ -2387,7 +2387,7 @@ func main() {
                     + '</div>';
             } else if (status === 'enterprise_verified') {
                 // 企业实名
-                title.textContent = '申请额度';
+                title.textContent = '申请积分';
                 body.innerHTML = ''
                     + '<div class="rounded-lg border border-amber-200 bg-amber-50/60 p-4">'
                     + '  <div class="text-sm font-semibold text-amber-800 mb-2"><i class="fas fa-university mr-1.5"></i>公司银行账户信息</div>'
@@ -2398,10 +2398,10 @@ func main() {
                     + '  </div>'
                     + '</div>'
                     + '<div>'
-                    + '  <label class="block text-sm font-medium text-gray-700 mb-2">申请额度数值 <span class="text-red-500">*</span>（单位：元）</label>'
+                    + '  <label class="block text-sm font-medium text-gray-700 mb-2">申请积分数值 <span class="text-red-500">*</span></label>'
                     + '  <div class="relative">'
-                    + '    <input type="number" id="customAmount" min="1" placeholder="请输入额度数值" class="w-full px-4 py-2 pr-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">'
-                    + '    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 pointer-events-none">元</span>'
+                    + '    <input type="number" id="customAmount" min="1" placeholder="请输入积分数值" class="w-full px-4 py-2 pr-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">'
+                    + '    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 pointer-events-none">积分</span>'
                     + '  </div>'
                     + '</div>'
                     + '<div>'
@@ -2419,7 +2419,7 @@ func main() {
                 const amt = document.getElementById('customAmount'); if (amt) amt.value = '';
             } else {
                 // 未认证
-                title.textContent = '申请额度';
+                title.textContent = '申请积分';
                 body.innerHTML = '<div class="text-center py-6 text-sm text-gray-500">请先完成身份认证</div>';
             }
             document.getElementById('rechargeModal').classList.remove('hidden');
@@ -2466,16 +2466,16 @@ func main() {
                 return;
             }
             const amount = parseFloat(document.getElementById('customAmount').value);
-            if (!amount || amount <= 0) { showToast('请输入正确的申请额度', 'error'); return; }
+            if (!amount || amount <= 0) { showToast('请输入正确的申请积分', 'error'); return; }
             const unitEl = document.getElementById('customAmountUnit');
-            const unit = unitEl ? unitEl.value : '元';
+            const unit = unitEl ? unitEl.value : '积分';
             const fileInput = document.getElementById('rechargeVoucherInput');
             const voucherName = (fileInput && fileInput.dataset && fileInput.dataset.attachedName) || '';
             // 生成申请记录（订单），状态"待审核"，不实际加余额
             addBalance(amount, '银行转账', { type: 'recharge_request', status: '待审核', paymentMethod: '银行转账', unit: unit, voucherName: voucherName });
             closeRechargeModal();
-            showToast('我们已收到您的材料，工作人员将在 1 个工作日内审核，审核通过后将为您增加服务额度', 'success');
-            // 刷新订单列表（额度申请记录）
+            showToast('我们已收到您的材料，工作人员将在 1 个工作日内审核，审核通过后将为您增加积分', 'success');
+            // 刷新订单列表（积分申请记录）
             if (typeof renderUserOrders === 'function') renderUserOrders();
         }
 
