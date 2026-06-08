@@ -269,13 +269,11 @@
                     + '    <div class="grid grid-cols-2 gap-3 text-xs text-gray-500 mb-3">'
                     + '      <div class="flex items-center"><i class="fas fa-coins text-amber-500 mr-1.5"></i><span>预算：' + escapeHtml(d.budget || '面议') + '</span></div>'
                     + '      <div class="flex items-center"><i class="far fa-calendar text-primary mr-1.5"></i><span>截止：' + escapeHtml(d.deadline || '不限') + '</span></div>'
-                    + '      <div class="flex items-center"><i class="fas fa-user text-gray-400 mr-1.5"></i><span>' + escapeHtml(d.publisher) + '</span></div>'
                     + '      <div class="flex items-center"><i class="far fa-clock text-gray-400 mr-1.5"></i><span>' + escapeHtml(d.createTime) + '</span></div>'
                     + '    </div>'
                     + (d.attachment ? '<div class="text-xs text-gray-500"><i class="fas fa-paperclip text-gray-400 mr-1"></i>附件：' + escapeHtml(d.attachment) + '</div>' : '')
                     + '  </div>'
-                    + '  <div class="px-6 pb-5 flex items-center justify-between">'
-                    + '    <span class="text-xs text-gray-400 font-mono">' + d.id + '</span>'
+                    + '  <div class="px-6 pb-5 flex items-center justify-end">'
                     +      actionBtn
                     + '  </div>'
                     + '</div>';

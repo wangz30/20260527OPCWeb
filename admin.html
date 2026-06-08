@@ -87,7 +87,7 @@
 
             <div class="sidebar-group">
                 <div class="sidebar-link" onclick="toggleSubmenu(this)"><i class="fas fa-users w-5 text-center"></i>用户管理<i class="fas fa-chevron-down ml-auto text-xs"></i></div>
-                <div class="sidebar-sub"><a href="#" onclick="switchSection('user-accounts')" class="sidebar-link" data-section="user-accounts">账号管理</a><a href="#" onclick="switchSection('user-balance')" class="sidebar-link" data-section="user-balance">额度管理</a></div>
+                <div class="sidebar-sub"><a href="#" onclick="switchSection('user-accounts')" class="sidebar-link" data-section="user-accounts">账号管理</a><a href="#" onclick="switchSection('user-balance')" class="sidebar-link" data-section="user-balance">额度管理</a><a href="#" onclick="switchSection('user-realname-audit')" class="sidebar-link" data-section="user-realname-audit">认证审核<span id="realnameAuditBadge" class="ml-auto bg-danger text-white text-xs px-1.5 py-0.5 rounded-full" style="display:none">0</span></a></div>
             </div>
 
             <div class="sidebar-group">
@@ -259,8 +259,39 @@
 
         <!-- ========== 额度申请管理（原"订单管理"） ========== -->
         <section id="sec-orders" class="admin-section">
-            <div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-bold text-secondary">额度申请管理</h2><p class="text-sm text-gray-500 mt-1">查看所有用户的额度申请记录与发票管理</p></div><div class="flex items-center space-x-2"><select id="orderUserFilter" onchange="renderOrders()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="all">全部用户</option></select></div></div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">申请编号</th><th class="text-left px-5 py-3">用户</th><th class="text-left px-5 py-3">申请额度</th><th class="text-left px-5 py-3">凭证</th><th class="text-left px-5 py-3">支付方式</th><th class="text-left px-5 py-3">时间</th><th class="text-left px-5 py-3">状态</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="orderTableBody"></tbody></table></div>
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <h2 class="text-2xl font-bold text-secondary">额度申请管理</h2>
+                    <p class="text-sm text-gray-500 mt-1">查看所有用户的额度申请记录与发票管理</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <select id="orderVerifyFilter" onchange="renderOrders()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm">
+                        <option value="all">全部认证状态</option>
+                        <option value="verified">个人认证</option>
+                        <option value="enterprise_verified">企业认证</option>
+                        <option value="unverified">未认证</option>
+                    </select>
+                    <button onclick="openAdminAddOrderModal()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dark transition"><i class="fas fa-plus mr-1.5"></i>管理员手动添加记录</button>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-100">
+                        <tr>
+                            <th class="text-left px-5 py-3">申请编号</th>
+                            <th class="text-left px-5 py-3">用户</th>
+                            <th class="text-left px-5 py-3">身份认证状态</th>
+                            <th class="text-left px-5 py-3">申请额度</th>
+                            <th class="text-left px-5 py-3">附件（银行转账单）</th>
+                            <th class="text-left px-5 py-3">支付方式</th>
+                            <th class="text-left px-5 py-3">时间</th>
+                            <th class="text-left px-5 py-3">状态</th>
+                            <th class="text-right px-5 py-3">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderTableBody"></tbody>
+                </table>
+            </div>
         </section>
 
         <!-- ========== 用户管理 > 账号管理 ========== -->
@@ -273,6 +304,119 @@
         <section id="sec-user-balance" class="admin-section">
             <div class="flex items-center justify-between mb-5"><div><h2 class="text-2xl font-bold text-secondary">用户额度管理</h2><p class="text-sm text-gray-500 mt-1">管理用户可用额度与额度变动记录</p></div><input type="text" id="balanceUserSearch" oninput="renderUserBalance()" placeholder="搜索用户..." class="border border-gray-200 rounded-lg px-3 py-2 text-sm w-40"></div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"><table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-5 py-3">用户</th><th class="text-left px-5 py-3">可用额度</th><th class="text-left px-5 py-3">累计消费</th><th class="text-left px-5 py-3">Token消耗</th><th class="text-left px-5 py-3">最近消费时间</th><th class="text-left px-5 py-3">消费笔数</th><th class="text-right px-5 py-3">操作</th></tr></thead><tbody id="userBalanceTableBody"></tbody></table></div>
+        </section>
+
+        <!-- ========== 用户管理 > 认证审核 ========== -->
+        <section id="sec-user-realname-audit" class="admin-section">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <h2 class="text-2xl font-bold text-secondary">认证审核</h2>
+                    <p class="text-sm text-gray-500 mt-1">个人实名认证由公安部接口自动比对（管理员可干预）；企业认证需人工审核</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="openRealnameLogHistory()" class="border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-50"><i class="fas fa-history mr-1.5"></i>操作历史</button>
+                </div>
+            </div>
+
+            <!-- 4 个统计卡 -->
+            <div class="grid grid-cols-4 gap-4 mb-5">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                    <div class="text-xs text-gray-500 mb-1">个人核验·今日通过</div>
+                    <div class="text-2xl font-bold text-green-600" id="realnameStat_personal_passed">0</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                    <div class="text-xs text-gray-500 mb-1">个人核验·今日失败</div>
+                    <div class="text-2xl font-bold text-red-500" id="realnameStat_personal_failed">0</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                    <div class="text-xs text-gray-500 mb-1">企业认证·待审核</div>
+                    <div class="text-2xl font-bold text-amber-600" id="realnameStat_enterprise_pending">0</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                    <div class="text-xs text-gray-500 mb-1">管理员干预·今日次数</div>
+                    <div class="text-2xl font-bold text-secondary" id="realnameStat_admin_intervention">0</div>
+                </div>
+            </div>
+
+            <!-- 标签页切换 -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="flex border-b border-gray-100 px-4 pt-3">
+                    <button onclick="switchRealnameTab('personal')" id="realnameTab_personal" class="realname-tab px-4 py-2.5 text-sm font-medium border-b-2 border-primary text-primary"><i class="fas fa-user mr-1.5"></i>个人实名认证</button>
+                    <button onclick="switchRealnameTab('enterprise')" id="realnameTab_enterprise" class="realname-tab px-4 py-2.5 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-secondary"><i class="fas fa-building mr-1.5"></i>企业认证</button>
+                </div>
+
+                <!-- 个人实名认证 面板 -->
+                <div id="realnamePanel_personal" class="p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-sm text-gray-600"><i class="fas fa-info-circle text-blue-500 mr-1.5"></i>个人认证走公安部"三要素"接口自动比对，下方为核验日志与管理员干预记录</div>
+                        <div class="flex items-center space-x-2">
+                            <select id="realnamePersonalFilter" onchange="renderRealnamePersonalTable()" class="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white">
+                                <option value="all">全部记录</option>
+                                <option value="passed">仅通过</option>
+                                <option value="failed">仅失败</option>
+                                <option value="admin">管理员干预</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 border-b border-gray-100">
+                                <tr>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">申请人</th>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">姓名</th>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">身份证(脱敏)</th>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">手机</th>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">提交时间</th>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">比对结果</th>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">失败/干预原因</th>
+                                    <th class="text-right px-4 py-3 text-xs font-semibold text-gray-500">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="realnamePersonalTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div id="realnamePersonalEmpty" class="hidden py-12 text-center text-gray-400">
+                        <i class="fas fa-inbox text-4xl mb-3 opacity-30"></i>
+                        <div class="text-sm">暂无个人核验记录</div>
+                    </div>
+                </div>
+
+                <!-- 企业认证 面板 -->
+                <div id="realnamePanel_enterprise" class="hidden p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="text-sm text-gray-600"><i class="fas fa-info-circle text-amber-500 mr-1.5"></i>企业认证需人工审核营业执照、资质材料等</div>
+                        <div class="flex items-center space-x-2">
+                            <select id="realnameEnterpriseFilter" onchange="renderRealnameEnterpriseTable()" class="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white">
+                                <option value="pending_audit">待审核</option>
+                                <option value="all">全部记录</option>
+                                <option value="enterprise_verified">已通过</option>
+                                <option value="enterprise_rejected">已驳回</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 border-b border-gray-100">
+                                <tr>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">申请人</th>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">企业名称</th>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">统一社会信用代码</th>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">法人</th>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">认证方式</th>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">提交时间</th>
+                                    <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">状态</th>
+                                    <th class="text-right px-4 py-3 text-xs font-semibold text-gray-500">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="realnameEnterpriseTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div id="realnameEnterpriseEmpty" class="hidden py-12 text-center text-gray-400">
+                        <i class="fas fa-inbox text-4xl mb-3 opacity-30"></i>
+                        <div class="text-sm">暂无企业认证记录</div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- ========== 租户管理 > 账号管理 ========== -->
@@ -624,12 +768,12 @@ const formServiceTypes = [
     {value:'maker', label:'创客空间入驻'}
 ];
 const sampleOrders = [
-    {id:'ORD20260520001',userId:2,userName:'李明',amount:500,paymentMethod:'微信支付',status:'已完成',time:'2026-05-20 14:30',invoiceAvailable:false},
-    {id:'ORD20260518002',userId:3,userName:'王芳',amount:1000,paymentMethod:'支付宝',status:'已完成',time:'2026-05-18 09:15',invoiceAvailable:false},
-    {id:'ORD20260515003',userId:5,userName:'赵敏',amount:300,paymentMethod:'微信支付',status:'已完成',time:'2026-05-15 16:45',invoiceAvailable:false},
-    {id:'ORD20260512004',userId:7,userName:'周婷',amount:2000,paymentMethod:'在线支付',status:'已完成',time:'2026-05-12 11:00',invoiceAvailable:true},
-    {id:'ORD20260510005',userId:1,userName:'张伟',amount:500,paymentMethod:'支付宝',status:'已完成',time:'2026-05-10 08:20',invoiceAvailable:false},
-    {id:'ORD20260508006',userId:4,userName:'刘洋',amount:200,paymentMethod:'微信支付',status:'已完成',time:'2026-05-08 13:50',invoiceAvailable:false},
+    {id:'ORD20260520001',userId:2,userName:'李明',amount:500,paymentMethod:'银行转账',status:'已完成',time:'2026-05-20 14:30',invoiceAvailable:false},
+    {id:'ORD20260518002',userId:3,userName:'王芳',amount:1000,paymentMethod:'银行转账',status:'已完成',time:'2026-05-18 09:15',invoiceAvailable:false},
+    {id:'ORD20260515003',userId:5,userName:'赵敏',amount:300,paymentMethod:'银行转账',status:'已完成',time:'2026-05-15 16:45',invoiceAvailable:false},
+    {id:'ORD20260512004',userId:7,userName:'周婷',amount:2000,paymentMethod:'银行转账',status:'已完成',time:'2026-05-12 11:00',invoiceAvailable:true},
+    {id:'ORD20260510005',userId:1,userName:'张伟',amount:500,paymentMethod:'银行转账',status:'已完成',time:'2026-05-10 08:20',invoiceAvailable:false},
+    {id:'ORD20260508006',userId:4,userName:'刘洋',amount:200,paymentMethod:'银行转账',status:'已完成',time:'2026-05-08 13:50',invoiceAvailable:false},
 ];
 const sampleApprovals = [
     {id:'AP20260501',user:'李明',userPhone:'138****5678',type:'data-api',typeLabel:'数据API',content:'企业工商信息查询 · 调用频率：100次/天',time:'2026-05-15 14:30',status:'approved',note:'已开通API访问权限，密钥通过短信发送，文档见附件。'},
@@ -731,6 +875,12 @@ function switchSection(section){
     // 展开父菜单
     const plink=document.querySelector('[data-section="'+section+'"]');
     if(plink){const sub=plink.closest('.sidebar-sub');if(sub)sub.classList.add('open');}
+    // 切换到认证审核时自动刷新
+    if (section === 'user-realname-audit') {
+        if (typeof renderRealnamePersonalTable === 'function') renderRealnamePersonalTable();
+        if (typeof renderRealnameEnterpriseTable === 'function') renderRealnameEnterpriseTable();
+        if (typeof refreshRealnameStat === 'function') refreshRealnameStat();
+    }
 }
 
 function toggleSubmenu(el){
@@ -741,6 +891,404 @@ function toggleSubmenu(el){
         if(chev){chev.style.transform=sub.classList.contains('open')?'rotate(180deg)':'rotate(0deg)'}
     }
 }
+
+// ========== 认证审核模块 ==========
+// 当前标签页：'personal' | 'enterprise'
+let currentRealnameTab = 'personal';
+// 当前操作的目标日志 id
+let currentRealnameLogId = null;
+
+function switchRealnameTab(name) {
+    currentRealnameTab = name;
+    document.getElementById('realnameTab_personal').className = 'realname-tab px-4 py-2.5 text-sm font-medium border-b-2 ' + (name === 'personal' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-secondary');
+    document.getElementById('realnameTab_enterprise').className = 'realname-tab px-4 py-2.5 text-sm font-medium border-b-2 ' + (name === 'enterprise' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-secondary');
+    document.getElementById('realnamePanel_personal').classList.toggle('hidden', name !== 'personal');
+    document.getElementById('realnamePanel_enterprise').classList.toggle('hidden', name !== 'enterprise');
+}
+
+function getAdminName() {
+    return (typeof AppState !== 'undefined' && AppState.currentAdminName) ? AppState.currentAdminName : '系统管理员';
+}
+
+function refreshRealnameStat() {
+    const logs = (typeof getRealNameLogs === 'function') ? getRealNameLogs() : [];
+    const today = new Date().toISOString().slice(0, 10);
+    const isToday = (s) => (s || '').indexOf(today) >= 0 || (s || '').indexOf(new Date().toLocaleDateString('zh-CN')) >= 0;
+    const personalAll = logs.filter(function(x) { return x.type === 'personal'; });
+    const personalPassedToday = personalAll.filter(function(x) { return x.result === 'passed' && isToday(x.time); }).length;
+    const personalFailedToday = personalAll.filter(function(x) { return x.result === 'failed' && isToday(x.time); }).length;
+    const enterprisePending = logs.filter(function(x) { return x.type === 'enterprise' && x.result === 'pending'; }).length;
+    const adminIntervention = logs.filter(function(x) { return x.auditAction && isToday(x.auditTime || x.time); }).length;
+
+    const s1 = document.getElementById('realnameStat_personal_passed'); if (s1) s1.textContent = personalPassedToday;
+    const s2 = document.getElementById('realnameStat_personal_failed'); if (s2) s2.textContent = personalFailedToday;
+    const s3 = document.getElementById('realnameStat_enterprise_pending'); if (s3) s3.textContent = enterprisePending;
+    const s4 = document.getElementById('realnameStat_admin_intervention'); if (s4) s4.textContent = adminIntervention;
+
+    // 侧边栏徽章：只显示企业待审
+    const badge = document.getElementById('realnameAuditBadge');
+    if (badge) {
+        if (enterprisePending > 0) { badge.style.display = ''; badge.textContent = enterprisePending; }
+        else { badge.style.display = 'none'; }
+    }
+}
+
+function getRealnameBadge(result, auditAction) {
+    // 优先级：管理员干预 > 接口结果
+    if (auditAction === 'admin_approved' || result === 'passed') {
+        return '<span class="text-xs px-2 py-0.5 rounded-full bg-green-50 text-green-700">✓ 通过</span>';
+    }
+    if (auditAction === 'admin_rejected') {
+        return '<span class="text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-700">✗ 管理员驳回</span>';
+    }
+    if (auditAction === 'admin_reverted') {
+        return '<span class="text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-700">撤销</span>';
+    }
+    if (auditAction === 'admin_reverify') {
+        return '<span class="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-700">重做中</span>';
+    }
+    if (result === 'failed') {
+        return '<span class="text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-700">✗ 不通过</span>';
+    }
+    if (result === 'pending') {
+        return '<span class="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-700">核验中</span>';
+    }
+    return '<span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">--</span>';
+}
+
+function getEnterpriseBadge(result, auditAction) {
+    if (auditAction === 'admin_approved' || result === 'passed') {
+        return '<span class="text-xs px-2 py-0.5 rounded-full bg-green-50 text-green-700">已通过</span>';
+    }
+    if (auditAction === 'admin_rejected' || result === 'failed') {
+        return '<span class="text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-700">已驳回</span>';
+    }
+    if (auditAction === 'admin_reverted') {
+        return '<span class="text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-700">已撤销</span>';
+    }
+    if (auditAction === 'admin_reverify') {
+        return '<span class="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-700">重做中</span>';
+    }
+    if (result === 'pending') {
+        return '<span class="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-700">待审核</span>';
+    }
+    return '<span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">--</span>';
+}
+
+// 渲染个人核验日志表格
+function renderRealnamePersonalTable() {
+    const filterEl = document.getElementById('realnamePersonalFilter');
+    const filter = filterEl ? filterEl.value : 'all';
+    const tbody = document.getElementById('realnamePersonalTableBody');
+    const empty = document.getElementById('realnamePersonalEmpty');
+    if (!tbody) return;
+
+    const logs = (typeof getRealNameLogs === 'function') ? getRealNameLogs('personal') : [];
+    let filtered = logs;
+    if (filter === 'passed') filtered = logs.filter(function(x) { return x.result === 'passed' && !x.auditAction; });
+    else if (filter === 'failed') filtered = logs.filter(function(x) { return x.result === 'failed' && !x.auditAction; });
+    else if (filter === 'admin') filtered = logs.filter(function(x) { return x.auditAction; });
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        if (empty) empty.classList.remove('hidden');
+        return;
+    }
+    if (empty) empty.classList.add('hidden');
+
+    tbody.innerHTML = filtered.map(function(x) {
+        const isAdminActed = !!x.auditAction;
+        const passBtn = (x.result === 'failed' && !isAdminActed) ? '<button onclick="openRealnameAdminModal(\'' + x.id + '\',\'personal\',\'approve\')" class="text-green-600 hover:text-green-800 text-xs font-medium mr-2"><i class="fas fa-check mr-0.5"></i>人工通过</button>' : '';
+        const rejectBtn = (x.result === 'failed' && !isAdminActed) ? '<button onclick="openRealnameAdminModal(\'' + x.id + '\',\'personal\',\'reject\')" class="text-red-600 hover:text-red-800 text-xs font-medium mr-2"><i class="fas fa-times mr-0.5"></i>人工驳回</button>' : '';
+        const revertBtn = (x.result === 'passed' && !isAdminActed) ? '<button onclick="openRealnameAdminModal(\'' + x.id + '\',\'personal\',\'revert\')" class="text-orange-600 hover:text-orange-800 text-xs font-medium mr-2"><i class="fas fa-undo mr-0.5"></i>撤销认证</button>' : '';
+        const reverifyBtn = (x.result === 'passed' && !isAdminActed) ? '<button onclick="openRealnameAdminModal(\'' + x.id + '\',\'personal\',\'reverify\')" class="text-blue-600 hover:text-blue-800 text-xs font-medium mr-2"><i class="fas fa-redo mr-0.5"></i>强制重做</button>' : '';
+
+        const reasonHtml = x.auditMessage
+            ? '<div class="text-xs text-gray-700">' + escapeHtml(x.auditMessage) + '</div>'
+            : (x.message && x.result === 'failed' ? '<div class="text-xs text-red-600">' + escapeHtml(x.message) + '</div>' : '<span class="text-xs text-gray-400">--</span>');
+        const auditByHtml = isAdminActed
+            ? '<div class="text-xs text-gray-400 mt-0.5">' + escapeHtml(x.auditBy || '') + ' · ' + escapeHtml(x.auditTime || '') + '</div>'
+            : '';
+
+        return ''
+            + '<tr class="border-b border-gray-50 hover:bg-gray-50/50">'
+            + '<td class="px-4 py-3 text-sm">' + escapeHtml(x.user) + '<div class="text-xs text-gray-400">' + escapeHtml(x.userPhone || '--') + '</div></td>'
+            + '<td class="px-4 py-3 text-sm">' + escapeHtml(x.name) + '</td>'
+            + '<td class="px-4 py-3 text-sm font-mono text-gray-600">' + escapeHtml(x.idCardMasked) + '</td>'
+            + '<td class="px-4 py-3 text-sm text-gray-600">' + escapeHtml(x.userPhone || '--') + '</td>'
+            + '<td class="px-4 py-3 text-xs text-gray-500">' + escapeHtml(x.time) + '</td>'
+            + '<td class="px-4 py-3">' + getRealnameBadge(x.result, x.auditAction) + auditByHtml + '</td>'
+            + '<td class="px-4 py-3">' + reasonHtml + '</td>'
+            + '<td class="px-4 py-3 text-right whitespace-nowrap">' + passBtn + rejectBtn + revertBtn + reverifyBtn + '<button onclick="openRealnameLogDetail(\'' + x.id + '\',\'personal\')" class="text-gray-500 hover:text-secondary text-xs font-medium"><i class="fas fa-eye"></i></button></td>'
+            + '</tr>';
+    }).join('');
+}
+
+// 渲染企业认证表格
+function renderRealnameEnterpriseTable() {
+    const filterEl = document.getElementById('realnameEnterpriseFilter');
+    const filter = filterEl ? filterEl.value : 'pending_audit';
+    const tbody = document.getElementById('realnameEnterpriseTableBody');
+    const empty = document.getElementById('realnameEnterpriseEmpty');
+    if (!tbody) return;
+
+    const logs = (typeof getRealNameLogs === 'function') ? getRealNameLogs('enterprise') : [];
+    let filtered = logs;
+    if (filter === 'pending_audit') filtered = logs.filter(function(x) { return x.result === 'pending' && !x.auditAction; });
+    else if (filter === 'enterprise_verified') filtered = logs.filter(function(x) { return (x.result === 'passed') || x.auditAction === 'admin_approved'; });
+    else if (filter === 'enterprise_rejected') filtered = logs.filter(function(x) { return (x.result === 'failed' && x.auditAction === 'admin_rejected') || (x.result === 'failed' && x.auditMessage); });
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        if (empty) empty.classList.remove('hidden');
+        return;
+    }
+    if (empty) empty.classList.add('hidden');
+
+    tbody.innerHTML = filtered.map(function(x) {
+        const isPending = (x.result === 'pending' && !x.auditAction);
+        const authTypeText = x.formData && x.formData.authType === 'agent' ? '委托人' : '法人本人';
+
+        const actionPending = '<button onclick="openRealnameAdminModal(\'' + x.id + '\',\'enterprise\',\'approve\')" class="text-green-600 hover:text-green-800 text-xs font-medium mr-2"><i class="fas fa-check mr-0.5"></i>审核通过</button><button onclick="openRealnameAdminModal(\'' + x.id + '\',\'enterprise\',\'reject\')" class="text-red-600 hover:text-red-800 text-xs font-medium"><i class="fas fa-times mr-0.5"></i>驳回</button>';
+        const actionVerified = '<button onclick="openRealnameAdminModal(\'' + x.id + '\',\'enterprise\',\'revert\')" class="text-orange-600 hover:text-orange-800 text-xs font-medium mr-2"><i class="fas fa-undo mr-0.5"></i>撤销</button><button onclick="openRealnameAdminModal(\'' + x.id + '\',\'enterprise\',\'reverify\')" class="text-blue-600 hover:text-blue-800 text-xs font-medium"><i class="fas fa-redo mr-0.5"></i>强制重做</button>';
+        const actionRejected = '<button onclick="openRealnameAdminModal(\'' + x.id + '\',\'enterprise\',\'reverify\')" class="text-blue-600 hover:text-blue-800 text-xs font-medium"><i class="fas fa-redo mr-0.5"></i>要求重做</button>';
+
+        let actionBtns = '';
+        if (isPending) actionBtns = actionPending;
+        else if (x.result === 'passed' || x.auditAction === 'admin_approved') actionBtns = actionVerified;
+        else actionBtns = actionRejected;
+
+        return ''
+            + '<tr class="border-b border-gray-50 hover:bg-gray-50/50">'
+            + '<td class="px-4 py-3 text-sm">' + escapeHtml(x.user) + '<div class="text-xs text-gray-400">' + escapeHtml(x.userPhone || '--') + '</div></td>'
+            + '<td class="px-4 py-3 text-sm font-medium">' + escapeHtml(x.name) + '</td>'
+            + '<td class="px-4 py-3 text-xs font-mono text-gray-600">' + escapeHtml(x.idCardMasked) + '</td>'
+            + '<td class="px-4 py-3 text-sm text-gray-600">' + escapeHtml(x.formData && x.formData.legalName || '--') + '</td>'
+            + '<td class="px-4 py-3 text-xs"><span class="px-2 py-0.5 rounded-full ' + (authTypeText === '委托人' ? 'bg-purple-50 text-purple-700' : 'bg-blue-50 text-blue-700') + '">' + authTypeText + '</span></td>'
+            + '<td class="px-4 py-3 text-xs text-gray-500">' + escapeHtml(x.time) + '</td>'
+            + '<td class="px-4 py-3">' + getEnterpriseBadge(x.result, x.auditAction) + (x.auditMessage ? '<div class="text-xs text-gray-500 mt-0.5 line-clamp-1" title="' + escapeHtml(x.auditMessage) + '">' + escapeHtml(x.auditMessage) + '</div>' : '') + '</td>'
+            + '<td class="px-4 py-3 text-right whitespace-nowrap">' + actionBtns + '<button onclick="openRealnameLogDetail(\'' + x.id + '\',\'enterprise\')" class="ml-2 text-gray-500 hover:text-secondary text-xs font-medium"><i class="fas fa-eye"></i></button></td>'
+            + '</tr>';
+    }).join('');
+}
+
+// 通用：打开管理员操作弹窗
+function openRealnameAdminModal(logId, type, action) {
+    currentRealnameLogId = logId;
+    let title = '';
+    let btnText = '';
+    let btnClass = '';
+    let requireReason = true;
+    let reasonLabel = '操作原因';
+
+    if (type === 'personal') {
+        if (action === 'approve') { title = '人工通过该用户实名认证'; btnText = '确认通过'; btnClass = 'bg-green-600 hover:bg-green-700'; reasonLabel = '人工核验说明'; }
+        else if (action === 'reject') { title = '人工驳回该用户实名认证'; btnText = '确认驳回'; btnClass = 'bg-red-600 hover:bg-red-700'; }
+        else if (action === 'revert') { title = '撤销该用户实名认证'; btnText = '确认撤销'; btnClass = 'bg-orange-600 hover:bg-orange-700'; }
+        else if (action === 'reverify') { title = '强制该用户重新认证'; btnText = '确认重做'; btnClass = 'bg-blue-600 hover:bg-blue-700'; }
+    } else {
+        if (action === 'approve') { title = '审核通过该企业认证'; btnText = '确认通过'; btnClass = 'bg-green-600 hover:bg-green-700'; reasonLabel = '认证说明（可选）'; requireReason = false; }
+        else if (action === 'reject') { title = '驳回该企业认证'; btnText = '确认驳回'; btnClass = 'bg-red-600 hover:bg-red-700'; }
+        else if (action === 'revert') { title = '撤销该企业认证'; btnText = '确认撤销'; btnClass = 'bg-orange-600 hover:bg-orange-700'; }
+        else if (action === 'reverify') { title = '要求该企业重新提交认证'; btnText = '确认重做'; btnClass = 'bg-blue-600 hover:bg-blue-700'; }
+    }
+
+    // 弹窗HTML
+    const modalHtml = ''
+        + '<div id="realnameAdminModal" class="modal-overlay fixed inset-0 bg-black/50 z-50 flex items-center justify-center">'
+        + '  <div class="bg-white rounded-2xl max-w-md w-full mx-4 shadow-2xl">'
+        + '    <div class="flex items-center justify-between p-5 border-b border-gray-100"><h3 class="text-lg font-bold text-secondary">' + title + '</h3>'
+        + '      <button onclick="closeRealnameAdminModal()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"><i class="fas fa-times text-gray-400"></i></button></div>'
+        + '    <div class="p-5">'
+        + '      <label class="text-sm font-medium text-gray-600 block mb-1">' + reasonLabel + (requireReason ? ' <span class="text-red-500">*</span>' : '') + '</label>'
+        + '      <textarea id="realnameAdminReason" rows="3" placeholder="' + (requireReason ? '请输入原因，将展示给用户' : '可填写管理员备注（可选）') + '" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"></textarea>'
+        + '      <div class="text-xs text-gray-400 mt-2"><i class="fas fa-user-shield mr-1"></i>操作人：' + escapeHtml(getAdminName()) + '</div>'
+        + '    </div>'
+        + '    <div class="flex justify-end space-x-3 p-5 border-t border-gray-100">'
+        + '      <button onclick="closeRealnameAdminModal()" class="px-5 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">取消</button>'
+        + '      <button id="realnameAdminConfirmBtn" onclick="confirmRealnameAdminAction(\'' + logId + '\',\'' + type + '\',\'' + action + '\')" class="px-5 py-2 ' + btnClass + ' text-white rounded-lg text-sm font-semibold">' + btnText + '</button>'
+        + '    </div>'
+        + '  </div>'
+        + '</div>';
+
+    // 移除已有弹窗
+    const old = document.getElementById('realnameAdminModal');
+    if (old) old.remove();
+    // 插入新弹窗
+    const wrap = document.createElement('div');
+    wrap.innerHTML = modalHtml;
+    document.body.appendChild(wrap.firstElementChild);
+}
+
+function closeRealnameAdminModal() {
+    const m = document.getElementById('realnameAdminModal');
+    if (m) m.remove();
+    currentRealnameLogId = null;
+}
+
+function confirmRealnameAdminAction(logId, type, action) {
+    const reason = (document.getElementById('realnameAdminReason') || {}).value || '';
+    // 驳回和撤销需要原因
+    if ((action === 'reject' || action === 'revert' || action === 'reverify') && !reason.trim()) {
+        if (typeof showToast === 'function') showToast('请填写原因', 'error');
+        return;
+    }
+
+    // 从 localStorage 找到该 log，更新字段
+    const LOG_KEY = 'opc_realname_logs';
+    let list = [];
+    try { list = JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); } catch (e) { list = []; }
+    const idx = list.findIndex(function(x) { return x.id === logId; });
+    if (idx < 0) {
+        if (typeof showToast === 'function') showToast('记录不存在', 'error');
+        return;
+    }
+    const item = list[idx];
+    const now = new Date().toLocaleString('zh-CN', { hour12: false });
+
+    if (type === 'personal') {
+        if (action === 'approve') {
+            item.result = 'passed'; item.message = '管理员人工核验通过';
+            item.auditAction = 'admin_approved';
+        } else if (action === 'reject') {
+            item.result = 'failed'; item.message = reason;
+            item.auditAction = 'admin_rejected';
+        } else if (action === 'revert') {
+            item.result = 'failed'; item.message = reason;
+            item.auditAction = 'admin_reverted';
+        } else if (action === 'reverify') {
+            item.result = 'pending'; item.message = reason;
+            item.auditAction = 'admin_reverify';
+        }
+    } else {
+        if (action === 'approve') {
+            item.result = 'passed'; item.message = '企业认证审核通过';
+            item.auditAction = 'admin_approved';
+        } else if (action === 'reject') {
+            item.result = 'failed'; item.message = reason;
+            item.auditAction = 'admin_rejected';
+        } else if (action === 'revert') {
+            item.result = 'failed'; item.message = reason;
+            item.auditAction = 'admin_reverted';
+        } else if (action === 'reverify') {
+            item.result = 'pending'; item.message = reason;
+            item.auditAction = 'admin_reverify';
+        }
+    }
+    item.auditBy = getAdminName();
+    item.auditTime = now;
+    item.auditMessage = reason;
+    list[idx] = item;
+    localStorage.setItem(LOG_KEY, JSON.stringify(list));
+
+    // 同步 AppState（如果是当前用户的操作）
+    if (typeof AppState !== 'undefined' && AppState.user && item.user === AppState.user.name) {
+        if (type === 'personal') {
+            if (action === 'approve') AppState.realNameStatus = 'verified';
+            else if (action === 'reject' || action === 'revert') {
+                AppState.realNameStatus = 'unverified';
+                AppState.realNameFailMessage = reason;
+            } else if (action === 'reverify') {
+                AppState.realNameStatus = 'unverified';
+                AppState.realNameFailMessage = reason;
+            }
+        } else {
+            if (action === 'approve') AppState.realNameStatus = 'enterprise_verified';
+            else if (action === 'reject') {
+                AppState.realNameStatus = 'enterprise_rejected';
+                AppState.realNameFailMessage = reason;
+            } else if (action === 'revert') {
+                AppState.realNameStatus = 'unverified';
+                AppState.realNameFailMessage = reason;
+            } else if (action === 'reverify') {
+                AppState.realNameStatus = 'unverified';
+                AppState.realNameFailMessage = reason;
+            }
+        }
+        if (typeof saveAppState === 'function') saveAppState();
+    }
+
+    closeRealnameAdminModal();
+    if (typeof showToast === 'function') showToast('操作成功', 'success');
+    renderRealnamePersonalTable();
+    renderRealnameEnterpriseTable();
+    refreshRealnameStat();
+}
+
+// 日志详情弹窗
+function openRealnameLogDetail(logId, type) {
+    const list = (typeof getRealNameLogs === 'function') ? getRealNameLogs() : [];
+    const item = list.find(function(x) { return x.id === logId; });
+    if (!item) return;
+    const fd = item.formData || {};
+    const html = ''
+        + '<div id="realnameDetailModal" class="modal-overlay fixed inset-0 bg-black/50 z-50 flex items-center justify-center">'
+        + '  <div class="bg-white rounded-2xl max-w-lg w-full mx-4 shadow-2xl max-h-[90vh] overflow-y-auto">'
+        + '    <div class="flex items-center justify-between p-5 border-b border-gray-100"><h3 class="text-lg font-bold text-secondary">认证详情</h3>'
+        + '      <button onclick="document.getElementById(\'realnameDetailModal\').remove()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"><i class="fas fa-times text-gray-400"></i></button></div>'
+        + '    <div class="p-5 space-y-3 text-sm">'
+        + '      <div class="grid grid-cols-2 gap-3">'
+        + '        <div><div class="text-xs text-gray-500">申请人</div><div class="font-medium">' + escapeHtml(item.user) + '</div></div>'
+        + '        <div><div class="text-xs text-gray-500">手机号</div><div class="font-medium">' + escapeHtml(item.userPhone || '--') + '</div></div>'
+        + '        <div><div class="text-xs text-gray-500">提交时间</div><div>' + escapeHtml(item.time) + '</div></div>'
+        + '        <div><div class="text-xs text-gray-500">类型</div><div>' + (type === 'personal' ? '个人实名认证' : '企业认证') + '</div></div>'
+        + (type === 'personal' ? (
+              '<div><div class="text-xs text-gray-500">真实姓名</div><div class="font-medium">' + escapeHtml(item.name) + '</div></div>'
+            + '<div><div class="text-xs text-gray-500">身份证号</div><div class="font-mono">' + escapeHtml(item.idCardMasked) + '</div></div>'
+          ) : (
+              '<div><div class="text-xs text-gray-500">企业名称</div><div class="font-medium">' + escapeHtml(item.name) + '</div></div>'
+            + '<div><div class="text-xs text-gray-500">统一社会信用代码</div><div class="font-mono">' + escapeHtml(item.idCardMasked) + '</div></div>'
+            + '<div><div class="text-xs text-gray-500">法人姓名</div><div class="font-medium">' + escapeHtml(fd.legalName || '--') + '</div></div>'
+            + '<div><div class="text-xs text-gray-500">认证方式</div><div>' + (fd.authType === 'agent' ? '委托人认证' : '法人本人') + '</div></div>'
+            + (fd.authType === 'agent' ? '<div class="col-span-2"><div class="text-xs text-gray-500">委托人</div><div class="font-medium">' + escapeHtml(fd.agentName || '--') + '</div></div>' : '')
+          ))
+        + '      </div>'
+        + (item.auditBy ? '<div class="border-t border-gray-100 pt-3 mt-3"><div class="text-xs text-gray-500 mb-1">最近管理员操作</div><div class="flex items-center gap-2">' + (item.auditAction && item.auditAction.indexOf('approved') >= 0 ? '<span class="text-green-600">✓</span>' : (item.auditAction === 'admin_rejected' ? '<span class="text-red-600">✗</span>' : '<span class="text-amber-600">↻</span>')) + '<div class="text-sm"><span class="font-medium">' + escapeHtml(item.auditBy) + '</span><span class="text-gray-500 ml-1">' + escapeHtml(item.auditTime) + '</span></div></div>' + (item.auditMessage ? '<div class="text-xs text-gray-600 mt-1 pl-6">原因：' + escapeHtml(item.auditMessage) + '</div>' : '') + '</div>' : '')
+        + '    </div>'
+        + '    <div class="flex justify-end p-5 border-t border-gray-100"><button onclick="document.getElementById(\'realnameDetailModal\').remove()" class="px-5 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">关闭</button></div>'
+        + '  </div>'
+        + '</div>';
+
+    const old = document.getElementById('realnameDetailModal');
+    if (old) old.remove();
+    const wrap = document.createElement('div');
+    wrap.innerHTML = html;
+    document.body.appendChild(wrap.firstElementChild);
+}
+
+// 操作历史（全部管理员干预记录）
+function openRealnameLogHistory() {
+    const list = (typeof getRealNameLogs === 'function') ? getRealNameLogs() : [];
+    const acted = list.filter(function(x) { return x.auditAction; });
+    const rows = acted.length === 0
+        ? '<div class="py-10 text-center text-gray-400 text-sm"><i class="fas fa-inbox text-3xl mb-2 opacity-30"></i><div>暂无管理员操作记录</div></div>'
+        : '<table class="w-full"><thead class="bg-gray-50 border-b border-gray-100"><tr><th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">时间</th><th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">操作人</th><th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">类型</th><th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">操作</th><th class="text-left px-4 py-3 text-xs font-semibold text-gray-500">原因</th></tr></thead><tbody>'
+            + acted.map(function(x) {
+                const actionMap = {
+                    'admin_approved': '<span class="text-green-600">人工通过/审核通过</span>',
+                    'admin_rejected': '<span class="text-red-600">人工驳回/审核驳回</span>',
+                    'admin_reverted': '<span class="text-orange-600">撤销认证</span>',
+                    'admin_reverify': '<span class="text-blue-600">强制重做</span>'
+                };
+                return '<tr class="border-b border-gray-50"><td class="px-4 py-3 text-xs text-gray-500">' + escapeHtml(x.auditTime) + '</td><td class="px-4 py-3 text-sm">' + escapeHtml(x.auditBy) + '</td><td class="px-4 py-3 text-xs">' + (x.type === 'personal' ? '个人' : '企业') + '</td><td class="px-4 py-3 text-sm">' + (actionMap[x.auditAction] || x.auditAction) + '</td><td class="px-4 py-3 text-sm text-gray-600">' + escapeHtml(x.auditMessage || '--') + '</td></tr>';
+            }).join('') + '</tbody></table>';
+
+    const html = ''
+        + '<div id="realnameHistoryModal" class="modal-overlay fixed inset-0 bg-black/50 z-50 flex items-center justify-center">'
+        + '  <div class="bg-white rounded-2xl max-w-3xl w-full mx-4 shadow-2xl max-h-[90vh] overflow-hidden flex flex-col">'
+        + '    <div class="flex items-center justify-between p-5 border-b border-gray-100"><h3 class="text-lg font-bold text-secondary">管理员操作历史</h3>'
+        + '      <button onclick="document.getElementById(\'realnameHistoryModal\').remove()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"><i class="fas fa-times text-gray-400"></i></button></div>'
+        + '    <div class="flex-1 overflow-y-auto p-5">' + rows + '</div>'
+        + '  </div>'
+        + '</div>';
+
+    const old = document.getElementById('realnameHistoryModal');
+    if (old) old.remove();
+    const wrap = document.createElement('div');
+    wrap.innerHTML = html;
+    document.body.appendChild(wrap.firstElementChild);
+}
+
 
 // ========== 审批管理子模块切换 ==========
 function switchApprovalSubtab(name){
@@ -1078,31 +1626,187 @@ function toggleFormStatus(id){const f=sampleForms.find(x=>x.id===id);if(f){f.sta
 function deleteForm(id){if(!confirm('确定删除该表单？'))return;const i=sampleForms.findIndex(x=>x.id===id);if(i>=0)sampleForms.splice(i,1);renderFormTable();showToast('表单已删除','error')}
 
 // ========== 额度申请管理（合并 sampleOrders 演示数据 + 个人中心真实提交） ==========
+// 用户身份认证状态：根据 userId 反查 sampleUsers.verified
+function getOrderUserVerifyStatus(userId) {
+    var u = (typeof sampleUsers !== 'undefined') ? sampleUsers.find(function(x){return x.id === userId;}) : null;
+    return u ? (u.verified || 'unverified') : 'unverified';
+}
+function getOrderVerifyBadge(status) {
+    if (status === 'enterprise_verified') return '<span class="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-700"><i class="fas fa-building mr-1"></i>企业认证</span>';
+    if (status === 'verified') return '<span class="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-green-50 text-green-700"><i class="fas fa-user-check mr-1"></i>个人认证</span>';
+    return '<span class="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500"><i class="fas fa-user-slash mr-1"></i>未认证</span>';
+}
+
 function renderOrders(){
-    var filter=document.getElementById('orderUserFilter').value;
-    var sel=document.getElementById('orderUserFilter');
+    var filterEl = document.getElementById('orderVerifyFilter');
+    var filter = filterEl ? filterEl.value : 'all';
     // 合并数据源：sampleOrders 演示数据 + localStorage 真实订单（来自个人中心提交）
     var realOrders = (typeof getOrders === 'function') ? getOrders() : [];
     var combined = (sampleOrders || []).concat(realOrders || []);
-    if(sel.options.length<=1){
-        var userIds=[];
-        combined.forEach(function(o){if(userIds.indexOf(o.userId)===-1)userIds.push(o.userId)});
-        userIds.forEach(function(uid){
-            var u = combined.find(function(x){return x.userId===uid});
-            if (u) sel.innerHTML+='<option value="'+uid+'">'+(u.userName||'用户')+'</option>';
-        });
-    }
-    var items=filter==='all'?combined:combined.filter(function(o){return o.userId===parseInt(filter)});
-    var pmMap={'微信支付':'bg-green-50 text-green-700','支付宝':'bg-blue-50 text-blue-700','在线支付':'bg-gray-50 text-gray-600','银行转账':'bg-amber-50 text-amber-700'};
+    // 认证状态筛选
+    var items = filter === 'all' ? combined : combined.filter(function(o){ return getOrderUserVerifyStatus(o.userId) === filter; });
+    // 支付方式：仅保留银行转账
+    var pmMap = {'银行转账':'bg-amber-50 text-amber-700'};
     var statusMap={'待审核':'bg-amber-50 text-amber-700','已完成':'bg-green-50 text-green-700','已驳回':'bg-red-50 text-red-700'};
     document.getElementById('orderTableBody').innerHTML=items.map(function(o){
         var amt = o.amount;
         var amtStr = (typeof amt === 'number') ? (amt + (o.unit ? (' ' + o.unit) : '')) : (amt || '');
         var voucher = o.voucherName
-            ? '<span class="inline-flex items-center text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded"><i class="fas fa-paperclip mr-1"></i>'+ (o.voucherName.length>14 ? o.voucherName.slice(0,14)+'…' : o.voucherName) +'</span>'
-            : '<span class="text-xs text-gray-300">—</span>';
-        return '<tr class="border-b border-gray-50 hover:bg-gray-50/50"><td class="px-5 py-3 font-mono text-xs text-gray-600">'+o.id+'</td><td class="px-5 py-3"><div class="flex items-center space-x-2"><span class="font-medium text-gray-800">'+o.userName+'</span></div></td><td class="px-5 py-3 font-semibold text-primary">'+(typeof amt === 'number' ? amt : amt)+'</td><td class="px-5 py-3">'+voucher+'</td><td class="px-5 py-3"><span class="badge '+(pmMap[o.paymentMethod]||'bg-gray-50 text-gray-600')+'">'+o.paymentMethod+'</span></td><td class="px-5 py-3 text-sm text-gray-500">'+o.time+'</td><td class="px-5 py-3"><span class="badge '+(statusMap[o.status]||'bg-gray-50 text-gray-600')+'">'+o.status+'</span></td><td class="px-5 py-3 text-right">'+(o.invoiceAvailable ? '<button onclick="adminInvoiceAction(\''+o.id+'\')" class="text-xs text-primary hover:text-primary-dark"><i class="fas fa-file-invoice mr-1"></i>发票</button>' : '<span class="text-xs text-gray-300">—</span>')+'</td></tr>';
-    }).join('') || '<tr><td colspan="8" class="px-5 py-12 text-center text-gray-400"><i class="fas fa-inbox text-3xl mb-2"></i><p>暂无额度申请记录</p></td></tr>';
+            ? '<span class="inline-flex items-center text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded" title="'+(o.voucherName)+'"><i class="fas fa-paperclip mr-1"></i>'+ (o.voucherName.length>14 ? o.voucherName.slice(0,14)+'…' : o.voucherName) +'</span>'
+            : '<span class="inline-flex items-center text-xs text-red-500 bg-red-50 px-2 py-0.5 rounded"><i class="fas fa-exclamation-circle mr-1"></i>未上传</span>';
+        var verifyStatus = getOrderUserVerifyStatus(o.userId);
+        var verifyBadge = getOrderVerifyBadge(verifyStatus);
+        return '<tr class="border-b border-gray-50 hover:bg-gray-50/50">'
+            + '<td class="px-5 py-3 font-mono text-xs text-gray-600">'+o.id+'</td>'
+            + '<td class="px-5 py-3"><span class="font-medium text-gray-800">'+o.userName+'</span></td>'
+            + '<td class="px-5 py-3">'+verifyBadge+'</td>'
+            + '<td class="px-5 py-3 font-semibold text-primary">'+amtStr+'</td>'
+            + '<td class="px-5 py-3">'+voucher+'</td>'
+            + '<td class="px-5 py-3"><span class="badge '+(pmMap[o.paymentMethod]||'bg-amber-50 text-amber-700')+'">'+o.paymentMethod+'</span></td>'
+            + '<td class="px-5 py-3 text-sm text-gray-500">'+o.time+'</td>'
+            + '<td class="px-5 py-3"><span class="badge '+(statusMap[o.status]||'bg-gray-50 text-gray-600')+'">'+o.status+'</span></td>'
+            + '<td class="px-5 py-3 text-right">'+(o.invoiceAvailable ? '<button onclick="adminInvoiceAction(\''+o.id+'\')" class="text-xs text-primary hover:text-primary-dark"><i class="fas fa-file-invoice mr-1"></i>发票</button>' : '<span class="text-xs text-gray-300">—</span>')+'</td>'
+            + '</tr>';
+    }).join('') || '<tr><td colspan="9" class="px-5 py-12 text-center text-gray-400"><i class="fas fa-inbox text-3xl mb-2"></i><p>暂无额度申请记录</p></td></tr>';
+}
+
+// 管理员手动添加记录
+function openAdminAddOrderModal() {
+    var userOptions = (typeof sampleUsers !== 'undefined') ? sampleUsers.map(function(u){
+        var verifyText = u.verified === 'enterprise_verified' ? '企业' : (u.verified === 'verified' ? '个人' : '未认证');
+        return '<option value="' + u.id + '">' + u.name + '（' + verifyText + '）</option>';
+    }).join('') : '';
+    var html = ''
+        + '<div id="adminAddOrderModal" class="modal-overlay fixed inset-0 bg-black/50 z-50 flex items-center justify-center">'
+        + '  <div class="bg-white rounded-2xl max-w-md w-full mx-4 shadow-2xl">'
+        + '    <div class="flex items-center justify-between p-5 border-b border-gray-100">'
+        + '      <h3 class="text-lg font-bold text-secondary">管理员手动添加额度申请记录</h3>'
+        + '      <button onclick="document.getElementById(\'adminAddOrderModal\').remove()" class="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"><i class="fas fa-times text-gray-400"></i></button>'
+        + '    </div>'
+        + '    <div class="p-5 space-y-4">'
+        + '      <div>'
+        + '        <label class="text-sm font-medium text-gray-600 block mb-1">用户 <span class="text-red-500">*</span></label>'
+        + '        <select id="adminAddOrderUser" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/30">' + userOptions + '</select>'
+        + '      </div>'
+        + '      <div>'
+        + '        <label class="text-sm font-medium text-gray-600 block mb-1">申请额度 <span class="text-red-500">*</span></label>'
+        + '        <input id="adminAddOrderAmount" type="number" min="1" placeholder="请输入申请额度数值" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30">'
+        + '      </div>'
+        + '      <div>'
+        + '        <label class="text-sm font-medium text-gray-600 block mb-1">支付方式</label>'
+        + '        <input value="银行转账" disabled class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-gray-50 text-gray-500">'
+        + '      </div>'
+        + '      <div>'
+        + '        <label class="text-sm font-medium text-gray-600 block mb-1">银行转账单附件 <span class="text-red-500">*</span></label>'
+        + '        <div class="flex items-center gap-2">'
+        + '          <label class="flex-1 cursor-pointer border border-dashed border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-500 hover:border-primary hover:text-primary transition flex items-center justify-center">'
+        + '            <i class="fas fa-cloud-upload-alt mr-2"></i><span id="adminAddOrderVoucherLabel">点击上传银行转账单（必填）</span>'
+        + '            <input id="adminAddOrderVoucher" type="file" accept="image/*,.pdf" class="hidden" onchange="onAdminAddOrderVoucherChange(this)">'
+        + '          </label>'
+        + '          <button type="button" id="adminAddOrderVoucherClear" onclick="clearAdminAddOrderVoucher()" class="hidden text-xs text-gray-400 hover:text-red-500 px-2 py-1"><i class="fas fa-times"></i></button>'
+        + '        </div>'
+        + '        <div id="adminAddOrderVoucherError" class="hidden text-xs text-red-500 mt-1"><i class="fas fa-exclamation-circle mr-1"></i>请上传银行转账单附件</div>'
+        + '      </div>'
+        + '      <div>'
+        + '        <label class="text-sm font-medium text-gray-600 block mb-1">状态</label>'
+        + '        <select id="adminAddOrderStatus" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white">'
+        + '          <option value="待审核">待审核</option>'
+        + '          <option value="已完成">已完成</option>'
+        + '          <option value="已驳回">已驳回</option>'
+        + '        </select>'
+        + '      </div>'
+        + '      <div>'
+        + '        <label class="text-sm font-medium text-gray-600 block mb-1">备注（可选）</label>'
+        + '        <textarea id="adminAddOrderNote" rows="2" placeholder="管理员备注信息" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"></textarea>'
+        + '      </div>'
+        + '      <div class="text-xs text-gray-400"><i class="fas fa-user-shield mr-1"></i>操作人：' + escapeHtml(getAdminName()) + '</div>'
+        + '    </div>'
+        + '    <div class="flex justify-end space-x-3 p-5 border-t border-gray-100">'
+        + '      <button onclick="document.getElementById(\'adminAddOrderModal\').remove()" class="px-5 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">取消</button>'
+        + '      <button onclick="confirmAdminAddOrder()" class="px-5 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-dark"><i class="fas fa-plus mr-1"></i>添加</button>'
+        + '    </div>'
+        + '  </div>'
+        + '</div>';
+    var old = document.getElementById('adminAddOrderModal');
+    if (old) old.remove();
+    var wrap = document.createElement('div');
+    wrap.innerHTML = html;
+    document.body.appendChild(wrap.firstElementChild);
+}
+function onAdminAddOrderVoucherChange(input) {
+    var label = document.getElementById('adminAddOrderVoucherLabel');
+    var clearBtn = document.getElementById('adminAddOrderVoucherClear');
+    var err = document.getElementById('adminAddOrderVoucherError');
+    if (input && input.files && input.files[0]) {
+        var name = input.files[0].name;
+        label.textContent = name.length > 18 ? name.slice(0, 18) + '…' : name;
+        label.classList.remove('text-gray-500');
+        label.classList.add('text-primary', 'font-medium');
+        clearBtn.classList.remove('hidden');
+        if (err) err.classList.add('hidden');
+    } else {
+        clearAdminAddOrderVoucher();
+    }
+}
+function clearAdminAddOrderVoucher() {
+    var input = document.getElementById('adminAddOrderVoucher');
+    var label = document.getElementById('adminAddOrderVoucherLabel');
+    var clearBtn = document.getElementById('adminAddOrderVoucherClear');
+    var err = document.getElementById('adminAddOrderVoucherError');
+    if (input) input.value = '';
+    if (label) {
+        label.textContent = '点击上传银行转账单（必填）';
+        label.classList.add('text-gray-500');
+        label.classList.remove('text-primary', 'font-medium');
+    }
+    if (clearBtn) clearBtn.classList.add('hidden');
+}
+function confirmAdminAddOrder() {
+    var userId = parseInt(document.getElementById('adminAddOrderUser').value, 10);
+    var amount = Number(document.getElementById('adminAddOrderAmount').value);
+    var status = document.getElementById('adminAddOrderStatus').value;
+    var note = document.getElementById('adminAddOrderNote').value || '';
+    var voucherInput = document.getElementById('adminAddOrderVoucher');
+    var voucherFile = (voucherInput && voucherInput.files && voucherInput.files[0]) ? voucherInput.files[0] : null;
+    if (!userId) { if (typeof showToast === 'function') showToast('请选择用户', 'error'); return; }
+    if (!amount || amount <= 0) { if (typeof showToast === 'function') showToast('请输入正确的申请额度', 'error'); return; }
+    if (!voucherFile) {
+        var err = document.getElementById('adminAddOrderVoucherError');
+        if (err) err.classList.remove('hidden');
+        if (typeof showToast === 'function') showToast('请上传银行转账单附件', 'error');
+        return;
+    }
+    var u = (typeof sampleUsers !== 'undefined') ? sampleUsers.find(function(x){return x.id === userId;}) : null;
+    if (!u) { if (typeof showToast === 'function') showToast('用户不存在', 'error'); return; }
+    // 生成订单
+    var now = new Date();
+    var id = 'ORD' + now.toISOString().slice(0,10).replace(/-/g,'') + String(Math.floor(Math.random()*900+100));
+    var order = {
+        id: id,
+        userId: userId,
+        userName: u.name,
+        type: 'recharge_request',
+        amount: amount,
+        unit: '积分',
+        paymentMethod: '银行转账',
+        status: status,
+        time: now.toLocaleString('zh-CN',{hour12:false}),
+        invoiceAvailable: status === '已完成',
+        voucherName: voucherFile.name,
+        voucherSize: voucherFile.size,
+        voucherType: voucherFile.type,
+        adminNote: note,
+        adminCreated: true,
+        adminName: getAdminName(),
+        adminTime: now.toLocaleString('zh-CN',{hour12:false})
+    };
+    var orders = (typeof getOrders === 'function') ? getOrders() : [];
+    orders.push(order);
+    if (typeof saveOrders === 'function') saveOrders(orders);
+    if (typeof showToast === 'function') showToast('已添加额度申请记录', 'success');
+    var m = document.getElementById('adminAddOrderModal');
+    if (m) m.remove();
+    renderOrders();
 }
 function adminInvoiceAction(id){
     var o = (sampleOrders||[]).find(function(x){return x.id===id});

@@ -1151,20 +1151,57 @@
             const statusContainer = document.getElementById('realname-status-container');
             const formCard = document.getElementById('realname-form-card');
             const verifiedCard = document.getElementById('realname-verified-card');
-            
+
             // 先全部隐藏
             if (statusContainer) statusContainer.innerHTML = '';
             if (formCard) formCard.classList.add('hidden');
             if (verifiedCard) verifiedCard.classList.add('hidden');
 
+            // 辅助：失败原因展示区（注入到表单卡片顶部）
+            const failBannerHtml = (AppState.realNameFailMessage && AppState.realNameStatus === 'unverified')
+                ? '<div class="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 flex items-start gap-2"><i class="fas fa-exclamation-circle text-red-500 mt-0.5"></i><div class="flex-1"><div class="text-sm font-semibold text-red-700">认证未通过</div><div class="text-xs text-red-600 mt-1 leading-relaxed">' + (AppState.realNameFailMessage || '') + '</div></div></div>'
+                : '';
+            // 辅助：重试次数提示
+            const retry = (typeof getRetryCount === 'function') ? getRetryCount() : 0;
+            const retryRemaining = Math.max(0, 3 - retry);
+            const retryHintHtml = (AppState.realNameStatus === 'unverified' && !failBannerHtml)
+                ? '<div class="mb-3 text-xs text-gray-400 flex items-center"><i class="fas fa-info-circle mr-1.5"></i>今日剩余核验次数：' + retryRemaining + ' / 3（接口自动调用公安部"三要素"核验服务）</div>'
+                : '';
+
             if (AppState.realNameStatus === 'unverified') {
                 if (statusContainer) {
                     statusContainer.innerHTML = `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">未认证</span>`;
                 }
-                if (formCard) formCard.classList.remove('hidden');
+                if (formCard) {
+                    formCard.classList.remove('hidden');
+                    // 注入失败原因/重试提示
+                    let bannerHost = document.getElementById('realname-fail-banner');
+                    if (!bannerHost) {
+                        bannerHost = document.createElement('div');
+                        bannerHost.id = 'realname-fail-banner';
+                        formCard.insertBefore(bannerHost, formCard.firstChild);
+                    }
+                    bannerHost.innerHTML = failBannerHtml + retryHintHtml;
+                }
+            } else if (AppState.realNameStatus === 'verifying') {
+                if (statusContainer) {
+                    statusContainer.innerHTML = `<span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm flex items-center gap-1.5"><i class="fas fa-spinner fa-spin text-xs"></i>核验中</span>`;
+                }
+                if (formCard) {
+                    formCard.classList.remove('hidden');
+                    // 锁定表单
+                    formCard.querySelectorAll('input, button, select, textarea').forEach(function(el) { el.disabled = true; });
+                    let bannerHost = document.getElementById('realname-fail-banner');
+                    if (!bannerHost) {
+                        bannerHost = document.createElement('div');
+                        bannerHost.id = 'realname-fail-banner';
+                        formCard.insertBefore(bannerHost, formCard.firstChild);
+                    }
+                    bannerHost.innerHTML = '<div class="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3 flex items-center gap-2"><i class="fas fa-spinner fa-spin text-amber-500"></i><div class="text-sm text-amber-800">正在调用公安部"三要素"核验接口，请稍候...</div></div>';
+                }
             } else if (AppState.realNameStatus === 'verified') {
                 if (statusContainer) {
-                    statusContainer.innerHTML = `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">个人实名认证</span>`;
+                    statusContainer.innerHTML = `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm flex items-center gap-1.5"><i class="fas fa-check-circle text-xs"></i>个人实名认证</span>`;
                 }
                 if (verifiedCard) {
                     verifiedCard.classList.remove('hidden');
@@ -1176,9 +1213,24 @@
                     if (nameDisplay) nameDisplay.value = realNameData.name || '张三';
                     if (idcardDisplay) idcardDisplay.value = realNameData.idCard ? maskString(realNameData.idCard, 3, 4) : '440***********1234';
                 }
+            } else if (AppState.realNameStatus === 'pending_audit') {
+                if (statusContainer) {
+                    statusContainer.innerHTML = `<span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm flex items-center gap-1.5"><i class="fas fa-hourglass-half text-xs"></i>企业认证审核中</span>`;
+                }
+                if (formCard) {
+                    formCard.classList.remove('hidden');
+                    formCard.querySelectorAll('input, button, select, textarea').forEach(function(el) { el.disabled = true; });
+                    let bannerHost = document.getElementById('realname-fail-banner');
+                    if (!bannerHost) {
+                        bannerHost = document.createElement('div');
+                        bannerHost.id = 'realname-fail-banner';
+                        formCard.insertBefore(bannerHost, formCard.firstChild);
+                    }
+                    bannerHost.innerHTML = '<div class="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3 flex items-start gap-2"><i class="fas fa-hourglass-half text-amber-500 mt-0.5"></i><div class="flex-1"><div class="text-sm font-semibold text-amber-800">企业认证已提交，等待管理员审核</div><div class="text-xs text-amber-700 mt-1 leading-relaxed">工作人员将在 1 个工作日内完成审核，审核结果将在此处显示，请耐心等待。</div></div></div>';
+                }
             } else if (AppState.realNameStatus === 'enterprise_verified') {
                 if (statusContainer) {
-                    statusContainer.innerHTML = `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">企业认证</span>`;
+                    statusContainer.innerHTML = `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm flex items-center gap-1.5"><i class="fas fa-check-circle text-xs"></i>企业认证</span>`;
                 }
                 if (verifiedCard) {
                     verifiedCard.classList.remove('hidden');
@@ -1191,6 +1243,24 @@
                     if (entName) entName.value = realNameData.enterpriseName || '某科技有限公司';
                     if (entCode) entCode.value = realNameData.enterpriseCode ? maskString(realNameData.enterpriseCode, 3, 4) : '911***********1234';
                     if (entLegal) entLegal.value = realNameData.legalName || '张三';
+                }
+            } else if (AppState.realNameStatus === 'enterprise_rejected') {
+                if (statusContainer) {
+                    statusContainer.innerHTML = `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm flex items-center gap-1.5"><i class="fas fa-times-circle text-xs"></i>企业认证已驳回</span>`;
+                }
+                if (formCard) {
+                    formCard.classList.remove('hidden');
+                    formCard.querySelectorAll('input, button, select, textarea').forEach(function(el) { el.disabled = false; });
+                    let bannerHost = document.getElementById('realname-fail-banner');
+                    if (!bannerHost) {
+                        bannerHost = document.createElement('div');
+                        bannerHost.id = 'realname-fail-banner';
+                        formCard.insertBefore(bannerHost, formCard.firstChild);
+                    }
+                    bannerHost.innerHTML = '<div class="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 flex items-start gap-2"><i class="fas fa-times-circle text-red-500 mt-0.5"></i><div class="flex-1"><div class="text-sm font-semibold text-red-700">企业认证已驳回</div><div class="text-xs text-red-600 mt-1 leading-relaxed">' + (AppState.realNameFailMessage || '请联系工作人员或重新提交') + '</div><div class="text-xs text-red-500 mt-1">您可修改资料后重新提交</div></div></div>';
+                    // 修改提交按钮文案
+                    const submitBtn = document.getElementById('enterprise-auth-submit-btn');
+                    if (submitBtn) submitBtn.textContent = '重新提交';
                 }
             }
 
@@ -1205,7 +1275,7 @@
             if (walletUnverified) walletUnverified.classList.add('hidden');
             if (walletMain) walletMain.classList.add('hidden');
 
-            if (AppState.realNameStatus === 'unverified') {
+            if (AppState.realNameStatus === 'unverified' || AppState.realNameStatus === 'verifying' || AppState.realNameStatus === 'pending_audit' || AppState.realNameStatus === 'enterprise_rejected') {
                 if (walletUnverified) walletUnverified.classList.remove('hidden');
             } else if (AppState.realNameStatus === 'verified' || AppState.realNameStatus === 'enterprise_verified') {
                 if (walletMain) {
@@ -1309,15 +1379,26 @@
             realNameData.idCard = idCard;
 
             document.getElementById('personal-auth-submit-btn').disabled = true;
-            document.getElementById('personal-auth-submit-btn').textContent = '提交中...';
+            document.getElementById('personal-auth-submit-btn').textContent = '核验中...';
+
+            // 注册异步接口回调（common.js 中的 mockRealNameVerify 1.5s 后会触发）
+            window.onRealNameVerifyResult = function(res) {
+                if (res.passed) {
+                    showToast('✓ 实名认证核验通过！', 'success');
+                    if (typeof executePendingAction === 'function') {
+                        try { executePendingAction(); } catch (e) {}
+                    }
+                } else {
+                    showToast('✗ ' + res.message, 'error');
+                }
+                if (typeof updateProfileUI === 'function') updateProfileUI();
+                window.onRealNameVerifyResult = null;
+            };
 
             closePersonalAuthModal();
             submitRealName({ name, idCard, type: 'personal' });
-
-            setTimeout(() => {
-                updateProfileUI();
-                startAuditTimer();
-            }, 500);
+            // 立即更新 UI 显示"核验中"
+            if (typeof updateProfileUI === 'function') updateProfileUI();
         }
 
         // ==================== 企业认证弹窗 ====================
@@ -1458,13 +1539,17 @@
             document.getElementById('enterprise-auth-submit-btn').disabled = true;
             document.getElementById('enterprise-auth-submit-btn').textContent = '提交中...';
 
-            closeEnterpriseAuthModal();
-            submitEnterpriseRealName({ enterpriseName: name, enterpriseCode: code, legalName: legal });
+            // 注册提交后回调（common.js submitEnterpriseRealName 同步调用）
+            window.onEnterpriseAuthSubmitted = function() {
+                showToast('✓ 企业认证已提交，工作人员将在 1 个工作日内审核', 'success');
+                if (typeof updateProfileUI === 'function') updateProfileUI();
+                window.onEnterpriseAuthSubmitted = null;
+            };
 
-            setTimeout(() => {
-                updateProfileUI();
-                startAuditTimer();
-            }, 500);
+            closeEnterpriseAuthModal();
+            submitEnterpriseRealName({ enterpriseName: name, enterpriseCode: code, legalName: legal, authType: authType });
+            // 立即更新 UI 显示"待审核"
+            if (typeof updateProfileUI === 'function') updateProfileUI();
         }
 
         function startAuditTimer() {

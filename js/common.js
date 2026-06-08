@@ -337,25 +337,317 @@ function requireLogin(options = {}) {
 }
 
 // ==================== 实名认证模块 ====================
+// 状态机：
+//   个人：unverified → verifying → verified | unverified(带原因)
+//   企业：unverified → pending_audit → enterprise_verified | enterprise_rejected(带原因)
+// 管理员干预：撤销 / 强制重做 / 人工通过 / 人工驳回
+
+// 状态徽章配色（全局使用）
+const REALNAME_STATUS_MAP = {
+    unverified: '未认证',
+    verifying: '核验中',
+    verified: '已通过',
+    pending_audit: '待审核',
+    enterprise_verified: '已通过',
+    enterprise_rejected: '已驳回'
+};
+const REALNAME_STATUS_BADGE = {
+    unverified: 'bg-gray-100 text-gray-600',
+    verifying: 'bg-amber-50 text-amber-700',
+    verified: 'bg-green-50 text-green-700',
+    pending_audit: 'bg-amber-50 text-amber-700',
+    enterprise_verified: 'bg-green-50 text-green-700',
+    enterprise_rejected: 'bg-red-50 text-red-700'
+};
+
+// ====== 模拟公安部"三要素"实名核验接口 ======
+// 实际接入：调用公安部/三要素核验服务API（实名认证接口）
+// 原型实现：根据身份证末位模拟通过/失败（1.5s 异步）
+function mockRealNameVerify(name, idCard) {
+    return new Promise(function(resolve) {
+        setTimeout(function() {
+            var lastChar = idCard.slice(-1).toUpperCase();
+            // 模拟规则：身份证末位为 '0' 时失败
+            var passed = lastChar !== '0';
+            resolve({
+                passed: passed,
+                code: passed ? 0 : 1001,
+                message: passed ? '核验通过' : '姓名与身份证号不匹配，请核对后重试',
+                verifyTime: new Date().toLocaleString('zh-CN', { hour12: false })
+            });
+        }, 1500);
+    });
+}
+
+// 个人重试次数管理（每日 3 次）
+var REALNAME_RETRY_KEY = 'opc_realname_retry';
+function getRetryCount() {
+    try {
+        var d = JSON.parse(localStorage.getItem(REALNAME_RETRY_KEY) || '{}');
+        var today = new Date().toISOString().slice(0, 10);
+        if (d.date !== today) return 0;
+        return d.count || 0;
+    } catch (e) { return 0; }
+}
+function setRetryCount(n) {
+    var today = new Date().toISOString().slice(0, 10);
+    localStorage.setItem(REALNAME_RETRY_KEY, JSON.stringify({ date: today, count: n }));
+}
+
+// 写入个人实名核验日志（供管理后台查看）
+var REALNAME_LOG_KEY = 'opc_realname_logs';
+function appendRealNameLog(log) {
+    var list = [];
+    try { list = JSON.parse(localStorage.getItem(REALNAME_LOG_KEY) || '[]'); } catch (e) { list = []; }
+    list.unshift(Object.assign({
+        id: 'RV' + Date.now(),
+        type: 'personal', // personal | enterprise
+        user: (AppState.user && AppState.user.name) || '匿名',
+        userPhone: (AppState.user && AppState.user.phone) || '--',
+        name: '',
+        idCardMasked: '',
+        result: 'pending', // passed | failed | pending
+        message: '',
+        time: new Date().toLocaleString('zh-CN', { hour12: false }),
+        auditBy: '',
+        auditTime: '',
+        auditMessage: '',
+        auditAction: ''
+    }, log));
+    localStorage.setItem(REALNAME_LOG_KEY, JSON.stringify(list));
+}
+function getRealNameLogs(type) {
+    var list = [];
+    try { list = JSON.parse(localStorage.getItem(REALNAME_LOG_KEY) || '[]'); } catch (e) { list = []; }
+    if (type) list = list.filter(function(x) { return x.type === type; });
+    return list;
+}
+function maskIdCard(id) {
+    if (!id || id.length < 8) return '--';
+    return id.slice(0, 4) + '***********' + id.slice(-4);
+}
+
+// 个人实名提交（异步调用 mock 接口）
 function submitRealName(formData) {
-    AppState.realNameStatus = 'verified';
+    if (getRetryCount() >= 3) {
+        if (typeof showToast === 'function') showToast('今日核验次数已用完，请明日再试', 'error');
+        if (typeof window.onRealNameVerifyResult === 'function') {
+            window.onRealNameVerifyResult({ passed: false, code: 9001, message: '今日核验次数已用完，请明日再试（每日 3 次）' });
+        }
+        return;
+    }
+    AppState.realNameStatus = 'verifying';
     saveAppState();
-    showToast('实名认证已通过！');
-    executePendingAction();
-    if (typeof updateProfileUI === 'function') {
-        updateProfileUI();
+    if (typeof updateProfileUI === 'function') updateProfileUI();
+
+    // 先写入"核验中"日志
+    appendRealNameLog({
+        name: formData.name || '',
+        idCardMasked: maskIdCard(formData.idCard || ''),
+        result: 'pending',
+        message: '正在调用公安部"三要素"核验接口...',
+        formData: formData
+    });
+
+    mockRealNameVerify(formData.name, formData.idCard).then(function(res) {
+        setRetryCount(getRetryCount() + (res.passed ? 0 : 1));
+        if (res.passed) {
+            AppState.realNameStatus = 'verified';
+            saveAppState();
+            // 更新最后一条日志为"通过"
+            updateLastLog({ result: 'passed', message: res.message });
+        } else {
+            AppState.realNameStatus = 'unverified';
+            AppState.realNameFailMessage = res.message;
+            saveAppState();
+            updateLastLog({ result: 'failed', message: res.message });
+        }
+        if (typeof updateProfileUI === 'function') updateProfileUI();
+        if (typeof window.onRealNameVerifyResult === 'function') {
+            window.onRealNameVerifyResult(res);
+        }
+        if (res.passed && typeof executePendingAction === 'function') executePendingAction();
+    });
+}
+function updateLastLog(patch) {
+    var list = [];
+    try { list = JSON.parse(localStorage.getItem(REALNAME_LOG_KEY) || '[]'); } catch (e) { list = []; }
+    if (list.length > 0) {
+        list[0] = Object.assign({}, list[0], patch);
+        localStorage.setItem(REALNAME_LOG_KEY, JSON.stringify(list));
     }
 }
 
+// 企业认证提交：进入 pending_audit
 function submitEnterpriseRealName(formData) {
-    AppState.realNameStatus = 'enterprise_verified';
+    AppState.realNameStatus = 'pending_audit';
     saveAppState();
-    showToast('企业认证已通过！');
-    executePendingAction();
-    if (typeof updateProfileUI === 'function') {
-        updateProfileUI();
+    appendRealNameLog({
+        type: 'enterprise',
+        name: formData.enterpriseName || '',
+        idCardMasked: formData.enterpriseCode || '',
+        result: 'pending',
+        message: '企业认证已提交，等待管理员审核',
+        formData: formData
+    });
+    if (typeof updateProfileUI === 'function') updateProfileUI();
+    if (typeof window.onEnterpriseAuthSubmitted === 'function') {
+        window.onEnterpriseAuthSubmitted(formData);
     }
 }
+
+// ====== 管理员干预：个人实名认证 ======
+// 撤销已通过的个人认证
+function adminRevertPersonalAuth(reason) {
+    AppState.realNameStatus = 'unverified';
+    AppState.realNameFailMessage = reason || '管理员已撤销您的个人实名认证';
+    saveAppState();
+    appendRealNameLog({
+        name: (AppState.realNameData && AppState.realNameData.name) || '',
+        idCardMasked: maskIdCard((AppState.realNameData && AppState.realNameData.idCard) || ''),
+        result: 'failed',
+        message: reason || '管理员撤销',
+        auditBy: AppState.currentAdminName || '系统管理员',
+        auditTime: new Date().toLocaleString('zh-CN', { hour12: false }),
+        auditMessage: reason,
+        auditAction: 'admin_reverted'
+    });
+    if (typeof updateProfileUI === 'function') updateProfileUI();
+    return true;
+}
+// 强制重新认证
+function adminReverifyPersonalAuth(reason) {
+    AppState.realNameStatus = 'unverified';
+    AppState.realNameFailMessage = reason || '管理员已要求您重新进行实名认证';
+    saveAppState();
+    appendRealNameLog({
+        name: (AppState.realNameData && AppState.realNameData.name) || '',
+        idCardMasked: maskIdCard((AppState.realNameData && AppState.realNameData.idCard) || ''),
+        result: 'pending',
+        message: reason || '管理员强制重做',
+        auditBy: AppState.currentAdminName || '系统管理员',
+        auditTime: new Date().toLocaleString('zh-CN', { hour12: false }),
+        auditMessage: reason,
+        auditAction: 'admin_reverify'
+    });
+    if (typeof updateProfileUI === 'function') updateProfileUI();
+    return true;
+}
+// 人工通过（覆盖接口失败结果）
+function adminApprovePersonalAuth(reason) {
+    AppState.realNameStatus = 'verified';
+    delete AppState.realNameFailMessage;
+    saveAppState();
+    appendRealNameLog({
+        name: (AppState.realNameData && AppState.realNameData.name) || '',
+        idCardMasked: maskIdCard((AppState.realNameData && AppState.realNameData.idCard) || ''),
+        result: 'passed',
+        message: '管理员人工核验通过',
+        auditBy: AppState.currentAdminName || '系统管理员',
+        auditTime: new Date().toLocaleString('zh-CN', { hour12: false }),
+        auditMessage: reason,
+        auditAction: 'admin_approved'
+    });
+    if (typeof updateProfileUI === 'function') updateProfileUI();
+    return true;
+}
+// 人工驳回（确认失败）
+function adminRejectPersonalAuth(reason) {
+    AppState.realNameStatus = 'unverified';
+    AppState.realNameFailMessage = reason || '管理员已确认认证失败';
+    saveAppState();
+    appendRealNameLog({
+        name: (AppState.realNameData && AppState.realNameData.name) || '',
+        idCardMasked: maskIdCard((AppState.realNameData && AppState.realNameData.idCard) || ''),
+        result: 'failed',
+        message: reason || '管理员确认失败',
+        auditBy: AppState.currentAdminName || '系统管理员',
+        auditTime: new Date().toLocaleString('zh-CN', { hour12: false }),
+        auditMessage: reason,
+        auditAction: 'admin_rejected'
+    });
+    if (typeof updateProfileUI === 'function') updateProfileUI();
+    return true;
+}
+
+// ====== 管理员干预：企业认证 ======
+// 审核通过
+function adminApproveEnterpriseAuth(reason) {
+    AppState.realNameStatus = 'enterprise_verified';
+    delete AppState.realNameFailMessage;
+    saveAppState();
+    appendRealNameLog({
+        type: 'enterprise',
+        name: (AppState.realNameData && AppState.realNameData.enterpriseName) || '',
+        idCardMasked: (AppState.realNameData && AppState.realNameData.enterpriseCode) || '',
+        result: 'passed',
+        message: '企业认证审核通过',
+        auditBy: AppState.currentAdminName || '系统管理员',
+        auditTime: new Date().toLocaleString('zh-CN', { hour12: false }),
+        auditMessage: reason || '',
+        auditAction: 'admin_approved'
+    });
+    if (typeof updateProfileUI === 'function') updateProfileUI();
+    return true;
+}
+// 审核驳回
+function adminRejectEnterpriseAuth(reason) {
+    AppState.realNameStatus = 'enterprise_rejected';
+    AppState.realNameFailMessage = reason || '企业认证已驳回';
+    saveAppState();
+    appendRealNameLog({
+        type: 'enterprise',
+        name: (AppState.realNameData && AppState.realNameData.enterpriseName) || '',
+        idCardMasked: (AppState.realNameData && AppState.realNameData.enterpriseCode) || '',
+        result: 'failed',
+        message: reason || '企业认证驳回',
+        auditBy: AppState.currentAdminName || '系统管理员',
+        auditTime: new Date().toLocaleString('zh-CN', { hour12: false }),
+        auditMessage: reason,
+        auditAction: 'admin_rejected'
+    });
+    if (typeof updateProfileUI === 'function') updateProfileUI();
+    return true;
+}
+// 撤销企业认证（已通过状态下）
+function adminRevertEnterpriseAuth(reason) {
+    AppState.realNameStatus = 'unverified';
+    AppState.realNameFailMessage = reason || '管理员已撤销您的企业认证';
+    saveAppState();
+    appendRealNameLog({
+        type: 'enterprise',
+        name: (AppState.realNameData && AppState.realNameData.enterpriseName) || '',
+        idCardMasked: (AppState.realNameData && AppState.realNameData.enterpriseCode) || '',
+        result: 'failed',
+        message: reason || '管理员撤销',
+        auditBy: AppState.currentAdminName || '系统管理员',
+        auditTime: new Date().toLocaleString('zh-CN', { hour12: false }),
+        auditMessage: reason,
+        auditAction: 'admin_reverted'
+    });
+    if (typeof updateProfileUI === 'function') updateProfileUI();
+    return true;
+}
+// 强制重做企业认证
+function adminReverifyEnterpriseAuth(reason) {
+    AppState.realNameStatus = 'unverified';
+    AppState.realNameFailMessage = reason || '管理员已要求您重新提交企业认证';
+    saveAppState();
+    appendRealNameLog({
+        type: 'enterprise',
+        name: (AppState.realNameData && AppState.realNameData.enterpriseName) || '',
+        idCardMasked: (AppState.realNameData && AppState.realNameData.enterpriseCode) || '',
+        result: 'pending',
+        message: reason || '管理员强制重做',
+        auditBy: AppState.currentAdminName || '系统管理员',
+        auditTime: new Date().toLocaleString('zh-CN', { hour12: false }),
+        auditMessage: reason,
+        auditAction: 'admin_reverify'
+    });
+    if (typeof updateProfileUI === 'function') updateProfileUI();
+    return true;
+}
+
 
 // ==================== 钱包模块（服务额度） ====================
 // amount: 申请额度数值（可带 unit 字段："元"或"点"）
